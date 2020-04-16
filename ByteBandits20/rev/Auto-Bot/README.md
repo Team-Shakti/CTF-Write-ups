@@ -1,6 +1,6 @@
 # Auto_bot
 
-Challenge was solved by: Sandra and Ashwathi
+Challenge was solved by: Sandra and Ashwathi <br />
 When we connected to the server we got a base64 encoded binary. Using bash we recieved the decoded binary and anylised it. But each time it was a new binary. 
 Heres the scritp
 ```
