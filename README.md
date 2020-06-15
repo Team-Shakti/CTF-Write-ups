@@ -1,12 +1,11 @@
-# bi0s wiki
+# Writeup Repo
 
-A collection of tips, tricks and techniques to help solve ctf problems more effectively. Knowledge of fundamentals might help.
-Total beginner? Start here: https://trailofbits.github.io/ctf/
+A collection of writeups from the CTFs we have participated.
 
 ## How to build ?
 
 
-This document is currently deployed in mkdocs at https://wiki.bi0s.in/ . Of course, it can also be deployed locally, as follows:
+This document is currently deployed in mkdocs at "to be filled" . Of course, it can also be deployed locally, as follows:
 
 Installation dependence
 
@@ -55,6 +54,7 @@ The site will be served on http://localhost:8000
     │   └── web
     ├── mkdocs.yml
     └── README.md
+    |__ about.md
 
 `mkdocs.yml` : config file for mkdocs , also contains details about the structure of the contents.
 `docs` : contains all the required files.
