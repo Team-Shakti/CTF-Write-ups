@@ -50,7 +50,7 @@ public class statistics
 We had to perform several tries to finally guess the few last charecters we needed to complete the flag. But it was worth!
 <p align="center">
 
-<img width=”200" height=”100" src=”/images/stat.png">
+<img width=”200" height=”100" src=”.../../images/stat.png">
 
 </p>
 `Flag: flag{tenpercentofallstatitoicsarefake}`
