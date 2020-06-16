@@ -1,0 +1,25 @@
+site_name: CTF-Writeups
+site_url: https://github.com/Team-Shakti/CTF-Write-ups
+copyright: 'Copyright &copy; 2020 <a href="http://Team-Shakti.github.io/">Team-Shakti Writeups</a>'
+
+# Repository
+
+repo_name: 'Team-Shakti/CTF-Write-ups'
+repo_url: 'https://github.com/Team-Shakti/CTF-Write-ups'
+edit_uri: 'blob/master/docs/'
+
+nav:
+    - About Us: about.md
+    - Website: 'https://team-shakti.github.io/'
+
+    # - References:
+    #  - Refer: references/index.md
+
+
+# Theme
+theme:
+        name: journal
+        nav_style: dark
+extra_javascript:
+  - 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML'
+
