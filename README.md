@@ -65,11 +65,11 @@ The site will be served on http://localhost:8000
 - Open the docs folder
 - Go to the corresponding field of the writeup (Crypto,Reversing etc)
 - If you are adding a new CTF
-    - Create a CTF folder and inside it add your intro.md (which has a description about the CTF and the list of challenges)
-    - Also edit the intro.md with the CTF name and it’s link
+    - Create a CTF folder and inside it add your intro.md (which has a description about the CTF and the list of challenges).
+    - Also edit the intro.md with the CTF name and it’s link.
 - If the CTF is already there go to the CTF folder
-	- Create the challenge folder and inside that add your intro.md (which is the writeup)
-	- Also Edit the intro.md and add the challenge name and it’s link
+	- Create the challenge folder and inside that add your intro.md (which is the writeup).
+	- Also Edit the intro.md and add the challenge name and it’s link along with the author's name (and twitter handle).
 
 
 
