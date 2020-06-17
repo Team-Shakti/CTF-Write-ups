@@ -41,11 +41,11 @@ def main():
     print(sol.model())
 main()
 
-'''
+
 
 <p align="center">
 
-<img width=”200" height=”200" src=”../../images/dis.png">
+<img src = "../../images/dis.png" width="200" height="200" >
 
 </p>
 

