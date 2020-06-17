@@ -6,9 +6,9 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
         
-        <link rel="canonical" href="https://github.com/Team-Shakti/CTF-Write-ups/web/DawgCTF20/intro/">
+        <link rel="canonical" href="https://github.com/Team-Shakti/CTF-Write-ups/reversing/ByteBandits20/baby_rust/">
         <link rel="shortcut icon" href="../../../img/favicon.ico">
-        <title>DawgCTF - CTF-Writeups</title>
+        <title>Baby_Rust - CTF-Writeups</title>
         <link href="../../../css/bootstrap-custom.min.css" rel="stylesheet">
         <link href="../../../css/font-awesome.min.css" rel="stylesheet">
         <link href="../../../css/base.css" rel="stylesheet">
@@ -61,7 +61,7 @@
                             </a>
                         </li>
                             <li>
-                                <a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/web/DawgCTF20/intro.md">Edit on Team-Shakti/CTF-Write-ups</a>
+                                <a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/reversing/ByteBandits20/baby_rust.md">Edit on Team-Shakti/CTF-Write-ups</a>
                             </li>
                     </ul>
                 </div>
@@ -71,21 +71,21 @@
         <div class="container">
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
-        <li class="main active"><a href="#dawgctf">DawgCTF</a></li>
-            <li><a href="#introduction">Introduction</a></li>
-            <li><a href="#the-contents-of-this-repo">The contents of this repo</a></li>
+        <li class="main active"><a href="#baby_rust">Baby_Rust</a></li>
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
-<h1 id="dawgctf">DawgCTF</h1>
-<h2 id="introduction">Introduction</h2>
-<p>"Write about the CTF and writeups"</p>
-<h2 id="the-contents-of-this-repo">The contents of this repo</h2>
-<p>This repo contains the writeups of varoius challenges from CTFs we have attempted.</p>
-<ul>
-<li><a href="../Freewifi2/intro/">FreeWifi 2</a></li>
-</ul></div>
+<h1 id="baby_rust">Baby_Rust</h1>
+<p>Analysing it dynamically gets us to xoring instructions:</p>
+<pre><code>d =&quot;adhmp`badO|sL}JuvvFmiui{@IO}QQVR&quot;
+k=0
+for i in d:
+    s=s+chr(ord(i)^(7+k))
+    k=k+1
+print(s)
+#flag{look_ma_i_can_write_in_rust}
+</code></pre></div>
         </div>
 
         <footer class="col-md-12">
