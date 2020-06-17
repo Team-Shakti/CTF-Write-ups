@@ -8,8 +8,8 @@ The following are the Links to the writeups to the challenges we have solved fro
 
 This repo contains the writeups of various challenges from CTFs we have attempted.
 
-- [HSCTF7 2020](../HSCTF7/intro/)
-    - [Emojis](Emojis.md)
+- [HSCTF7 2020](https://ctftime.org/event/939)
+    - [Emojis](../HSCTF7/Emojis/)
    
 
 

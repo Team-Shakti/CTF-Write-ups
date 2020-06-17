@@ -13,5 +13,6 @@ This repo contains the writeups of varoius challenges from CTFs we have attempte
 - [Cryptography](crypto/intro/)
 - [Web Exploitation](web/intro/)
 - [Forensic Analysis](forensics/intro/)
+- [Miscellaneous](misc/intro/)
 
 

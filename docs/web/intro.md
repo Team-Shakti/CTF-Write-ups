@@ -8,7 +8,8 @@
 
 This repo contains the writeups of varoius challenges from CTFs we have attempted.
 
-- [Dawg CTF 2020](../DawgCTF20/intro/)
+- [Dawg CTF 2020](https://ctftime.org/event/1030)
+    - [FreeWifi 2](../DawgCTF20/freewifi2/)
 
 
 
