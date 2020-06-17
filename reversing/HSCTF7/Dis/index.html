@@ -4,14 +4,14 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="description" content="None">
         
-        <link rel="canonical" href="https://github.com/Team-Shakti/CTF-Write-ups/">
-        <link rel="shortcut icon" href="img/favicon.ico">
-        <title>CTF-Writeups</title>
-        <link href="css/bootstrap-custom.min.css" rel="stylesheet">
-        <link href="css/font-awesome.min.css" rel="stylesheet">
-        <link href="css/base.css" rel="stylesheet">
+        
+        <link rel="canonical" href="https://github.com/Team-Shakti/CTF-Write-ups/reversing/HSCTF7/Dis/">
+        <link rel="shortcut icon" href="../../../img/favicon.ico">
+        <title>Dis HSCTF2020 - CTF-Writeups</title>
+        <link href="../../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../../css/base.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atelier-forest-light.min.css">
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
@@ -19,13 +19,13 @@
             <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
         <![endif]-->
 
-        <script src="js/jquery-1.10.2.min.js" defer></script>
-        <script src="js/bootstrap-3.0.3.min.js" defer></script>
+        <script src="../../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../../js/bootstrap-3.0.3.min.js" defer></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
         <script>hljs.initHighlightingOnLoad();</script> 
     </head>
 
-    <body class="homepage">
+    <body>
 
         <div class="navbar navbar-default navbar-fixed-top" role="navigation">
             <div class="container">
@@ -39,7 +39,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href=".">CTF-Writeups</a>
+                    <a class="navbar-brand" href="../../..">CTF-Writeups</a>
                 </div>
 
                 <!-- Expanded navigation -->
@@ -47,7 +47,7 @@
                         <!-- Main navigation -->
                         <ul class="nav navbar-nav">
                             <li >
-                                <a href="about/">About Us</a>
+                                <a href="../../../about/">About Us</a>
                             </li>
                             <li >
                                 <a href="https://team-shakti.github.io/">Website</a>
@@ -61,7 +61,7 @@
                             </a>
                         </li>
                             <li>
-                                <a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/index.md">Edit on Team-Shakti/CTF-Write-ups</a>
+                                <a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/reversing/HSCTF7/Dis.md">Edit on Team-Shakti/CTF-Write-ups</a>
                             </li>
                     </ul>
                 </div>
@@ -71,25 +71,52 @@
         <div class="container">
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
-        <li class="main active"><a href="#welcome-to-teamshakti-writeups">Welcome to TeamShakti Writeups</a></li>
-            <li><a href="#introduction">Introduction</a></li>
-            <li><a href="#the-contents-of-this-repo">The contents of this repo</a></li>
+        <li class="main active"><a href="#dis-hsctf2020">Dis HSCTF2020</a></li>
+            <li><a href="#description">Description</a></li>
+            <li><a href="#solution">Solution</a></li>
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
-<h1 id="welcome-to-teamshakti-writeups">Welcome to TeamShakti Writeups</h1>
-<h2 id="introduction">Introduction</h2>
-<p>This repo is hosted by <a href="http://Team-Shakti.github.io/">TeamShakti</a>,  the women-only CTF team of <a href="https://www.amrita.edu/amritapuri/">Amrita Vishwa Vidyapeetham, Amritapuri Campus</a>.</p>
-<h2 id="the-contents-of-this-repo">The contents of this repo</h2>
-<p>This repo contains the writeups of varoius challenges from CTFs we have attempted.</p>
-<ul>
-<li><a href="reversing/intro/">Reverse Engineering</a></li>
-<li><a href="pwning/intro/">Binary Exploitation</a></li>
-<li><a href="crypto/intro/">Cryptography</a></li>
-<li><a href="web/intro/">Web Exploitation</a></li>
-<li><a href="forensics/intro/">Forensic Analysis</a></li>
-</ul></div>
+<h1 id="dis-hsctf2020">Dis HSCTF2020</h1>
+<h2 id="description">Description</h2>
+<p>The challenge was a python bytecode challenge where the approach I chose was to maually replicate the bytecode from the documentation of the dis module in python which took up a while. Im not sure if there's a less time consuming approach but once that was done the reversing part was automated using Z3.</p>
+<h2 id="solution">Solution</h2>
+<p>'''python</p>
+<p>bytestring=b'\xae\xc0\xa1\xab\xef\x15\xd8\xca\x18\xc6\xab\x17\x93\xa8\x11\xd7\x18\x15\xd7\x17\xbd\x9a\xc0\xe9\x93\x11\xa7\x04\xa1\x1c\x1c\xed'
+from z3 import *</p>
+<p>def a(s):
+    o = [0] * 32
+    for i in range(32):
+        o[i] = ((s[i]+s[i])-60)
+    return o
+def b(s,t):
+    for x,y in zip(s,t):
+        yield(x+y)-50
+def c(s):
+    return [x+5 for x in s]</p>
+<p>def e(s):
+    s = [ i for i in s ]
+    o = [ (o^5)-30 for o in b(a(s),c(s)) ]
+    return o</p>
+<p>def main():
+    sol=Solver()
+    o=b'\xae\xc0\xa1\xab\xef\x15\xd8\xca\x18\xc6\xab\x17\x93\xa8\x11\xd7\x18\x15\xd7\x17\xbd\x9a\xc0\xe9\x93\x11\xa7\x04\xa1\x1c\x1c\xed'
+    l=list(o)
+    s = [ BitVec('s[%s]' % i, 8) for i in range(32) ]
+    s = e(s)
+    for i in range(len(l)):
+        sol.add(s[i]==l[i])
+    print(sol.check())
+    print(sol.model())
+main()</p>
+<p align="center">
+
+<img src = "../../images/dis.png" width="200" height="200" >
+
+</p>
+
+<p><code>Flag: flag{5tr4ng3_d1s45s3mbly_1c0a88}</code></p></div>
         </div>
 
         <footer class="col-md-12">
@@ -98,12 +125,12 @@
             <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
         <script>
-            var base_url = ".",
+            var base_url = "../../..",
                 shortcuts = {"search": 83, "next": 78, "help": 191, "previous": 80};
         </script>
-        <script src="js/base.js" defer></script>
+        <script src="../../../js/base.js" defer></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
-        <script src="search/main.js" defer></script>
+        <script src="../../../search/main.js" defer></script>
 
         <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
     <div class="modal-dialog">
@@ -171,8 +198,3 @@
 
     </body>
 </html>
-
-<!--
-MkDocs version : 1.0.4
-Build Date UTC : 2020-06-17 07:12:44
--->
