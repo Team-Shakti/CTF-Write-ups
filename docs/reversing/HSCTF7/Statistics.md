@@ -11,7 +11,7 @@ However the following is the script that we used to solve the challenge.
 
 ## Solution
 
-'''java
+```java
 
 import java.util.Scanner;
 public class statistics
@@ -43,7 +43,7 @@ public class statistics
     }
 }
 
-'''
+```
 
 `Output: flag{tenpercentofallstatirqicsashfake}`
 
