@@ -9,8 +9,7 @@ Another java Reversing Challenge. We are given a java file which is to be revers
 ## Solution
 
 
-'''python
-Solve
+```
 s="1dd3|y_3tttb5g\`q]^dhn3j"
 def unxor(string):
     ret=''
@@ -35,7 +34,7 @@ for i in range(3):
     print(s)
     s=untranspose(s)
     print(s)
-'''
+```
 
 ### Output
 
