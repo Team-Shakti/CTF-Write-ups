@@ -15,3 +15,4 @@ This repo contains the writeups of varoius challenges from CTFs we have attempte
     - [Dis](../HSCTF7/Dis/) - By @sandrabeme
     - [APLab:Statistics](../HSCTF7/Statistics/) - By @sandrabeme
     - [APLab:English](../HSCTF7/APLabEnglish/) - By @sandrabeme
+    - [APLab:ComputerScience](../HSCTF7/ComputerScience/) - By @namithas123
