@@ -16,3 +16,5 @@ This repo contains the writeups of varoius challenges from CTFs we have attempte
     - [APLab:Statistics](../HSCTF7/Statistics/) - By @sandrabeme
     - [APLab:English](../HSCTF7/APLabEnglish/) - By @sandrabeme
     - [APLab:ComputerScience](../HSCTF7/ComputerScience/) - By @namithas123
+- [DarkCTF](https://ctftime.org/event/1118)
+    - [Jack](DarkCTF/Jack/) - By @sandrabeme
