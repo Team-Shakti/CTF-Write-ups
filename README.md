@@ -5,7 +5,7 @@ A collection of writeups from the CTFs we have participated.
 ## How to build ?
 
 
-This document is currently deployed in mkdocs at https://team-shakti.github.io/CTF-Write-ups/ . Of course, it can also be deployed locally, as follows:
+This document is currently deployed in mkdocs at https://teamshakti.in/CTF-Write-ups/ . Of course, it can also be deployed locally, as follows:
 
 Installation dependence
 
