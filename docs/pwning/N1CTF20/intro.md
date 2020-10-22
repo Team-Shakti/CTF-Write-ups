@@ -1,8 +1,7 @@
 # N1CTF
 
 ## Introduction
-
-Held between Sat, 17 Oct. 2020, 05:30 IST — Mon, 19 Oct. 2020, 05:30 IST
+[CTFtime link for the event](https://ctftime.org/event/1099)
 
 ## Contents 
 
