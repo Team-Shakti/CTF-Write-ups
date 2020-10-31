@@ -82,27 +82,32 @@
 <h2 id="description">Description</h2>
 <p>Another java Reversing Challenge. We are given a java file which is to be reversed.</p>
 <h2 id="solution">Solution</h2>
-<p>'''python
-Solve
-s="1dd3|y_3tttb5g`q]^dhn3j"
+<pre><code>s=&quot;1dd3|y_3tttb5g\`q]^dhn3j&quot;
 def unxor(string):
     ret=''
     xorstr=[4,1,3,1,2,1,3,0,1,4,3,1,2,0,1,4,1,2,3,2,1,0,3]
     for i in range(len(string)):
         ret+=chr(ord(string[i])^xorstr[i])
-    return ret</p>
-<p>def untranspose(string):
-    ret=[None]*23
+    return ret
+
+
+
+
+def untranspose(string):
+    ret=[None]\*23
     transpose=[11,18,15,19,8,17,5,2,12,6,21,0,22,7,13,14,4,16,20,1,3,10,9]
     for i in range(len(transpose)):
         ret[transpose[i]]=string[i]
-    return ''.join(ret)</p>
-<p>for i in range(3):
+    return ''.join(ret)
+
+
+for i in range(3):
     s=unxor(s)
     print(s)
     s=untranspose(s)
     print(s)
-'''</p>
+</code></pre>
+
 <h3 id="output">Output</h3>
 <p><code>5eg2~x\3upwc7gau\\gjo3i
 cj3o\\pg~i35uaug\xe2gw7
