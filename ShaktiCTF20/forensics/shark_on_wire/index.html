@@ -6,9 +6,9 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
         
-        <link rel="canonical" href="https://github.com/Team-Shakti/CTF-Write-ups/ShaktiCTF20/pwning/intro/">
+        <link rel="canonical" href="https://github.com/Team-Shakti/CTF-Write-ups/ShaktiCTF20/forensics/shark_on_wire/">
         <link rel="shortcut icon" href="../../../img/favicon.ico">
-        <title>Binary Exploitation - CTF-Writeups</title>
+        <title>Shark on Wire - CTF-Writeups</title>
         <link href="../../../css/bootstrap-custom.min.css" rel="stylesheet">
         <link href="../../../css/font-awesome.min.css" rel="stylesheet">
         <link href="../../../css/base.css" rel="stylesheet">
@@ -64,7 +64,7 @@
                             </a>
                         </li>
                             <li>
-                                <a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/ShaktiCTF20/pwning/intro.md">Edit on Team-Shakti/CTF-Write-ups</a>
+                                <a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/ShaktiCTF20/forensics/shark_on_wire.md">Edit on Team-Shakti/CTF-Write-ups</a>
                             </li>
                     </ul>
                 </div>
@@ -74,55 +74,24 @@
         <div class="container">
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
-        <li class="main active"><a href="#binary-exploitation">Binary Exploitation</a></li>
+        <li class="main active"><a href="#shark-on-wire">Shark on Wire</a></li>
+            <li><a href="#challenge-description">Challenge Description</a></li>
+            <li><a href="#short-writeup">Short writeup</a></li>
+            <li><a href="#challenge-author">Challenge Author</a></li>
+            <li><a href="#flag">Flag</a></li>
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
-<h1 id="binary-exploitation">Binary Exploitation</h1>
-<p>Table containing challenge status</p>
-<table>
-<thead>
-<tr>
-<th align="center">Challenge Name</th>
-<th align="center">Level</th>
-<th align="center">Author</th>
-<th align="center">Concept</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td align="center"><a href="../connect/">Connect</a></td>
-<td align="center">Very Easy</td>
-<td align="center"><a href="https://twitter.com/GeethnaTk">b3y0nd3r</a></td>
-<td align="center">nc,ls,cat</td>
-</tr>
-<tr>
-<td align="center"><a href="../returning/">Returning</a></td>
-<td align="center">Very Easy</td>
-<td align="center"><a href="https://twitter.com/rudyerudite">rudy</a></td>
-<td align="center">return values of snprintf, overflow</td>
-</tr>
-<tr>
-<td align="center"><a href="../compute_shell/">Compute_Shell</a></td>
-<td align="center">Easy</td>
-<td align="center"><a href="https://twitter.com/GeethnaTk">b3y0nd3r</a></td>
-<td align="center">Shellcode</td>
-</tr>
-<tr>
-<td align="center"><a href="../adventure_chain/">Adventure Chain</a></td>
-<td align="center">Easy</td>
-<td align="center"><a href="https://twitter.com/GeethnaTk">b3y0nd3r</a></td>
-<td align="center">ROPchain, passing args</td>
-</tr>
-<tr>
-<td align="center"><a href="../reactor_got/">Reactor_GOT</a></td>
-<td align="center">Medium</td>
-<td align="center"><a href="https://twitter.com/GeethnaTk">b3y0nd3r</a>, <a href="https://twitter.com/rudyerudite">rudy</a></td>
-<td align="center">GOT overwrite</td>
-</tr>
-</tbody>
-</table></div>
+<h1 id="shark-on-wire">Shark on Wire</h1>
+<h3 id="challenge-description">Challenge Description</h3>
+<p>Lara sent me a file which had some hidden message. Help me recover the secret information.</p>
+<h3 id="short-writeup">Short writeup</h3>
+<p>Follow the TCP stream to see the flag.</p>
+<h3 id="challenge-author">Challenge Author</h3>
+<p><a href="https://twitter.com/SrideviKrishn16">v1Ru5</a></p>
+<h3 id="flag">Flag</h3>
+<p>shaktictf{wir3sh4rk_i5_ju5t_aw3s0m3}</p></div>
         </div>
 
         <footer class="col-md-12">
