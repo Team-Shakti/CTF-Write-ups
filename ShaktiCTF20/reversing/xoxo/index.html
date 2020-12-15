@@ -4,14 +4,14 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="description" content="None">
         
-        <link rel="canonical" href="https://github.com/Team-Shakti/CTF-Write-ups/">
-        <link rel="shortcut icon" href="img/favicon.ico">
-        <title>CTF-Writeups</title>
-        <link href="css/bootstrap-custom.min.css" rel="stylesheet">
-        <link href="css/font-awesome.min.css" rel="stylesheet">
-        <link href="css/base.css" rel="stylesheet">
+        
+        <link rel="canonical" href="https://github.com/Team-Shakti/CTF-Write-ups/ShaktiCTF20/reversing/xoxo/">
+        <link rel="shortcut icon" href="../../../img/favicon.ico">
+        <title>XOXO - CTF-Writeups</title>
+        <link href="../../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../../css/base.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atelier-forest-light.min.css">
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
@@ -19,13 +19,13 @@
             <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
         <![endif]-->
 
-        <script src="js/jquery-1.10.2.min.js" defer></script>
-        <script src="js/bootstrap-3.0.3.min.js" defer></script>
+        <script src="../../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../../js/bootstrap-3.0.3.min.js" defer></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
         <script>hljs.initHighlightingOnLoad();</script> 
     </head>
 
-    <body class="homepage">
+    <body>
 
         <div class="navbar navbar-default navbar-fixed-top" role="navigation">
             <div class="container">
@@ -39,7 +39,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href=".">CTF-Writeups</a>
+                    <a class="navbar-brand" href="../../..">CTF-Writeups</a>
                 </div>
 
                 <!-- Expanded navigation -->
@@ -47,10 +47,10 @@
                         <!-- Main navigation -->
                         <ul class="nav navbar-nav">
                             <li >
-                                <a href="about/">About Us</a>
+                                <a href="../../../about/">About Us</a>
                             </li>
                             <li >
-                                <a href="shaktictf/">ShaktiCTF</a>
+                                <a href="../../../shaktictf/">ShaktiCTF</a>
                             </li>
                             <li >
                                 <a href="https://team-shakti.github.io/">Website</a>
@@ -64,7 +64,7 @@
                             </a>
                         </li>
                             <li>
-                                <a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/index.md">Edit on Team-Shakti/CTF-Write-ups</a>
+                                <a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/ShaktiCTF20/reversing/xoxo.md">Edit on Team-Shakti/CTF-Write-ups</a>
                             </li>
                     </ul>
                 </div>
@@ -74,26 +74,44 @@
         <div class="container">
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
-        <li class="main active"><a href="#welcome-to-teamshakti-writeups">Welcome to TeamShakti Writeups</a></li>
-            <li><a href="#introduction">Introduction</a></li>
-            <li><a href="#the-contents-of-this-repo">The contents of this repo</a></li>
+        <li class="main active"><a href="#xoxo">XOXO</a></li>
+            <li><a href="#challenge-description">Challenge Description</a></li>
+            <li><a href="#writeup">Writeup</a></li>
+            <li><a href="#script">Script</a></li>
+            <li><a href="#flag">Flag</a></li>
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
-<h1 id="welcome-to-teamshakti-writeups">Welcome to TeamShakti Writeups</h1>
-<h2 id="introduction">Introduction</h2>
-<p>This repo is hosted by <a href="http://Team-Shakti.github.io/">TeamShakti</a>,  the women-only CTF team of <a href="https://www.amrita.edu/amritapuri/">Amrita Vishwa Vidyapeetham, Amritapuri Campus</a>.</p>
-<h2 id="the-contents-of-this-repo">The contents of this repo</h2>
-<p>This repo contains the writeups of varoius challenges from CTFs we have attempted.</p>
-<ul>
-<li><a href="reversing/intro/">Reverse Engineering</a></li>
-<li><a href="pwning/intro/">Binary Exploitation</a></li>
-<li><a href="crypto/intro/">Cryptography</a></li>
-<li><a href="web/intro/">Web Exploitation</a></li>
-<li><a href="forensics/intro/">Forensic Analysis</a></li>
-<li><a href="misc/intro/">Miscellaneous</a></li>
-</ul></div>
+<h1 id="xoxo">XOXO</h1>
+<h3 id="challenge-description">Challenge Description</h3>
+<p>During the early days of Apollo, software was not taken as seriously as other engineering disciplines. Though in fact we had a complex system of systems, we weren’t getting credit for what was a legitimate field. It was out of desperation I came up with the term, to say: “Hey, we’re engineering too.”</p>
+<p>Lets play by my rules.</p>
+<h3 id="writeup">Writeup</h3>
+<p>The game does not let the player play at anyposition also does not let the server play at any position. But finally a pattern is achieved once all positions are filled but again this has to be achieved in a certain sequence which is to be obtained deom the final check matrix function which checks if the input sequence was in this order : l=[7,51, 3, 73, 71, 2, 35, 77, 6, 79, 26, 38, 53, 27, 44, 78, 45, 21, 36, 33, 59, 29, 17, 5, 56, 42, 24, 47, 18, 9, 74, 20, 75, 54, 23, 22, 60, 63, 57, 1, 62]</p>
+<p>Initially you need to open the binary using <a href="https://ghidra-sre.org/">ghidra</a> and open the disassembly view using the code browser from ghidra. </p>
+<p>On the left side you can see the symbol table where every function from the program is listed and from there you can search for the main function to get the starting point of the program.</p>
+<p>As you go through the program you can see the other functions and from the names of the function you can see that there is a function called the seq_check which sounds fishy. And if you go through it you can see a check.</p>
+<p><img alt="seq" src="../image1.png" /> </p>
+<p>here the sequence array is hard coded and on xoring these values with 0x1337 you get the sequence in which you should give your input. </p>
+<h3 id="script">Script</h3>
+<pre><code class="python">from pwn import *
+user_seq = ['8', '52', '4', '74', '72', '3', '36', '78', '7', '80', '27', '39', '54', '28', '45', '79', '46', '22', '37', '34', '60', '30', '18', '6', '57', '43', '25', '48', '19', '10', '75', '21', '76', '55', '24', '23', '61', '64', '58', '2', '63']
+
+#user_seq = ['7', '51', '3', '73', '71', '2', '35', '77', '6', '79', '26', '38', '53', '27', '44', '78', '45', '21', '36', '33', '59', '29', '17', '5', '56', '42', '24', '47', '18', '9', '74', '20', '75', '54', '23', '22', '60', '63', '57', '1', '62']
+#io=process(&quot;./a.out&quot;)
+io= remote(&quot;0.0.0.0&quot;, 1111)
+for i in range(len(user_seq)):
+    print(&quot;running &quot;+str(i))
+    io.recv()
+    io.sendline(bytes(user_seq[i],'utf-8'))
+print(io.recvall())
+
+</code></pre>
+
+<p>Flag is obtained when sequence is achieved.</p>
+<h3 id="flag">Flag</h3>
+<p>shaktictf{XOXO_g0n3_to0_f4r_??_XD}</p></div>
         </div>
 
         <footer class="col-md-12">
@@ -102,12 +120,12 @@
             <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
         <script>
-            var base_url = ".",
+            var base_url = "../../..",
                 shortcuts = {"search": 83, "next": 78, "help": 191, "previous": 80};
         </script>
-        <script src="js/base.js" defer></script>
+        <script src="../../../js/base.js" defer></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
-        <script src="search/main.js" defer></script>
+        <script src="../../../search/main.js" defer></script>
 
         <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
     <div class="modal-dialog">
@@ -175,8 +193,3 @@
 
     </body>
 </html>
-
-<!--
-MkDocs version : 1.0.4
-Build Date UTC : 2020-12-15 11:41:25
--->

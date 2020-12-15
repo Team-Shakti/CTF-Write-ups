@@ -4,14 +4,14 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="description" content="None">
         
-        <link rel="canonical" href="https://github.com/Team-Shakti/CTF-Write-ups/">
-        <link rel="shortcut icon" href="img/favicon.ico">
-        <title>CTF-Writeups</title>
-        <link href="css/bootstrap-custom.min.css" rel="stylesheet">
-        <link href="css/font-awesome.min.css" rel="stylesheet">
-        <link href="css/base.css" rel="stylesheet">
+        
+        <link rel="canonical" href="https://github.com/Team-Shakti/CTF-Write-ups/ShaktiCTF20/crypto/RailMail/">
+        <link rel="shortcut icon" href="../../../img/favicon.ico">
+        <title>RailMail - CTF-Writeups</title>
+        <link href="../../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../../css/base.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atelier-forest-light.min.css">
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
@@ -19,13 +19,13 @@
             <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
         <![endif]-->
 
-        <script src="js/jquery-1.10.2.min.js" defer></script>
-        <script src="js/bootstrap-3.0.3.min.js" defer></script>
+        <script src="../../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../../js/bootstrap-3.0.3.min.js" defer></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
         <script>hljs.initHighlightingOnLoad();</script> 
     </head>
 
-    <body class="homepage">
+    <body>
 
         <div class="navbar navbar-default navbar-fixed-top" role="navigation">
             <div class="container">
@@ -39,7 +39,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href=".">CTF-Writeups</a>
+                    <a class="navbar-brand" href="../../..">CTF-Writeups</a>
                 </div>
 
                 <!-- Expanded navigation -->
@@ -47,10 +47,10 @@
                         <!-- Main navigation -->
                         <ul class="nav navbar-nav">
                             <li >
-                                <a href="about/">About Us</a>
+                                <a href="../../../about/">About Us</a>
                             </li>
                             <li >
-                                <a href="shaktictf/">ShaktiCTF</a>
+                                <a href="../../../shaktictf/">ShaktiCTF</a>
                             </li>
                             <li >
                                 <a href="https://team-shakti.github.io/">Website</a>
@@ -64,7 +64,7 @@
                             </a>
                         </li>
                             <li>
-                                <a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/index.md">Edit on Team-Shakti/CTF-Write-ups</a>
+                                <a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/ShaktiCTF20/crypto/RailMail.md">Edit on Team-Shakti/CTF-Write-ups</a>
                             </li>
                     </ul>
                 </div>
@@ -74,26 +74,24 @@
         <div class="container">
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
-        <li class="main active"><a href="#welcome-to-teamshakti-writeups">Welcome to TeamShakti Writeups</a></li>
-            <li><a href="#introduction">Introduction</a></li>
-            <li><a href="#the-contents-of-this-repo">The contents of this repo</a></li>
+        <li class="main active"><a href="#railmail">RailMail</a></li>
+            <li><a href="#challenge-description">Challenge Description</a></li>
+            <li><a href="#short-writeup">Short writeup</a></li>
+            <li><a href="#challenge-author">Challenge Author</a></li>
+            <li><a href="#flag">Flag</a></li>
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
-<h1 id="welcome-to-teamshakti-writeups">Welcome to TeamShakti Writeups</h1>
-<h2 id="introduction">Introduction</h2>
-<p>This repo is hosted by <a href="http://Team-Shakti.github.io/">TeamShakti</a>,  the women-only CTF team of <a href="https://www.amrita.edu/amritapuri/">Amrita Vishwa Vidyapeetham, Amritapuri Campus</a>.</p>
-<h2 id="the-contents-of-this-repo">The contents of this repo</h2>
-<p>This repo contains the writeups of varoius challenges from CTFs we have attempted.</p>
-<ul>
-<li><a href="reversing/intro/">Reverse Engineering</a></li>
-<li><a href="pwning/intro/">Binary Exploitation</a></li>
-<li><a href="crypto/intro/">Cryptography</a></li>
-<li><a href="web/intro/">Web Exploitation</a></li>
-<li><a href="forensics/intro/">Forensic Analysis</a></li>
-<li><a href="misc/intro/">Miscellaneous</a></li>
-</ul></div>
+<h1 id="railmail">RailMail</h1>
+<h3 id="challenge-description">Challenge Description</h3>
+<p>Joan received a secret mail from her friend, upon looking into it, she found that it contains an encrypted text and sum of key and offset. She is clueless what to do. Help her get the message.  </p>
+<h3 id="short-writeup">Short writeup</h3>
+<p>Challenge based on RailFence cipher. Sum of key and offset is given. Simple bruteforce needs to be done to get actual key and offset. Online tools can be used to solve the same.  </p>
+<h3 id="challenge-author">Challenge Author</h3>
+<p><a href="https://twitter.com/__4lph4__">4lph4</a></p>
+<h3 id="flag">Flag</h3>
+<p>shaktictf{Aw3s0m3_k33p_Go1n9!}</p></div>
         </div>
 
         <footer class="col-md-12">
@@ -102,12 +100,12 @@
             <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
         <script>
-            var base_url = ".",
+            var base_url = "../../..",
                 shortcuts = {"search": 83, "next": 78, "help": 191, "previous": 80};
         </script>
-        <script src="js/base.js" defer></script>
+        <script src="../../../js/base.js" defer></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
-        <script src="search/main.js" defer></script>
+        <script src="../../../search/main.js" defer></script>
 
         <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
     <div class="modal-dialog">
@@ -175,8 +173,3 @@
 
     </body>
 </html>
-
-<!--
-MkDocs version : 1.0.4
-Build Date UTC : 2020-12-15 11:41:25
--->
