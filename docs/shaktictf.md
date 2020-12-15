@@ -14,6 +14,6 @@ This repo contains the writeups of varoius challenges from ShaktiCTF. There are 
 - [Cryptography](../ShaktiCTF20/crypto/intro/)
 - [Web Exploitation](../ShaktiCTF20/web/intro/)
 - [Forensics](../ShaktiCTF20/forensics/intro/)
-- [Stegnography](../ShaktiCTF20/stego/intro/)
+- [steganography](../ShaktiCTF20/stego/intro/)
 - [Miscellaneous](../ShaktiCTF20/misc/intro/)
 
