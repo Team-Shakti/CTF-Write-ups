@@ -1,17 +1,21 @@
-#EZ
+# EZ
+
 **Challenge discription**
 Lets try a beginners windows challenge!!!
-**Author**:bl4ck_Widw
+
+**Author**:[bl4ck_Widw](https://twitter.com/N4m1th4_01)
+
 
 **Writeup:**
-The file provided is a executable file , that can be reversed in windows OS
-By using IDA decompilor in windows , you can get the peudocode of the challenge. Using that it will be very easy to reverse the program. All you have to do is reverse the functions and use the given string to find the input which will be the key. If the key you gave in is correct , use that key as the passcode in the executable ,to obtain the flag!
+The file provided is a executable file , that can be reversed in windows OS.
+By using IDA decompilor in windows , you can get the pseudocode of the challenge. Using that it will be very easy to reverse the program. All you have to do is reverse the functions and use the given string to find the input which will be the key. If the key you gave in is correct , use that key as the passcode in the executable ,to obtain the flag!
 
-The solution script:
+### The solution script:
+Here give the input as ```"lcZdl_Yoati+Xjn,lN!gGRdNR-R]H`=XjN,lo*+Iv"``` Shown in the challenge file and get the input to be used as the passcode.
 ```
 #include<stdio.h>
 #include<string.h>
-/* give the input as "lcZdl_Yoati+Xjn,lN!gGRdNR-R]H`=XjN,lo*+Iv" Shown in the challenge file and get the input to be used.*/
+
 char* lol(char *input){
 	int i;
 	for(i=0;input[i]!='\0';i++){
