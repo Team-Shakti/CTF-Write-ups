@@ -75,21 +75,23 @@
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
         <li class="main active"><a href="#ez">EZ</a></li>
+            <li><a href="#the-solution-script">The solution script:</a></li>
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
 <h1 id="ez">EZ</h1>
 <p><strong>Challenge discription</strong>
-Lets try a beginners windows challenge!!!
-<strong>Author</strong>:bl4ck_Widw</p>
+Lets try a beginners windows challenge!!!</p>
+<p><strong>Author</strong>:<a href="https://twitter.com/N4m1th4_01">bl4ck_Widw</a></p>
 <p><strong>Writeup:</strong>
-The file provided is a executable file , that can be reversed in windows OS
-By using IDA decompilor in windows , you can get the peudocode of the challenge. Using that it will be very easy to reverse the program. All you have to do is reverse the functions and use the given string to find the input which will be the key. If the key you gave in is correct , use that key as the passcode in the executable ,to obtain the flag!</p>
-<p>The solution script:</p>
+The file provided is a executable file , that can be reversed in windows OS.
+By using IDA decompilor in windows , you can get the pseudocode of the challenge. Using that it will be very easy to reverse the program. All you have to do is reverse the functions and use the given string to find the input which will be the key. If the key you gave in is correct , use that key as the passcode in the executable ,to obtain the flag!</p>
+<h3 id="the-solution-script">The solution script:</h3>
+<p>Here give the input as <code>"lcZdl_Yoati+Xjn,lN!gGRdNR-R]H`=XjN,lo*+Iv"</code> Shown in the challenge file and get the input to be used as the passcode.</p>
 <pre><code>#include&lt;stdio.h&gt;
 #include&lt;string.h&gt;
-/* give the input as &quot;lcZdl_Yoati+Xjn,lN!gGRdNR-R]H`=XjN,lo*+Iv&quot; Shown in the challenge file and get the input to be used.*/
+
 char* lol(char *input){
     int i;
     for(i=0;input[i]!='\0';i++){
