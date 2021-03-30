@@ -49,9 +49,9 @@ Till here we have just overflown the buffer. This allows us into the shell but h
    0x0804929c <+102>:	xor    ecx,0x67616c66
    ```
    Thus in order to overflow the buffer at the password, and to call the win() function once the right value is compared at ebp-0xc register, we willnhave to:
-      * rewrite ebp-0xc with p32(0xdeadbeef) since that is what it is compared with,
-      * rewrite the return address stored at eip to that of the win function, 
-      * pass arguments of win function, i.e 
+   1. rewrite ebp-0xc with p32(0xdeadbeef) since that is what it is compared with,
+   2. rewrite the return address stored at eip to that of the win function, 
+   3. pass arguments of win function, i.e 
          param_1 = p32(0x14b4da55), param_2 = p32(0x0), param_3 = p32(0x67616c66), param_4 = p32(0x0)
    
 ## python program : (cotinuation)
