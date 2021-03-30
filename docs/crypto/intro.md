@@ -9,7 +9,7 @@
 This repo contains the writeups of varoius challenges from CTFs we have attempted.
 
 - [BlueHensCTF](https://ctftime.org/event/1298)
-    - [hot-diggity-dog](../BlueHensCTF/hot-diggit-dog/) - [Arya Arun](https://twitter.com/aryaarun_)
+    - [hot-diggity-dog](../BlueHensCTF/hot-diggity-dog/) - [Arya Arun](https://twitter.com/aryaarun_)
 
 
 
