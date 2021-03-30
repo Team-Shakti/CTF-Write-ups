@@ -1,4 +1,4 @@
-# Beef-Of-Finitude
+# Beef_Of_Finitude
 
 To start off, we see a main function which calls function myFun.
    
