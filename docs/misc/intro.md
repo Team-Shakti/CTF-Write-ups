@@ -10,3 +10,5 @@ This repo contains the writeups of various challenges from CTFs we have attempte
 
 - [HSCTF7 2020](https://ctftime.org/event/939)
     - [Emojis](../HSCTF7/Emojis/) - [Sandhra Bino](https://twitter.com/SandraBino1)
+- [BlueHensCTF](https://ctftime.org/event/1298)
+    - [Conway](../BlueHensCTF/conway/) - [Arya Arun](https://twitter.com/aryaarun_)
