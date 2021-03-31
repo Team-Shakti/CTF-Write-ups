@@ -1,4 +1,4 @@
-# Challenge Name: Beef-Of-Finitude
+# Beef-Of-Finitude
 
 To start off, we see a main function which calls function myFun.
    
