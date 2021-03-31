@@ -15,4 +15,4 @@ This repo contains the writeups of various challenges from CTFs we have attempte
 - [BlueHensCTF 2020](https://ctftime.org/event/1298)
     - [Rise and Shine](../BlueHensCTF/rise/) -[Adhithya Sree Mohan](https://twitter.com/adhithya_sree)
 -[BlueHensCTF 2020](https://ctftime.org/event/1298)
-    - [mountain climber)(../BlueHensCTF/Mountain_climber/) -[Revathi](https://twitter.com/Revathi01740772)
+    - [mountain climber](../BlueHensCTF/Mountain_climber/) -[Revathi](https://twitter.com/Revathi01740772)
