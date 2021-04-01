@@ -17,5 +17,4 @@ This repo contains the writeups of varoius challenges from CTFs we have attempte
 - [N1CTF20](https://ctftime.org/event/1099)
     - [EasyWrite](../N1CTF20/easywrite/) - [Shruti Dixit](https://twitter.com/rudyerudite)
 - [BlueHens CTF](https://ctftime.org/event/1298)
-    - [Beef-Of-Finitude](../BlueHens CTF/beef-of-finitude/) - [Shravya Bhaskara](https://twitter.com/BhaskaraShravya)
-
+    - [Beef-Of-Finitude](../BlueHensCTF/beef-of-finitude/) - [Shravya Bhaskara](https://twitter.com/BhaskaraShravya)
