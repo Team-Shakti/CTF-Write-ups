@@ -8,7 +8,7 @@ Here we have an intersting challenge which involves brute forcing.
 
 <p align="left">
 
-<img src = " https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/crypto/BlueHensCTF/asset/otp-1.png " width = "300" height = "300" >
+<img src = "https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/crypto/BlueHensCTF/asset/otp-1.png" width = "300" height = "300" >
 
 </p>
 
@@ -18,7 +18,7 @@ In the given file, code is given in php
 
 <p align="left">
 
-<img src = " https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/crypto/BlueHensCTF/asset/ciphertext.png  " width = "1617" height = "250" >
+<img src = "https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/crypto/BlueHensCTF/asset/ciphertext.png" width = "1617" height = "250" >
 
 </p>
 
@@ -28,20 +28,20 @@ Here we have two cipher texts, which are separated by @@
 
 <p align="left">
 
-<img src = "https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/crypto/BlueHensCTF/asset/Selection_014.png " width = "670" height = "270" >
+<img src = "https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/crypto/BlueHensCTF/asset/Selection_014.png" width = "670" height = "270" >
 
 </p>
 
 <p align="left">
 
-<img src = "https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/crypto/BlueHensCTF/asset/Selection_015.png " width = "640" height = "119" >
+<img src = "https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/crypto/BlueHensCTF/asset/Selection_015.png" width = "640" height = "119" >
 
 </p>
 
 >> repeated xor :
 <p align="left">
 
-<img src = "https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/crypto/BlueHensCTF/asset/Selection_016.png " width = "760" height = "109" >
+<img src = "https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/crypto/BlueHensCTF/asset/Selection_016.png" width = "760" height = "109" >
 
 </p>
 
@@ -51,13 +51,13 @@ Try to guess letters one by one and xor it with cipher texts accordingly.
 
 <p align="left">
 
-<img src = "https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/crypto/BlueHensCTF/asset/Selection_018.png " width = "1150" height = "533" >
+<img src = "https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/crypto/BlueHensCTF/asset/Selection_018.png" width = "1150" height = "533" >
 
 </p>
 
 <p align="left">
 
-<img src = " /https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/crypto/BlueHensCTF/asset/Selection_020.png " width = "1009" height = "622" >
+<img src = "https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/crypto/BlueHensCTF/asset/Selection_020.png" width = "1009" height = "622" >
 
 </p>
 
