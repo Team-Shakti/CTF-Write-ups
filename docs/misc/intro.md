@@ -12,6 +12,6 @@ This repo contains the writeups of various challenges from CTFs we have attempte
     - [Emojis](https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/misc/HSCTF7/Emojis.md) - [Sandhra Bino](https://twitter.com/SandraBino1)
 - [BlueHensCTF 2021](https://ctftime.org/event/1298)
     - [Conway](https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/misc/BlueHensCTF/Conway/conway.md) - [Arya Arun](https://twitter.com/aryaarun_)
-    - [Rise and Shine](https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/misc/BlueHensCTF/Rise/rise.md) -[Adhithya Sree Mohan](https://twitter.com/adhithya_sree)
+    - [Rise and Shine](https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/misc/BlueHensCTF/Rise%20%26%20Shine/rise.md) -[Adhithya Sree Mohan](https://twitter.com/adhithya_sree)
     - [Mountain Climber](https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/misc/BlueHensCTF/Mountain%20Climber/Mountain_climber.md) -[Revathi](https://twitter.com/Revathi01740772)
     - [Transforms](https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/misc/BlueHensCTF/Transforms/Transforms.md) -[Sri Nimitha](https://twitter.com/SriNimitha)
