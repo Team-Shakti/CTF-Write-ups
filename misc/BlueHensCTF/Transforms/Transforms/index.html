@@ -6,12 +6,12 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
         
-        <link rel="canonical" href="https://github.com/Team-Shakti/CTF-Write-ups/pwning/intro/">
-        <link rel="shortcut icon" href="../../img/favicon.ico">
-        <title>Binary Exploitation - CTF-Writeups</title>
-        <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
-        <link href="../../css/font-awesome.min.css" rel="stylesheet">
-        <link href="../../css/base.css" rel="stylesheet">
+        <link rel="canonical" href="https://github.com/Team-Shakti/CTF-Write-ups/misc/BlueHensCTF/Transforms/Transforms/">
+        <link rel="shortcut icon" href="../../../../img/favicon.ico">
+        <title>Transforms - CTF-Writeups</title>
+        <link href="../../../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../../../css/base.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atelier-forest-light.min.css">
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
@@ -19,8 +19,8 @@
             <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
         <![endif]-->
 
-        <script src="../../js/jquery-1.10.2.min.js" defer></script>
-        <script src="../../js/bootstrap-3.0.3.min.js" defer></script>
+        <script src="../../../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../../../js/bootstrap-3.0.3.min.js" defer></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
         <script>hljs.initHighlightingOnLoad();</script> 
     </head>
@@ -39,7 +39,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="../..">CTF-Writeups</a>
+                    <a class="navbar-brand" href="../../../..">CTF-Writeups</a>
                 </div>
 
                 <!-- Expanded navigation -->
@@ -47,10 +47,10 @@
                         <!-- Main navigation -->
                         <ul class="nav navbar-nav">
                             <li >
-                                <a href="../../about/">About Us</a>
+                                <a href="../../../../about/">About Us</a>
                             </li>
                             <li >
-                                <a href="../../shaktictf/">ShaktiCTF</a>
+                                <a href="../../../../shaktictf/">ShaktiCTF</a>
                             </li>
                             <li >
                                 <a href="https://team-shakti.github.io/">Website</a>
@@ -64,7 +64,7 @@
                             </a>
                         </li>
                             <li>
-                                <a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/pwning/intro.md">Edit on Team-Shakti/CTF-Write-ups</a>
+                                <a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/misc/BlueHensCTF/Transforms/Transforms.md">Edit on Team-Shakti/CTF-Write-ups</a>
                             </li>
                     </ul>
                 </div>
@@ -74,40 +74,73 @@
         <div class="container">
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
-        <li class="main active"><a href="#binary-exploitation">Binary Exploitation</a></li>
-            <li><a href="#introduction">Introduction</a></li>
-            <li><a href="#the-contents-of-this-repo">The contents of this repo</a></li>
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
-<h1 id="binary-exploitation">Binary Exploitation</h1>
-<h2 id="introduction">Introduction</h2>
-<p>"Write about Pwn and about the writeups"</p>
-<h2 id="the-contents-of-this-repo">The contents of this repo</h2>
-<p>This repo contains the writeups of varoius challenges from CTFs we have attempted.</p>
-<ul>
-<li><a href="https://ctftime.org/event/1033">De1CTF20</a><ul>
-<li><a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/pwning/De1CTF20/stl.md">STL_Container</a> - <a href="https://twitter.com/rudyerudite">Shruti Dixit</a></li>
-</ul>
-</li>
-<li><a href="https://ctftime.org/event/939">HSCTF20</a><ul>
-<li><a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/pwning/HSCTF20/studysim.md">StudySim</a> - <a href="https://twitter.com/rudyerudite">Shruti Dixit</a></li>
-</ul>
-</li>
-<li><a href="https://ctftime.org/event/933">VolgaCTF20</a><ul>
-<li><a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/pwning/VolgaCTF20/notepad.md">Notepad--</a> - <a href="https://twitter.com/rudyerudite">Shruti Dixit</a></li>
-</ul>
-</li>
-<li><a href="https://ctftime.org/event/1099">N1CTF20</a><ul>
-<li><a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/pwning/N1CTF20/easywrite.md">EasyWrite</a> - <a href="https://twitter.com/rudyerudite">Shruti Dixit</a></li>
-</ul>
-</li>
-<li><a href="https://ctftime.org/event/1298">BlueHens CTF</a><ul>
-<li><a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/pwning/BlueHensCTF/beef-of-finitude.md">Beef-Of-Finitude</a> - <a href="https://twitter.com/BhaskaraShravya">Shravya Bhaskara</a></li>
-</ul>
-</li>
-</ul></div>
+<p>Challenge name: Transforms
+Convert me!</p>
+<p>nc challenges.ctfd.io 30008
+We have to do 100 conversion correctly. For example:</p>
+<p>convert bytearray to hexdigest: [129, 141, 112, 176, 251, 106, 160, 102] @@@@@</p>
+<p>convert integer to bytearray: 1639309969325418938 @@@@@</p>
+<p>convert bytearray to integer: [55, 107, 189, 150, 85, 213, 147, 94] @@@@@
+and so on</p>
+<p>import binascii
+from pwn import *</p>
+<p>def parse_message(message):
+    try:
+        message = message.replace(b"convert", b"").strip()
+        message = message.replace(b" @@@@@", b"").strip()
+        base_a = message.split(b"to")[0].replace(b"convert", b"").strip()
+        base_b = message.split(b"to")[1].split(b":")[0].strip()
+        pivot = (f"{base_b.decode()}:").encode()
+        value = message.split(pivot)[-1].strip()
+        return base_a.decode(), base_b.decode(), value
+    except Exception as e:
+        print(f"Exception raised: {e} with message: {message}")</p>
+<p>if <strong>name</strong> == "<strong>main</strong>":</p>
+<pre><code>conn = remote('challenges.ctfd.io', 30008)
+for i in range(0, 120):
+    for j in range(0, 2):
+        print(conn.recvline())
+
+    line = conn.recvline()
+    base_a, base_b, value = parse_message(line)
+    print(line)
+    print(f" Parsed to: from **{base_a}** to **{base_b}** ===&gt; ", value)
+
+    response = None
+    #1 - Convert start types in byte. stop
+    if base_a == "bytearray":
+        bytes_value = bytes( bytearray ( eval ( value ) ) )
+    elif base_a == "hexdigest":
+        bytes_value = bytes.fromhex( value.decode() )  # TypeError: fromhex() argument must be str, not bytes
+    elif base_a == "string":
+        bytes_value = value.strip()  # (?)
+    elif base_a == "integer":
+        bytes_value = (int(value)).to_bytes(8, 'big')
+
+    #2 - Convert byte from what you want.
+    if base_b == "bytearray":
+        response = str( list( bytearray(bytes_value) ) )
+    elif base_b == "hexdigest":
+        response = bytes_value.hex()
+    elif base_b == "string":
+        response = bytes_value.strip()
+    elif base_b == "integer":
+        response = str( int.from_bytes(bytes_value, byteorder='big', signed=False) )
+
+    if response is not None:
+        print(b"Going to send response ===&gt; ", response)
+        conn.send(response)
+        conn.send(b"\n")
+        print(b"Response from challenge: " + conn.recvline())
+        print(conn.recvline())
+        print(f"\n {i+1} ===================================\n")
+    else:
+        print("No response was provided")
+</code></pre></div>
         </div>
 
         <footer class="col-md-12">
@@ -116,12 +149,12 @@
             <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
         <script>
-            var base_url = "../..",
+            var base_url = "../../../..",
                 shortcuts = {"search": 83, "next": 78, "help": 191, "previous": 80};
         </script>
-        <script src="../../js/base.js" defer></script>
+        <script src="../../../../js/base.js" defer></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
-        <script src="../../search/main.js" defer></script>
+        <script src="../../../../search/main.js" defer></script>
 
         <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
     <div class="modal-dialog">

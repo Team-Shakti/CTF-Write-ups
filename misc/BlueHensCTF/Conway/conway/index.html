@@ -6,12 +6,12 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
         
-        <link rel="canonical" href="https://github.com/Team-Shakti/CTF-Write-ups/misc/BlueHensCTF/rise/">
-        <link rel="shortcut icon" href="../../../img/favicon.ico">
-        <title>Rise - CTF-Writeups</title>
-        <link href="../../../css/bootstrap-custom.min.css" rel="stylesheet">
-        <link href="../../../css/font-awesome.min.css" rel="stylesheet">
-        <link href="../../../css/base.css" rel="stylesheet">
+        <link rel="canonical" href="https://github.com/Team-Shakti/CTF-Write-ups/misc/BlueHensCTF/Conway/conway/">
+        <link rel="shortcut icon" href="../../../../img/favicon.ico">
+        <title>BlueHens CTF - CTF-Writeups</title>
+        <link href="../../../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../../../css/base.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atelier-forest-light.min.css">
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
@@ -19,8 +19,8 @@
             <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
         <![endif]-->
 
-        <script src="../../../js/jquery-1.10.2.min.js" defer></script>
-        <script src="../../../js/bootstrap-3.0.3.min.js" defer></script>
+        <script src="../../../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../../../js/bootstrap-3.0.3.min.js" defer></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
         <script>hljs.initHighlightingOnLoad();</script> 
     </head>
@@ -39,7 +39,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="../../..">CTF-Writeups</a>
+                    <a class="navbar-brand" href="../../../..">CTF-Writeups</a>
                 </div>
 
                 <!-- Expanded navigation -->
@@ -47,10 +47,10 @@
                         <!-- Main navigation -->
                         <ul class="nav navbar-nav">
                             <li >
-                                <a href="../../../about/">About Us</a>
+                                <a href="../../../../about/">About Us</a>
                             </li>
                             <li >
-                                <a href="../../../shaktictf/">ShaktiCTF</a>
+                                <a href="../../../../shaktictf/">ShaktiCTF</a>
                             </li>
                             <li >
                                 <a href="https://team-shakti.github.io/">Website</a>
@@ -64,7 +64,7 @@
                             </a>
                         </li>
                             <li>
-                                <a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/misc/BlueHensCTF/rise.md">Edit on Team-Shakti/CTF-Write-ups</a>
+                                <a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/misc/BlueHensCTF/Conway/conway.md">Edit on Team-Shakti/CTF-Write-ups</a>
                             </li>
                     </ul>
                 </div>
@@ -74,27 +74,23 @@
         <div class="container">
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
-        <li class="main active"><a href="#description">DESCRIPTION</a></li>
-        <li class="main "><a href="#solution">SOLUTION</a></li>
-        <li class="main "><a href="#flag">FLAG</a></li>
+        <li class="main active"><a href="#bluehens-ctf">BlueHens CTF</a></li>
+            <li><a href="#conway-presents-the-falcon-misc">Conway presents the falcon - Misc</a></li>
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
-<h2 id="description">DESCRIPTION</h2>
-<p>Breakfast is the most important meal of the day.
-Wrap your result in UDCTF{} all caps.
-HINT: it is one common english word encoded in Baconian</p>
-<p><img alt="breakfast" src="https://raw.githubusercontent.com/llioness/CTF-Write-ups/master/docs/misc/BlueHensCTF/asset/breakfast.png" /></p>
-<h2 id="solution">SOLUTION</h2>
+<h1 id="bluehens-ctf">BlueHens CTF</h1>
+<h2 id="conway-presents-the-falcon-misc">Conway presents the falcon - Misc</h2>
+<p><img alt="shakti" src="https://github.com/aryaarun12/CTF-Write-ups/blob/master/docs/misc/BlueHensCTF/asset/falcon.png?raw=true" /></p>
+<p><a href="https://github.com/aryaarun12/CTF-Write-ups/blob/master/docs/misc/BlueHensCTF/asset/golly.rle">Challenge file</a></p>
 <ul>
-<li>It's Baconian cipher. </li>
-<li>There are 40 stars, of 2 types, along the boundary of the image. </li>
-<li>When we take those in anti-clockwise order, we will get the baconian "AAABAAABBBAAAAAABABBABBBAABAAAABBABABBAA".</li>
-<li>This can de decoded to "CHAMPION".</li>
+<li>On browsing about rle files</li>
+<li>Found an <a href="https://copy.sh/life/">online decoder</a> </li>
+<li>Importing the file into it, we directly get the flag..</li>
 </ul>
-<h1 id="flag">FLAG</h1>
-<p>UDCTF{CHAMPION}</p></div>
+<pre><code>UDCTF{th3y_c4ll_thems3lves_the_fl4g_smash3rs}
+</code></pre></div>
         </div>
 
         <footer class="col-md-12">
@@ -103,12 +99,12 @@ HINT: it is one common english word encoded in Baconian</p>
             <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
         <script>
-            var base_url = "../../..",
+            var base_url = "../../../..",
                 shortcuts = {"search": 83, "next": 78, "help": 191, "previous": 80};
         </script>
-        <script src="../../../js/base.js" defer></script>
+        <script src="../../../../js/base.js" defer></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
-        <script src="../../../search/main.js" defer></script>
+        <script src="../../../../search/main.js" defer></script>
 
         <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
     <div class="modal-dialog">
