@@ -16,4 +16,6 @@ This repo contains the writeups of varoius challenges from CTFs we have attempte
     - [Notepad--](../VolgaCTF20/notepad/) - [Shruti Dixit](https://twitter.com/rudyerudite)
 - [N1CTF20](https://ctftime.org/event/1099)
     - [EasyWrite](../N1CTF20/easywrite/) - [Shruti Dixit](https://twitter.com/rudyerudite)
+- [ShaktiCTF21]
+	- [Returning](../ShakitCTF21/returning2.md) - [Shruti Dixit](https://twitter.com/rudyerudite)
 
