@@ -9,11 +9,12 @@ This document is currently deployed in mkdocs at https://teamshakti.in/CTF-Write
 
 Installation dependence
 
-    # mkdocs
+    MKdocs
     pip install mkdocs
     # extensions
     pip install pymdown-extensions
-    # theme
+    
+    Theme
     
     pip install mkdocs-material
     pip install mkdocs-bootswatch
