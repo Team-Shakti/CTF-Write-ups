@@ -11,7 +11,7 @@ This challenge is a fairly simple one but a bit tricky for beginners .
 The challenge emphasises on string compare . The input gets compared with a small part of an array already provided. The player just have to figure out which part gets compared with to find the flag.
 
 Solution script:
-```
+```c
 #include<stdio.h>
 #include<string.h>
 #include<stdlib.h>
