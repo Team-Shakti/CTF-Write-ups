@@ -10,15 +10,15 @@ This document is currently deployed in mkdocs at https://teamshakti.in/CTF-Write
 Installation dependence
 
     # mkdocs
-    `pip install mkdocs`
+    pip install mkdocs
     # extensions
-    `pip install pymdown-extensions`
+    pip install pymdown-extensions
     # theme
-    ```
+    
     pip install mkdocs-material
     pip install mkdocs-bootswatch
     pip install mkdocs-bootstrap
-    ```
+    
 Local deployment
 
     mkdocs serve
