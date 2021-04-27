@@ -29,7 +29,7 @@ As the challenge discription tells us about the flag format , we can use it as a
 As we know , the flag format is shaktiCTF{} .
 ShaktiCTF is  a 9 letter long string just like our input . Hence we can use the flag format to reverse our program and find the pin . 
 Solution script:
-```
+```python
 d="shaktiCTF"
 # The flag format can be used to find the pin code 
 c=[85, 76, 66, 53, 80, 72, 118, 98, 59, 78, 98, 126, 5, 107, 100, 75, 110, 60, 123, 16, 17, 105, 57, 6, 119, 85, 98, 93, 112, 16, 87, 109, 96, 126, 82, 100, 78, 1, 98, 105, 65, 4, 116, 79, 2, 35]
