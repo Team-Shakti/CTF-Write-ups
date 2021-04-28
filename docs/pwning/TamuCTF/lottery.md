@@ -1,4 +1,4 @@
-# Challenge Name : Lottery
+# Lottery
 
 Description : 
 Attack the binary and get the flag!
