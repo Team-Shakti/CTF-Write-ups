@@ -10,10 +10,6 @@ This repo contains the writeups of various challenges from CTFs we have attempte
 
 - [HSCTF7 2020](https://ctftime.org/event/939)
 <<<<<<< HEAD
-    - [Emojis](../HSCTF7/Emojis/) - [Sandhra Bino](https://twitter.com/SandraBino1)
-- [BlueHensCTF](https://ctftime.org/event/1298)
-    - [Conway](../BlueHensCTF/conway/) - [Arya Arun](https://twitter.com/aryaarun_)
-    - [Rise and Shine](../BlueHensCTF/rise/) -[Adhithya Sree Mohan](https://twitter.com/adhithya_sree)
     - [Emojis](https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/misc/HSCTF7/Emojis.md) - [Sandhra Bino](https://twitter.com/SandraBino1)
 - [BlueHensCTF 2021](https://ctftime.org/event/1298)
     - [Conway](https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/misc/BlueHensCTF/Conway/conway.md) - [Arya Arun](https://twitter.com/aryaarun_)
