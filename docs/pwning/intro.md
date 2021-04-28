@@ -19,5 +19,5 @@ This repo contains the writeups of varoius challenges from CTFs we have attempte
 - [BlueHensCTF](https://ctftime.org/event/1298)
     - [Beef-Of-Finitude](../BlueHensCTF/beef-of-finitude/) - [Shravya Bhaskara](https://twitter.com/BhaskaraShravya)
 - [tamuCTF21](https://ctftime.org/event/1320)
-    - [lottery](https://github.com/shravya-bhaskara/CTF-Write-ups/blob/master/docs/pwning/tamuCTF21/lottery.md) - [Shravya Bhaskara](https://twitter.com/BhaskaraShravya)
+    - [lottery](../tamuCTF21/lottery/) - [Shravya Bhaskara](https://twitter.com/BhaskaraShravya)
  
