@@ -16,5 +16,8 @@ This repo contains the writeups of varoius challenges from CTFs we have attempte
     - [Notepad--](../VolgaCTF20/notepad/) - [Shruti Dixit](https://twitter.com/rudyerudite)
 - [N1CTF20](https://ctftime.org/event/1099)
     - [EasyWrite](../N1CTF20/easywrite/) - [Shruti Dixit](https://twitter.com/rudyerudite)
-- [BlueHens CTF](https://ctftime.org/event/1298)
+- [BlueHensCTF](https://ctftime.org/event/1298)
     - [Beef-Of-Finitude](../BlueHensCTF/beef-of-finitude/) - [Shravya Bhaskara](https://twitter.com/BhaskaraShravya)
+- [tamuCTF21](https://ctftime.org/event/1320)
+    - [lottery](https://github.com/shravya-bhaskara/CTF-Write-ups/blob/master/docs/pwning/tamuCTF21/lottery.md) - [Shravya Bhaskara](https://twitter.com/BhaskaraShravya)
+ 
