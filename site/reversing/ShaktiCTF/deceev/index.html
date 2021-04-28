@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        <link rel="canonical" href="https://github.com/Team-Shakti/CTF-Write-ups/reversing/ShaktiCTF/deceev/">
+        <link rel="shortcut icon" href="../../../img/favicon.ico">
+        <title>Deceev - CTF-Writeups</title>
+        <link href="../../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/darcula.min.css">
+
+        <script src="../../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../../js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+            <div class="container">
+                <a class="navbar-brand" href="../../..">CTF-Writeups</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="navitem">
+                                <a href="../../../about/" class="nav-link">About Us</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../../../shaktictf/" class="nav-link">ShaktiCTF</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="https://team-shakti.github.io/" class="nav-link">Website</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/reversing/ShaktiCTF/deceev.md" class="nav-link">Edit on Team-Shakti/CTF-Write-ups</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#deceev" class="nav-link">Deceev</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#challenge-writeup" class="nav-link">Challenge Writeup</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="deceev">Deceev</h1>
+<h2 id="challenge-writeup">Challenge Writeup</h2>
+<p>This challenge basically acts as a base64 encoding service where whatever string you give as a binary the base64 encoded string is returned, or at least tahts what it looks like at first sight. Well, the challenge name suggests that it is a deceptive challenge. 
+The challenge in its normal behaviour does not enter functions that seem suspicious. </p>
+<pre><code class="language-cpp">int __cdecl main(int argc, const char **argv, const char **envp)
+{
+  __int64 v3; // rdx
+  __int64 v4; // rdx
+  int result; // eax
+  __int64 v6; // [rsp-30h] [rbp-30h]
+  __int64 v7; // [rsp-28h] [rbp-28h]
+  __int64 v8; // [rsp-20h] [rbp-20h]
+  const char *v9; // [rsp-18h] [rbp-18h]
+
+  __asm { endbr64 }
+  sub_10E0(&quot;Enter the string you want to encode :\t&quot;, argv, envp);
+  ((void (__fastcall *)(__int64, __int64))sub_10F0)(256LL, _bss_start);
+  sub_10E0(&quot;%d %d %d %d %d\n&quot;, 47LL, 48LL);
+  v3 = ((__int64 (__fastcall *)())sub_10D0)();
+  v6 = ((__int64 (__fastcall *)(__int64))b64_encode)(v3);
+  sub_10E0(&quot;encoded: %s\n&quot;, v6, v4);
+  v7 = b64_decoded_size(v6) + 1;
+  v8 = sub_1110(v7);
+  if ( (unsigned int)b64_decode(v6, v8, v7) )
+  {
+    if ( argc == 2 )
+    {
+      v9 = argv[1];
+      sub_1110(256LL);
+      ZDNjMTN2Mw(v9);
+    }
+    *(_BYTE *)(v8 + v7) = 0;
+    sub_10B0(v8);
+    sub_10C0(&quot;Good Day!&quot;);
+    result = 0;
+  }
+  else
+  {
+    sub_10C0(&quot;Decode Failure&quot;);
+    result = 1;
+  }
+  return result;
+}
+
+</code></pre>
+<p><ins>Checker Code</ins></p>
+<pre><code class="language-cpp">__int64 __fastcall ZDNjMTN2Mw(__int64 a1)
+{
+  __int64 v1; // rax
+  __int64 v2; // rax
+  __int64 v4; // [rsp-10h] [rbp-10h]
+
+  __asm { endbr64 }
+  v4 = sub_1110(256LL);
+  manipulate(a1, 0LL, v4);
+  v1 = sub_10D0(v4);
+  v2 = b64_encode(v4, v1);
+  if ( !(unsigned int)sub_1100(
+                        v2,
+                        &quot;c2JodWFna2d0eWktY210M2Y1ezVkYjN1Y2czZ3B5dC0xbTAzbjVfNTFiNXVfZzNndnkzLXJteTN3NWg1M2JydTNnfWc=&quot;) )
+    sub_10C0(&quot;\nYup, you got me :P\nYour input is your flag!!&quot;);
+  return sub_10C0(&quot;Exiting peacefully&quot;);
+}
+</code></pre>
+<p>So taking a deeper look at the decompilation from ghidra/IDA and compare it with another base64 encoding code from online you can notice the differance in the charset used for encoding (This is the intended solution :P).</p>
+<p>On going through the path followed by your input you can see that your input is being modified at alternate indices with chars from the string <code>buggy-m355</code>. This input goes further for the encoding process. </p>
+<p>Decoding the hardcoded b64(like)<code>c2JodWFna2d0eWktY210M2Y1ezVkYjN1Y2czZ3B5dC0xbTAzbjVfNTFiNXVfZzNndnkzLXJteTN3NWg1M2JydTNnfWc=</code> string with the charset used in the binary gives you this string.</p>
+<p><code>flag = 'sbhuagkgtyi-cmt3f5{5db3ucg3gpyt-1m03n5_51b5u_g3gvy3-rmy3w5h53bru3g}g'[::2]</code></p>
+<h3 id="flag">Flag</h3>
+<p><code>shaktictf{d3c3pt10n_15_3v3rywh3r3}</code></p>
+<p>Which is the flag.
+Hope you liked the challenge!!</p></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+                <p>Copyright &copy; 2020 <a href="http://Team-Shakti.github.io/">Team-Shakti Writeups</a></p>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../../js/base.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
+        <script src="../../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

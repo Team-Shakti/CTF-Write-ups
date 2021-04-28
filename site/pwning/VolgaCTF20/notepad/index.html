@@ -9,62 +9,49 @@
         <link rel="canonical" href="https://github.com/Team-Shakti/CTF-Write-ups/pwning/VolgaCTF20/notepad/">
         <link rel="shortcut icon" href="../../../img/favicon.ico">
         <title>Notepad-- - CTF-Writeups</title>
-        <link href="../../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../../css/bootstrap.min.css" rel="stylesheet">
         <link href="../../../css/font-awesome.min.css" rel="stylesheet">
         <link href="../../../css/base.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atelier-forest-light.min.css">
-        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-        <!--[if lt IE 9]>
-            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-        <![endif]-->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/darcula.min.css">
 
         <script src="../../../js/jquery-1.10.2.min.js" defer></script>
-        <script src="../../../js/bootstrap-3.0.3.min.js" defer></script>
+        <script src="../../../js/bootstrap.min.js" defer></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
         <script>hljs.initHighlightingOnLoad();</script> 
     </head>
 
     <body>
-
-        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
             <div class="container">
-
-                <!-- Collapsed navigation -->
-                <div class="navbar-header">
-                    <!-- Expander button -->
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="../../..">CTF-Writeups</a>
-                </div>
+                <a class="navbar-brand" href="../../..">CTF-Writeups</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
                 <!-- Expanded navigation -->
-                <div class="navbar-collapse collapse">
+                <div id="navbar-collapse" class="navbar-collapse collapse">
                         <!-- Main navigation -->
                         <ul class="nav navbar-nav">
-                            <li >
-                                <a href="../../../about/">About Us</a>
+                            <li class="navitem">
+                                <a href="../../../about/" class="nav-link">About Us</a>
                             </li>
-                            <li >
-                                <a href="../../../shaktictf/">ShaktiCTF</a>
+                            <li class="navitem">
+                                <a href="../../../shaktictf/" class="nav-link">ShaktiCTF</a>
                             </li>
-                            <li >
-                                <a href="https://team-shakti.github.io/">Website</a>
+                            <li class="navitem">
+                                <a href="https://team-shakti.github.io/" class="nav-link">Website</a>
                             </li>
                         </ul>
 
-                    <ul class="nav navbar-nav navbar-right">
-                        <li>
-                            <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
                                 <i class="fa fa-search"></i> Search
                             </a>
                         </li>
-                            <li>
-                                <a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/pwning/VolgaCTF20/notepad.md">Edit on Team-Shakti/CTF-Write-ups</a>
+                            <li class="nav-item">
+                                <a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/pwning/VolgaCTF20/notepad.md" class="nav-link">Edit on Team-Shakti/CTF-Write-ups</a>
                             </li>
                     </ul>
                 </div>
@@ -72,15 +59,38 @@
         </div>
 
         <div class="container">
-                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
-    <ul class="nav bs-sidenav">
-        <li class="main active"><a href="#notepad-">Notepad--</a></li>
-            <li><a href="#reversing">Reversing</a></li>
-            <li><a href="#vulnerability-and-the-exploit">Vulnerability and the exploit</a></li>
-            <li><a href="#exploit-code">Exploit Code</a></li>
-    </ul>
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#notepad-" class="nav-link">Notepad--</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#reversing" class="nav-link">Reversing</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#vulnerability-and-the-exploit" class="nav-link">Vulnerability and the exploit</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#exploit-code" class="nav-link">Exploit Code</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
 </div></div>
-                <div class="col-md-9" role="main">
+                    <div class="col-md-9" role="main">
 
 <h1 id="notepad-">Notepad--</h1>
 <p>This 300 pointer challenge was the solo Pwn challenge in VolgaCTF and I solved it just after the CTF ended :(. The following exploit is tested on a Ubuntu 18.04 VM.</p>
@@ -88,7 +98,6 @@
 <pre><code>Notepad– is the app to store your most private notes, with an extremely
 lightweight UI. Check it out!
 </code></pre>
-
 <p>We are just given the challenge binary for this challenge. Also, the 64-bit dynamically linked stripped binary had all the protections enabled other than FORTIFY.</p>
 <h2 id="reversing">Reversing</h2>
 <p>The Notepad application presents us a menu function which looks like:</p>
@@ -102,7 +111,6 @@ Pick an existing notebook or create a new one
 
 &gt;
 </code></pre>
-
 <p>The structure of the notebook and tab is as follows,</p>
 <pre><code>struct notebook { char name[16];
                   int number_of_tabs;
@@ -114,7 +122,6 @@ struct tabs { char name[16];
               char* content; 
             }
 </code></pre>
-
 <p>So the functionality allows you to pick a notebook by giving the index as index_of_notebook + 1  and to try out the functionalities of tabs.</p>
 <pre><code>Operations with notebook &quot;aaaaaaa&quot;
 [a]dd tab
@@ -126,7 +133,6 @@ struct tabs { char name[16];
 
 &gt;
 </code></pre>
-
 <p>This let’s you add a tab, view the data in each tab ( (len(data_it_prints) is equal to tab-&gt;size) , list all the names of tabs in a notebook, delete a tab and go back to the previous menu. So hoping that the functionalities of the binary is clear let’s move on!</p>
 <h2 id="vulnerability-and-the-exploit">Vulnerability and the exploit</h2>
 <h3 id="getting-the-leaks">Getting the leaks</h3>
@@ -151,7 +157,7 @@ struct tabs { char name[16];
 <p>Mind you, I did this locally and not on the server. To get which libc the binary is using you might have to look up the last 3 nibbles in the libc database to get the libc version the challenge is using!</p>
 <h3 id="overwriting-the-free_hook">Overwriting the free_hook</h3>
 <p>The first obvious bug in the binary is the manner in how it takes in the name of the notebook and the tab. It takes the input through scanf( “%s”, name) which makes it obvious that it is prone to the classic buffer overflow! Here’s the code snippet of the add_notebook functionality:</p>
-<pre><code class="C">int add_notebook()
+<pre><code class="language-C">int add_notebook()
 {
 __int64 v1; // rax
 char *v2; // ST08_8
@@ -164,7 +170,6 @@ printf(&quot;Enter notebook name: &quot;);
 return __isoc99_scanf(&quot;%s&quot;, v2);
 }
 </code></pre>
-
 <p>Now, that you have got the leaks you can find the address of free_hook which is a libc pointer that is invoked when the program calls free(chunk). To carry out the final exploit our aim is now to overwrite the free_hook. To do this we do have to explore another vulnerability which lies in the update_tab functionality.</p>
 <p>Update_tab function let’s you update any tab of the index lesser than notebook-&gt;number_of_tabs.</p>
 <pre><code>Enter index of tab to update: 1
@@ -172,7 +177,6 @@ Enter new tab name (leave empty to skip):
 Enter new data length (leave empty to keep the same): 
 Enter the data:
 </code></pre>
-
 <p>And as you can see in above if the new length is same as the previous it just simply lets you update the content pointed by the data pointer. Otherwise, it frees the current data pointer and calls a malloc() with a size. What if I could overwrite tabs-&gt;data pointer with free_hook and call an update functionality without giving a different size? Let’s see what we can do!</p>
 <ul>
 <li>
@@ -189,7 +193,7 @@ Enter the data:
 </li>
 </ul>
 <h2 id="exploit-code">Exploit Code</h2>
-<pre><code class="python">from pwn import *
+<pre><code class="language-python">from pwn import *
 
 r = process('./notepad')
 # notebook functionalities
@@ -272,8 +276,8 @@ del_tab(1)
 #gdb.attach(r)
 r.interactive()
 </code></pre>
-
 <p>The challenge was a simple yet interesting one! I got a shell locally for this but was too late to try it on the server and get the flag. Anyways, I’m glad I could solve it!</p></div>
+            </div>
         </div>
 
         <footer class="col-md-12">
@@ -283,27 +287,27 @@ r.interactive()
         </footer>
         <script>
             var base_url = "../../..",
-                shortcuts = {"search": 83, "next": 78, "help": 191, "previous": 80};
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
         </script>
         <script src="../../../js/base.js" defer></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
         <script src="../../../search/main.js" defer></script>
 
-        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
-    <div class="modal-dialog">
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
             </div>
             <div class="modal-body">
                 <p>
                     From here you can search these documents. Enter
                     your search terms below.
                 </p>
-                <form role="form">
+                <form>
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
                     </div>
                 </form>
                 <div id="mkdocs-search-results"></div>
@@ -312,12 +316,12 @@ r.interactive()
             </div>
         </div>
     </div>
-</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="Keyboard Shortcuts Modal" aria-hidden="true">
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="exampleModalLabel">Keyboard Shortcuts</h4>
             </div>
             <div class="modal-body">
               <table class="table">

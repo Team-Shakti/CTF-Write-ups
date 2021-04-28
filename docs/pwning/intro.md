@@ -9,11 +9,19 @@
 This repo contains the writeups of varoius challenges from CTFs we have attempted.
 
 - [De1CTF20](https://ctftime.org/event/1033)
-    - [STL_Container](../De1CTF20/stl/) - [Shruti Dixit](https://twitter.com/rudyerudite)
+    - [STL_Container](https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/pwning/De1CTF20/stl.md) - [Shruti Dixit](https://twitter.com/rudyerudite)
 - [HSCTF20](https://ctftime.org/event/939)
-    - [StudySim](../HSCTF20/studysim/) - [Shruti Dixit](https://twitter.com/rudyerudite)
+    - [StudySim](https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/pwning/HSCTF20/studysim.md) - [Shruti Dixit](https://twitter.com/rudyerudite)
 - [VolgaCTF20](https://ctftime.org/event/933)
-    - [Notepad--](../VolgaCTF20/notepad/) - [Shruti Dixit](https://twitter.com/rudyerudite)
+    - [Notepad--](https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/pwning/VolgaCTF20/notepad.md) - [Shruti Dixit](https://twitter.com/rudyerudite)
 - [N1CTF20](https://ctftime.org/event/1099)
-    - [EasyWrite](../N1CTF20/easywrite/) - [Shruti Dixit](https://twitter.com/rudyerudite)
+    - [EasyWrite](https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/pwning/N1CTF20/easywrite.md) - [Shruti Dixit](https://twitter.com/rudyerudite)
+- [BlueHens CTF](https://ctftime.org/event/1298)
+    - [Beef-Of-Finitude](https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/pwning/BlueHensCTF/beef-of-finitude.md) - [Shravya Bhaskara](https://twitter.com/BhaskaraShravya)
+- [ShaktiCTF21](https://ctftime.org/event/1251)
+	- [Returning](../ShakitCTF21/returning2.md) - [Shruti Dixit](https://twitter.com/rudyerudite)
+
+- [TamuCTF 21](https://ctftime.org/event/1320)
+    - [tictactoe](../tamuCTF/tictactoe) - [SandraBino](https://twitter.com/sandrabeme)
+    - [lottery](../tamuCTF/lottery) - [Shravya Bhaskara](https://twitter.com/BhaskaraShravya)
 
