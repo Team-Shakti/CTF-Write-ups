@@ -4,26 +4,26 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="description" content="None">
         
-        <link rel="canonical" href="https://github.com/Team-Shakti/CTF-Write-ups/">
-        <link rel="shortcut icon" href="img/favicon.ico">
-        <title>CTF-Writeups</title>
-        <link href="css/bootstrap.min.css" rel="stylesheet">
-        <link href="css/font-awesome.min.css" rel="stylesheet">
-        <link href="css/base.css" rel="stylesheet">
+        
+        <link rel="canonical" href="https://github.com/Team-Shakti/CTF-Write-ups/crypto/CyberApocalypseCTF/Wii_Phit/">
+        <link rel="shortcut icon" href="../../../img/favicon.ico">
+        <title>Wii Phit - CTF-Writeups</title>
+        <link href="../../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../../css/base.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/darcula.min.css">
 
-        <script src="js/jquery-1.10.2.min.js" defer></script>
-        <script src="js/bootstrap.min.js" defer></script>
+        <script src="../../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../../js/bootstrap.min.js" defer></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
         <script>hljs.initHighlightingOnLoad();</script> 
     </head>
 
-    <body class="homepage">
+    <body>
         <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
             <div class="container">
-                <a class="navbar-brand" href=".">CTF-Writeups</a>
+                <a class="navbar-brand" href="../../..">CTF-Writeups</a>
                 <!-- Expander button -->
                 <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
                     <span class="navbar-toggler-icon"></span>
@@ -34,10 +34,10 @@
                         <!-- Main navigation -->
                         <ul class="nav navbar-nav">
                             <li class="navitem">
-                                <a href="about/" class="nav-link">About Us</a>
+                                <a href="../../../about/" class="nav-link">About Us</a>
                             </li>
                             <li class="navitem">
-                                <a href="shaktictf/" class="nav-link">ShaktiCTF</a>
+                                <a href="../../../shaktictf/" class="nav-link">ShaktiCTF</a>
                             </li>
                             <li class="navitem">
                                 <a href="https://team-shakti.github.io/" class="nav-link">Website</a>
@@ -51,7 +51,7 @@
                             </a>
                         </li>
                             <li class="nav-item">
-                                <a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/index.md" class="nav-link">Edit on Team-Shakti/CTF-Write-ups</a>
+                                <a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/crypto/CyberApocalypseCTF/Wii_Phit.md" class="nav-link">Edit on Team-Shakti/CTF-Write-ups</a>
                             </li>
                     </ul>
                 </div>
@@ -71,16 +71,8 @@
     <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
         <ul class="nav flex-column">
             
-            <li class="nav-item" data-level="1"><a href="#welcome-to-teamshakti-writeups" class="nav-link">Welcome to TeamShakti Writeups</a>
+            <li class="nav-item" data-level="1"><a href="#wii-phit" class="nav-link">Wii Phit</a>
               <ul class="nav flex-column">
-            <li class="nav-item" data-level="2"><a href="#introduction" class="nav-link">Introduction</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#the-contents-of-this-repo" class="nav-link">The contents of this repo</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
               </ul>
             </li>
         </ul>
@@ -88,19 +80,58 @@
 </div></div>
                     <div class="col-md-9" role="main">
 
-<h1 id="welcome-to-teamshakti-writeups">Welcome to TeamShakti Writeups</h1>
-<h2 id="introduction">Introduction</h2>
-<p>This repo is hosted by <a href="http://Team-Shakti.github.io/">TeamShakti</a>,  the women-only CTF team of <a href="https://www.amrita.edu/amritapuri/">Amrita Vishwa Vidyapeetham, Amritapuri Campus</a>.</p>
-<h2 id="the-contents-of-this-repo">The contents of this repo</h2>
-<p>This repo contains the writeups of varoius challenges from CTFs we have attempted.</p>
-<ul>
-<li><a href="reversing/intro/">Reverse Engineering</a></li>
-<li><a href="pwning/intro/">Binary Exploitation</a></li>
-<li><a href="crypto/intro/">Cryptography</a></li>
-<li><a href="web/intro/">Web Exploitation</a></li>
-<li><a href="forensics/intro/">Forensic Analysis</a></li>
-<li><a href="misc/intro/">Miscellaneous</a></li>
-</ul></div>
+<h1 id="wii-phit">Wii Phit</h1>
+<p>Solved by: Sowmya (@__4lph4__)</p>
+<p>This was an interesting challenge from Cyber Apocalypse CTF 2021. This challenge is based on Number Theory and I really liked the way this challenge was created.</p>
+<p>Here's the challenge script for understanding the challenge: </p>
+<pre><code class="language-python">from Crypto.Util.number import bytes_to_long
+from secrets import FLAG,p,q
+
+N = p**3 * q
+e = 0x10001
+c = pow(bytes_to_long(FLAG),e,N)
+
+print(f'Flag: {hex(c)}')
+
+# Hint
+
+w = 25965460884749769384351428855708318685345170011800821829011862918688758545847199832834284337871947234627057905530743956554688825819477516944610078633662855
+x = p + 1328
+y = p + 1329
+z = q - 1
+
+assert w*(x*z + y*z - x*y) == 4*x*y*z
+</code></pre>
+<p>Parameter given to us:</p>
+<pre><code>Flag: 0x12f47f77c4b5a72a0d14a066fedc80ba6064058c900a798f1658de60f13e1d8f21106654c4aac740fd5e2d7cf62f0d3284c2686d2aac261e35576df989185fee449c20efa171ff3d168a04bce84e51af255383a59ed42583e93481cbfb24fddda16e0a767bff622a4753e1a5df248af14c9ad50f842be47ebb930604becfd4af04d21c0b2248a16cdee16a04b4a12ac7e2161cb63e2d86999a1a8ed2a8faeb4f4986c2a3fbd5916effb1d9f3f04e330fdd8179ea6952b14f758d385c4bc9c5ae30f516c17b23c7c6b9dbe40e16e90d8734baeb69fed12149174b22add6b96750e4416ca7addf70bcec9210b967991e487a4542899dde3abf3a91bbbaeffae67831c46c2238e6e5f4d8004543247fae7ff25bbb01a1ab3196d8a9cfd693096aabec46c2095f2a82a408f688bbedddc407b328d4ea5394348285f48afeaafacc333cff3822e791b9940121b73f4e31c93c6b72ba3ede7bba87419b154dc6099ec95f56ed74fb5c55d9d8b3b8c0fc7de99f344beb118ac3d4333eb692710eaa7fd22
+</code></pre>
+<p>Getting into my initial approach, I first tried elaborating this: <code>assert w*(x*z + y*z - x*y) == 4*x*y*z</code> thinking that it would give me a relation in one of the primes of the modulus. But that didn't work out. </p>
+<p>On staring at the equation for sometime, I found it similar to one the maths algebra kind of relation. Rearranging the equation gave me this equation: 
+<code>4/w = 1/x + 1/y - 1/z</code></p>
+<p>I searched for similar equations on the internet and I luckily found <a href="https://scialert.net/fulltext/?doi=aja.2011.31.37#:~:text=The%20above%20relation%20can%20also,this%20is%20a%20Diophantine%20equation">this</a></p>
+<p>According to the above link
+w = n
+x = (n-1)/2
+y = (n+1)/2
+z = n(n-1)(n+1)/4</p>
+<p>Once we get x,y,z we can simply get the prime factors <code>p,q</code> with which we can construct Modulus <code>N</code> and <code>phi(n)</code> to solve the RSA problem. </p>
+<p>Solution script:</p>
+<pre><code>from Crypto.Util.number import *
+w = 25965460884749769384351428855708318685345170011800821829011862918688758545847199832834284337871947234627057905530743956554688825819477516944610078633662855
+flag = 0x12f47f77c4b5a72a0d14a066fedc80ba6064058c900a798f1658de60f13e1d8f21106654c4aac740fd5e2d7cf62f0d3284c2686d2aac261e35576df989185fee449c20efa171ff3d168a04bce84e51af255383a59ed42583e93481cbfb24fddda16e0a767bff622a4753e1a5df248af14c9ad50f842be47ebb930604becfd4af04d21c0b2248a16cdee16a04b4a12ac7e2161cb63e2d86999a1a8ed2a8faeb4f4986c2a3fbd5916effb1d9f3f04e330fdd8179ea6952b14f758d385c4bc9c5ae30f516c17b23c7c6b9dbe40e16e90d8734baeb69fed12149174b22add6b96750e4416ca7addf70bcec9210b967991e487a4542899dde3abf3a91bbbaeffae67831c46c2238e6e5f4d8004543247fae7ff25bbb01a1ab3196d8a9cfd693096aabec46c2095f2a82a408f688bbedddc407b328d4ea5394348285f48afeaafacc333cff3822e791b9940121b73f4e31c93c6b72ba3ede7bba87419b154dc6099ec95f56ed74fb5c55d9d8b3b8c0fc7de99f344beb118ac3d4333eb692710eaa7fd22
+x = (w-1)//2
+y = (w+1)//2
+z = w*x*y
+p = x - 1328
+q = z + 1
+N = p**3 * q
+e = 65537
+phin = (p-1)*(p**2)*(q-1)
+d = inverse(e,phin)
+flag = long_to_bytes(pow(flag,d,N))
+print(flag)
+</code></pre>
+<p>On running the script, we get the flag: <code>CHTB{Erdos-Straus-Conjecture}</code></p></div>
             </div>
         </div>
 
@@ -110,12 +141,12 @@
             <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
         <script>
-            var base_url = ".",
+            var base_url = "../../..",
                 shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
         </script>
-        <script src="js/base.js" defer></script>
+        <script src="../../../js/base.js" defer></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
-        <script src="search/main.js" defer></script>
+        <script src="../../../search/main.js" defer></script>
 
         <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -183,8 +214,3 @@
 
     </body>
 </html>
-
-<!--
-MkDocs version : 1.1.2
-Build Date UTC : 2021-04-28 11:30:32.286542+00:00
--->
