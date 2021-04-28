@@ -13,7 +13,7 @@ This repo contains the writeups of varoius challenges from CTFs we have attempte
     - [OTP-1](https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/crypto/BlueHensCTF/OTP-1.md) - [Pavani](https://twitter.com/Paavani15793872)
 - [TamuCTF](https://ctftime.org/event/1320)
     - [pwngen](https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/crypto/TamuCTF/pwngen/writeup.md) - [ph03n1x](https://github.com/meenakshisl)
--[CyberApocalypseCTF](/Phasestream3/readme) -  [Pavani](https://twitter.com/Paavani15793872)
+-[CyberApocalypseCTF](../CyberApocalypseCTF/Phasestream3/readme) -  [Pavani](https://twitter.com/Paavani15793872)
 
 
 
