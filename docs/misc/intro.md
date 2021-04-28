@@ -9,7 +9,6 @@ The following are the Links to the writeups to the challenges we have solved fro
 This repo contains the writeups of various challenges from CTFs we have attempted in the misc category.
 
 - [HSCTF7 2020](https://ctftime.org/event/939)
-<<<<<<< HEAD
     - [Emojis](https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/misc/HSCTF7/Emojis.md) - [Sandhra Bino](https://twitter.com/SandraBino1)
 - [BlueHensCTF 2021](https://ctftime.org/event/1298)
     - [Conway](https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/misc/BlueHensCTF/Conway/conway.md) - [Arya Arun](https://twitter.com/aryaarun_)
