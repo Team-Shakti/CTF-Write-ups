@@ -20,3 +20,8 @@ This repo contains the writeups of varoius challenges from CTFs we have attempte
     - [Beef-Of-Finitude](https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/pwning/BlueHensCTF/beef-of-finitude.md) - [Shravya Bhaskara](https://twitter.com/BhaskaraShravya)
 - [ShaktiCTF21](https://ctftime.org/event/1251)
 	- [Returning](../ShakitCTF21/returning2.md) - [Shruti Dixit](https://twitter.com/rudyerudite)
+
+- [TamuCTF 21](https://ctftime.org/event/1320)
+    - [tictactoe](../tamuCTF/tictactoe) - [SandraBino](https://twitter.com/sandrabeme)
+    - [lottery](../tamuCTF/lottery) - [Shravya Bhaskara](https://twitter.com/BhaskaraShravya)
+
