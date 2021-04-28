@@ -12,7 +12,7 @@ Ciphertext of flag:
 
 <p align="left">
 
-<img src = "../../asset/PS3.png" width = "300" height = "300" >
+<img src = "../asset/PS3.png" width = "300" height = "300" >
 
 </p>
  
