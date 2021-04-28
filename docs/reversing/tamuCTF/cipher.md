@@ -11,7 +11,8 @@ We have a flag encrypted using this program. Can you figure out what it is?
 The challenge is basically a xoring challenge where random numbers gets xored with the input to form the encrypted key provided in the file named flag.enc
 
 Going through the debuggers , we can see that there is a call of :srand(0x1337) 
-The srand() function sets the starting point for for the production of random numbers . It also got two xoring operations .Hence xorring with the random numbers and the data from the flag.enc to get the flag
+
+The srand() function sets the starting point for for the production of random numbers . It also got two xoring operations .Hence xoring with the random numbers and the data from the flag.enc to get the flag
 
 #### Solution Script
 
@@ -31,5 +32,6 @@ while(True):
 	X.append(chr(int(M,16)))
 print(''.join(X))
 ```
-
+`
 Flag:gigem{d0n7_wr173_y0ur_0wn_c1ph3r5}
+`
