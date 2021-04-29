@@ -22,5 +22,5 @@ This repo contains the writeups of varoius challenges from CTFs we have attempte
     - [Maragaret](../ShaktiCTF/Margaret) - @sandrabeme
     - [deceev](../ShaktiCTF/deceev) - @sandrabeme
     - [fusk](../ShaktiCTF/fusk) - @sandrabeme
-- [TamuCTF]()
-    - []()    
+- [TamuCTF21](https://ctftime.org/event/1320)
+    - [setecAstronomy](../tamuCTF/astronomy.md) 

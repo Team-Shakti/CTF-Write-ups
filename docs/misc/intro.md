@@ -18,3 +18,8 @@ This repo contains the writeups of various challenges from CTFs we have attempte
 #### Sandbox
 - [TamuCTF](https://ctftime.org/event/1320)
     - [pybox](../tamuCTF/pybox) - [SandraBino](https://twitter.com/SandraBino1)
+    - [ARCHIVAL](../tamuCTF/archival/archival) - [Adhithya Sree Mohan](https://twitter.com/adhithya_sree) 
+    - [ELIZABETH IS MISSING](../tamuCTF/elizabeth_is_missing/elizabeth) - [Adhithya Sree Mohan](https://twitter.com/adhithya_sree)
+    - [MARVEL V/S DC](../tamuCTF/marvel_dc/marvel_dc) - [Adhithya Sree Mohan](https://twitter.com/adhithya_sree)
+    - [SPECTRAL IMAGING](../tamuCTF/spectral_imaging/spectral) - [Adhithya Sree Mohan](https://twitter.com/adhithya_sree)
+
