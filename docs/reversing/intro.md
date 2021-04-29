@@ -24,3 +24,4 @@ This repo contains the writeups of varoius challenges from CTFs we have attempte
     - [fusk](../ShaktiCTF/fusk) - @sandrabeme
 - [TamuCTF21](https://ctftime.org/event/1320)
     - [setecAstronomy](../tamuCTF/astronomy.md) 
+    - [simple_cipher](../tamuCTF/cipher.md)
