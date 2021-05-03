@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        <link rel="canonical" href="https://github.com/Team-Shakti/CTF-Write-ups/crypto/TamuCTF/pwngen/writeup/">
+        <link rel="shortcut icon" href="../../../../img/favicon.ico">
+        <title>TamuCTF - CTF-Writeups</title>
+        <link href="../../../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/darcula.min.css">
+
+        <script src="../../../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../../../js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+            <div class="container">
+                <a class="navbar-brand" href="../../../..">CTF-Writeups</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="navitem">
+                                <a href="../../../../about/" class="nav-link">About Us</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../../../../shaktictf/" class="nav-link">ShaktiCTF</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="https://team-shakti.github.io/" class="nav-link">Website</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/crypto/TamuCTF/pwngen/writeup.md" class="nav-link">Edit on Team-Shakti/CTF-Write-ups</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#tamuctf" class="nav-link">TamuCTF</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#pwngen" class="nav-link">pwngen</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#writeup" class="nav-link">Writeup</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#solution" class="nav-link">Solution</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="tamuctf">TamuCTF</h1>
+<h2 id="pwngen">pwngen</h2>
+<p><em>Challenge points</em> : 150
+<em>Challenge solves</em> : 10</p>
+<h3 id="description">Description</h3>
+<p>(<em>not the exact description</em>)</p>
+<p>It has been found that a set of passwords have been generated using the given script.We have reason to believe that they generated a set of passwords at the same time using a custom password generation program and that their previous password was <code>ElxFr9)F</code>. Send the next password at <code>openssl s_client -connect tamuctf.com:443 -servername pwgen -quiet</code>.</p>
+<p>Files : <a href="">main.rs</a></p>
+<h2 id="writeup">Writeup</h2>
+<p>Author : <a href="https://github.com/meenakshisl">ph03n1x</a></p>
+<p><strong>TL;DR</strong>
+1. Given the equation of a Linear congruential generator (LCG) and the previous password generated using it
+2. Use z3 to find the seed with the given contraints.
+3. Find the seed and get the next password from it.</p>
+<h2 id="solution">Solution</h2>
+<p>On inspecting the file we understand that it is a LCG generator. We decided to give it a try with z3 python, so we decided to rewrite the functions in python (becuase we were more familiar with python than rust):-</p>
+<pre><code class="language-python">
+class LCG() : 
+    def __init__(self,seed) : 
+        self.seed = seed 
+        self.a = 1103515245 
+        self.c = 12345 
+    def next(self) : 
+        self.seed = ((self.seed * self.a) + self.c)%0x100000000 
+        out = (self.seed &gt;&gt; 16) &amp; 0x7fff 
+        return out
+def get_pass(rand) : 
+    l = [] 
+    for i in range(8) : 
+        l.append(chr(rand.next()%94 + 33)) 
+    return ''.join(l) 
+</code></pre>
+<p>The code should produce the same output as the given rs file. Now we simply used z3 to setup the contraints and find the seed :-</p>
+<pre><code class="language-python">from z3 import *
+
+known = 'ElxFr9)F' 
+
+class LCG() :
+    def __init__(self,seed) :
+        self.seed = seed
+        self.a = 1103515245
+        self.c = 12345
+    def next(self) :
+        self.seed = ((self.seed * self.a) + self.c)%0x100000000
+        out = (self.seed &gt;&gt; 16) &amp; 0x7fff
+        return out
+def get_pass(rand) :
+    return URem(rand.next(),94) + 33
+
+s = Solver()
+seed = BitVec(&quot;seed&quot;,32)
+l = LCG(seed)
+for i in known :
+    s.add(get_pass(l) == ord(i))
+s.check()
+seed = s.model()[seed]
+</code></pre>
+<p>We get our seed as <code>seed = 718549711</code>. 
+(<em>Note</em> : Make sure you use modify the class to the inital class definition since the second one has been slightly modified to take in z3 objects)
+Now let's predict the password :-</p>
+<pre><code class="language-python">seed = 718549711      
+l = LCG(seed)         
+print(get_pass(l) )          
+# output : 'ElxFr9)F'
+get_pass(l)           
+# output 'xV!;28vj'
+</code></pre>
+<p>Now to connect to the server and send the password :-</p>
+<p><img alt="get_flag" src="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/crypto/TamuCTF/pwngen/get_flag.png" /></p>
+<p><strong>Flag</strong> : <code>gigem{cryp706r4ph1c4lly_1n53cur3_prn65_DC6F9B}</code></p></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+                <p>Copyright &copy; 2020 <a href="http://Team-Shakti.github.io/">Team-Shakti Writeups</a></p>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../../../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../../../js/base.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
+        <script src="../../../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>
