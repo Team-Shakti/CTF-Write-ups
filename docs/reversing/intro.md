@@ -18,10 +18,6 @@ This repo contains the writeups of varoius challenges from CTFs we have attempte
     - [APLab:ComputerScience](../HSCTF7/ComputerScience/) - By @namithas123
 - [DarkCTF](https://ctftime.org/event/1118)
     - [Jack](../DarkCTF/Jack/) - By @sandrabeme
-- [ShaktiCTF21](https://ctftime.org/event/1251)
-    - [Maragaret](../ShaktiCTF/Margaret) - @sandrabeme
-    - [deceev](../ShaktiCTF/deceev) - @sandrabeme
-    - [fusk](../ShaktiCTF/fusk) - @sandrabeme
 - [TamuCTF21](https://ctftime.org/event/1320)
-    - [setecAstronomy](../tamuCTF/astronomy.md) 
-    - [simple_cipher](../tamuCTF/cipher.md)
+    - [setecAstronomy](../tamuCTF/astronomy) 
+    - [simple_cipher](../tamuCTF/cipher)
