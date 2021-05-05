@@ -94,11 +94,11 @@
 <p>My rapper friend Big Y sent me his latest track but something sounded a little off about it. Help me find out if he was trying to tell me something with it. Submit your answer as tjctf{message}</p>
 <h2 id="solution">Solution</h2>
 <p>Open the given mp3 file using Sonic Visualiser. Using Spectrogram we see something like this.</p>
-<p><img alt="img1" src="https://github.com/ksridevi2908/CTF-Write-ups/blob/master/docs/forensics/TJCTF/Rap%20God/img1.png" /></p>
+<p><img alt="img1" src="https://raw.githubusercontent.com/Team-Shakti/CTF-Write-ups/master/docs/forensics/TJCTF/RAP/img1.png" /></p>
 <p>They are encoded images, but not clear. Let's examine the channel-2 in Spectrogram. Now, the encoded symbols are clear.</p>
-<p><img alt="img2" src="https://github.com/ksridevi2908/CTF-Write-ups/blob/master/docs/forensics/TJCTF/Rap%20God/img2.png" /></p>
+<p><img alt="img2" src="https://raw.githubusercontent.com/Team-Shakti/CTF-Write-ups/master/docs/forensics/TJCTF/RAP/img2.png" /></p>
 <p>After surfing through internet I came across <a href="https://www.dcode.fr/wingdings-font">this</a> website which decodes similar images as in our case. Let's try decoding using this website.</p>
-<p>tjctf{quicksonic}</p>
+<p><strong>tjctf{quicksonic}</strong></p>
 <p>We got the flag!</p></div>
             </div>
         </div>
