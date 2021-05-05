@@ -93,7 +93,7 @@
 <p>Mr Elliot Anderson has received a zip file from somewhere around. From a secret friend he got a transcript of some conversation. Help Mr. Elliot to get the secret flag. Once you get the password,convert it to lower case as password.</p>
 <h2 id="solution">Solution</h2>
 <p>So, we are given one password protected zip file and one text file. If you look carefully we can find that some of the characters in the text file are in uppercase. You can either write a python program or manually collect the uppercase letters. And we get IKNOWYARECOLLECTAINGLLUPPERCASELETTERFIRSTPARTOFTHEPASSWORDISLETTHEREBE</p>
-<p><img alt="upper" src="https://github.com/ksridevi2908/CTF-Write-ups/blob/master/docs/forensics/DarkCTF/Asset/1.png" /></p>
+<p><img alt="upper" src="https://raw.githubusercontent.com/Team-Shakti/CTF-Write-ups/master/docs/forensics/DarkCTF/Asset/1.png" /></p>
 <pre><code class="language-python">r = open(&quot;file.txt&quot;,&quot;r&quot;)
 r = r.read()
 part1=''
@@ -102,19 +102,20 @@ for i in r:
         part1+=i
 print(part1) 
 </code></pre>
-<p><img alt="out" src="https://github.com/ksridevi2908/CTF-Write-ups/blob/master/docs/forensics/DarkCTF/Asset/2.png" /></p>
+<p><img alt="out" src="https://raw.githubusercontent.com/Team-Shakti/CTF-Write-ups/master/docs/forensics/DarkCTF/Asset/2.png" /></p>
 <p>As mentioned in the description, after converting it to lowercase, we get iknowyarecollectainglluppercaseletterfirstpartofthepasswordislettherebe. And the first part of the flag is lettherebe.</p>
 <p>We get the second part of the flag by running stegsnow. </p>
-<p><img alt="snow" src="https://github.com/ksridevi2908/CTF-Write-ups/blob/master/docs/forensics/DarkCTF/Asset/3.png" /></p>
+<p><img alt="snow" src="https://raw.githubusercontent.com/Team-Shakti/CTF-Write-ups/master/docs/forensics/DarkCTF/Asset/3.png" /></p>
 <p>The second part of the flag is goodrainswithshining.</p>
 <p>We find some homoglyph unicode characters towards the end of the text file. Collecting those characters we get the last part of the flag rainnnbow. </p>
-<p><img alt="last" src="https://github.com/ksridevi2908/CTF-Write-ups/blob/master/docs/forensics/DarkCTF/Asset/4.png" /></p>
+<p><img alt="last" src="https://raw.githubusercontent.com/Team-Shakti/CTF-Write-ups/master/docs/forensics/DarkCTF/Asset/4.png" /></p>
 <p>So, the final password is "lettherebegoodrainswithshiningrainnnbow". We use this password to open the password protected text file which contains some 8 digit numbers.</p>
 <blockquote>
 <p>31060562 32641524 21475550 14066460 21666171 34073461 35044157 33661564 15046170 23032164 146764</p>
 </blockquote>
 <p>This is octal-xlate encoding. We can decode these characters online from <a href="https://www.paulschou.com/tools/xlate/">here</a></p>
-<p>And the flag is darkCTF{h0m0Glypw1tHooct4LxL4t3}</p></div>
+<p>And the flag is </p>
+<p><strong>darkCTF{h0m0Glypw1tHooct4LxL4t3}</strong></p></div>
             </div>
         </div>
 
