@@ -10,14 +10,14 @@ My rapper friend Big Y sent me his latest track but something sounded a little o
 
 Open the given mp3 file using Sonic Visualiser. Using Spectrogram we see something like this.
 
-![img1](https://github.com/ksridevi2908/CTF-Write-ups/blob/master/docs/forensics/TJCTF/Rap%20God/img1.png)
+![img1](https://raw.githubusercontent.com/Team-Shakti/CTF-Write-ups/master/docs/forensics/TJCTF/RAP/img1.png)
 
 They are encoded images, but not clear. Let's examine the channel-2 in Spectrogram. Now, the encoded symbols are clear.
 
-![img2](https://github.com/ksridevi2908/CTF-Write-ups/blob/master/docs/forensics/TJCTF/Rap%20God/img2.png)
+![img2](https://raw.githubusercontent.com/Team-Shakti/CTF-Write-ups/master/docs/forensics/TJCTF/RAP/img2.png)
 
 After surfing through internet I came across [this](https://www.dcode.fr/wingdings-font) website which decodes similar images as in our case. Let's try decoding using this website.
 
-tjctf{quicksonic}
+**tjctf{quicksonic}**
 
 We got the flag!

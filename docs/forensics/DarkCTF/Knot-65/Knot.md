@@ -8,7 +8,7 @@ Mr Elliot Anderson has received a zip file from somewhere around. From a secret 
 
 So, we are given one password protected zip file and one text file. If you look carefully we can find that some of the characters in the text file are in uppercase. You can either write a python program or manually collect the uppercase letters. And we get IKNOWYARECOLLECTAINGLLUPPERCASELETTERFIRSTPARTOFTHEPASSWORDISLETTHEREBE
 
-![upper](https://github.com/ksridevi2908/CTF-Write-ups/blob/master/docs/forensics/DarkCTF/Asset/1.png)
+![upper](https://raw.githubusercontent.com/Team-Shakti/CTF-Write-ups/master/docs/forensics/DarkCTF/Asset/1.png)
 
 ``` python
 r = open("file.txt","r")
@@ -19,19 +19,19 @@ for i in r:
 		part1+=i
 print(part1) 
 ```
-![out](https://github.com/ksridevi2908/CTF-Write-ups/blob/master/docs/forensics/DarkCTF/Asset/2.png)
+![out](https://raw.githubusercontent.com/Team-Shakti/CTF-Write-ups/master/docs/forensics/DarkCTF/Asset/2.png)
 
 As mentioned in the description, after converting it to lowercase, we get iknowyarecollectainglluppercaseletterfirstpartofthepasswordislettherebe. And the first part of the flag is lettherebe.
 
 We get the second part of the flag by running stegsnow. 
 
-![snow](https://github.com/ksridevi2908/CTF-Write-ups/blob/master/docs/forensics/DarkCTF/Asset/3.png)
+![snow](https://raw.githubusercontent.com/Team-Shakti/CTF-Write-ups/master/docs/forensics/DarkCTF/Asset/3.png)
 
 The second part of the flag is goodrainswithshining.
 
 We find some homoglyph unicode characters towards the end of the text file. Collecting those characters we get the last part of the flag rainnnbow. 
 
-![last](https://github.com/ksridevi2908/CTF-Write-ups/blob/master/docs/forensics/DarkCTF/Asset/4.png)
+![last](https://raw.githubusercontent.com/Team-Shakti/CTF-Write-ups/master/docs/forensics/DarkCTF/Asset/4.png)
 
 So, the final password is "lettherebegoodrainswithshiningrainnnbow". We use this password to open the password protected text file which contains some 8 digit numbers.
 
@@ -39,7 +39,9 @@ So, the final password is "lettherebegoodrainswithshiningrainnnbow". We use this
 
 This is octal-xlate encoding. We can decode these characters online from [here](https://www.paulschou.com/tools/xlate/)
 
-And the flag is darkCTF{h0m0Glypw1tHooct4LxL4t3}
+And the flag is 
+
+**darkCTF{h0m0Glypw1tHooct4LxL4t3}**
 
 
 

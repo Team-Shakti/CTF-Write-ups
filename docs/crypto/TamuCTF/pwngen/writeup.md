@@ -87,6 +87,6 @@ get_pass(l)
 
 Now to connect to the server and send the password :-
 
-![get_flag](https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/crypto/TamuCTF/pwngen/get_flag.png)
+![get_flag](https://raw.githubusercontent.com/Team-Shakti/CTF-Write-ups/master/docs/crypto/TamuCTF/pwngen/get_flag.png)
 
 **Flag** : `gigem{cryp706r4ph1c4lly_1n53cur3_prn65_DC6F9B}`
