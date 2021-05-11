@@ -18,6 +18,8 @@ This repo contains the writeups of varoius challenges from CTFs we have attempte
 - [DawgCTF](https://ctftime.org/event/1319)
     - [Deserted Island Toolkit](../DawgCTF/Deserted-island) - [Arya Arun](https://twitter.com/aryaarun_)
     - [These Ladies Paved Your Way](../DawgCTF/these-ladies) - [Arya Arun](https://twitter.com/aryaarun_)
+    - [Moses](../DawgCTF/moses) - [Arya Arun](https://twitter.com/aryaarun_)
+    
 
 
 
