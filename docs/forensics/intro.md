@@ -15,6 +15,8 @@ This repo contains the writeups of varoius challenges from CTFs we have attempte
     - [Rap God](../TJCTF/RAP/Rap) - [v1Ru5](https://twitter.com/SrideviKrishn16)
 - [TamuCTF](https://ctftime.org/event/1320)
     - [Recovery](../TamuCTF/Recovery/Recovery) - [v1Ru5](https://twitter.com/SrideviKrishn16)
+- [DawgCTF](https://ctftime.org/event/1319)
+    - [Deserted Island Toolkit]
 
 
 
