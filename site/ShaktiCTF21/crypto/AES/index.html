@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        <link rel="canonical" href="https://github.com/Team-Shakti/CTF-Write-ups/ShaktiCTF21/crypto/AES/">
+        <link rel="shortcut icon" href="../../../img/favicon.ico">
+        <title>Awesome Encryption Scheme - CTF-Writeups</title>
+        <link href="../../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/darcula.min.css">
+
+        <script src="../../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../../js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+            <div class="container">
+                <a class="navbar-brand" href="../../..">CTF-Writeups</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="navitem">
+                                <a href="../../../about/" class="nav-link">About Us</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../../../shaktictf/" class="nav-link">ShaktiCTF</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="https://team-shakti.github.io/" class="nav-link">Website</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/ShaktiCTF21/crypto/AES.md" class="nav-link">Edit on Team-Shakti/CTF-Write-ups</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#awesome-encryption-scheme" class="nav-link">Awesome Encryption Scheme</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="awesome-encryption-scheme">Awesome Encryption Scheme</h1>
+<p>Authored by: Sowmya (@__4lpha__)</p>
+<p>Challenge Script:</p>
+<pre><code class="language-python">from Crypto.Cipher import AES
+from Crypto.Util.Padding import pad
+from hashlib import md5
+from os import urandom
+from flag import flag
+
+keys = [md5(urandom(3)).digest() for _ in range(2)]
+
+
+def bytexor(da,ta): return bytes(i^j for i,j in zip(da,ta))
+
+
+def get_ciphers(iv1, iv2):
+    return [
+        AES.new(keys[0], mode=AES.MODE_CBC, iv=iv1),
+        AES.new(keys[1], mode=AES.MODE_CFB, iv=iv2, segment_size=8*16),
+    ]
+
+def encrypt(m: bytes, iv1: bytes, iv2: bytes) -&gt; bytes:
+    m = pad(m,32)
+    ciphers = get_ciphers(iv1, iv2)
+    c = m
+    for cipher in ciphers:
+        c = b''.join(i[16:]+bytexor(i[:16],cipher.encrypt(i[16:])) for i in [c[i:i+32] for i in range(0,len(c),32)])
+    return c
+
+plaintext = f'finally now i am able to send my secret with double security and double trust, {flag}'.encode()
+iv1, iv2 = urandom(16),urandom(16)
+
+ciphertext = encrypt(plaintext, iv1, iv2)
+ciphertext = b&quot;:&quot;.join([x.hex().encode() for x in [iv1, iv2, ciphertext]])
+
+open('encrypted','wb').write(ciphertext)
+</code></pre>
+<p>Output:</p>
+<pre><code>c486732c526c5b60bc29bae6926644eb:5fe355033095d413e601a7ede00fca1d:fd68e8732bb6e9b5672730eb1ed3f2fe9c88b5503e3fb08747ce3dd17296e383ccb76b78587bb1bd1337574073a185e9d846aeab36929d0101e433a34db0cf9ed034abb473a2280624d430c39e58c245603f56a4ddb1127a9f74051481440bbbe53fd95bc8a2a9a3f3488c68d1d9fa8e82cb40dce3df7b2d1c22fca0d05d08c9d197e053586643b32d3dbd4421996ad6abf2a1a930eb16609303471808bac90b
+</code></pre>
+<p>This is a customised encryption scheme. So let's take a look at the block diagram to get better understanding of the encryption scheme.</p>
+<p>Enryption Block Diagram:</p>
+<pre><code>                          Message-Block
+        ----------------------------------------------------
+        |        L0             |               R0         |
+        ----------------------------------------------------
+                  |                             |
+                  |         -------------       |
+                  V         |           |       |
+                  ⊕ &lt;-------|  AES-CBC  |&lt;------|
+                  |         |           |       |
+                  |         -------------       |
+                  |                             |
+                  |                             |
+                  -------------------------|    |
+                                            \   |
+                                             \  |
+                  |---------------------------\--
+                  |                            \
+                  |                             |
+                  V           Meet              V
+        ----------------------------------------------------
+        |        L1  ==  R0     |      L2  ==  R1          |
+        ----------------------------------------------------
+                  |                             |
+                  |         -------------       |
+                  V         |           |       |
+                  ⊕ &lt;-------|  AES-CFB  |&lt;------|
+                  |         |           |       |
+                  |         -------------       |
+                  |                             |
+                  |                             |
+                  -------------------------|    |
+                                            \   |
+                                             \  |
+                  |---------------------------\--
+                  |                            \
+                  |                             |
+                  V       Cipher-Block          V
+        ----------------------------------------------------
+        |        L2             |               R2         |
+        ----------------------------------------------------
+</code></pre>
+<p>Observation:
+If we notice the block diagram we can say that the encryption function is using two rounds of fiestal structure
+* Now we have <code>L1||R1</code>
+* Key is a hash of 3 random bytes (can be bruteforced)</p>
+<p>We can find the key used for <code>AES-CBC</code> by using <code>L0, R0, R1(L2)</code>:
+* Since <code>R1 = L0 ^ E( R0 )</code>where <code>E</code> stands for <code>CBC-Encryption</code></p>
+<pre><code>            -&gt; R1 = L0 ^ E( R0 )
+            -&gt; R1 ^ L0 = E(R0)
+            -&gt; L2 ^ L0 = E(R0)
+</code></pre>
+<ul>
+<li>Now we have a pair of <code>plaintext &amp; ciphertext</code> pair which help in bruteforcing the CBC-key</li>
+</ul>
+<p>In detail: </p>
+<pre><code>keys        =   [ md5(bytes([i,j,k])).digest() for i in range(256) for j in range(256) for k in range(256) ]
+key1      =   [ i for i in keys if bytexor(pt[:16],AES.new(i,AES.MODE_CBC,iv1).encrypt(pt[16:32])) == ct[:16] ][0]
+</code></pre>
+<p>We can find the key used for <code>AES-CFB</code> by using <code>L2, R2, L1(R0)</code>:
+* Since <code>R2 = L1 ^ E( R1 )</code>where <code>E</code> stands for <code>CBC-Encryption</code></p>
+<pre><code>            -&gt; R2 = L1 ^ E( R1 )
+            -&gt; R2 ^ L1 = E( R1 )
+            -&gt; R2 ^ R0 = E( L2 )
+</code></pre>
+<ul>
+<li>Now we have a pair of <code>plaintext &amp; ciphertext</code> pair which help in bruteforcing the CFB-key</li>
+</ul>
+<p>In detail: </p>
+<pre><code class="language-python">key2 = [ i for i in keys if bytexor(AES.new(i,AES.MODE_CFB, iv2,segment_size=8*16).encrypt(ct[:16]),ct[16:32]) == pt[16:32] ][0]
+</code></pre>
+<p>Now we have the both <code>key1</code> and <code>key2</code>, so we can reverse the encryption process to decrypt the ciphertext.
+In detail: </p>
+<pre><code class="language-python">def decrypt(c: bytes, iv1: bytes, iv2: bytes) -&gt; bytes:
+    ciphers = get_ciphers(iv1, iv2)
+    m = c
+    for cipher in ciphers[::-1]:
+        m = b''.join(bytexor(i[16:],cipher.encrypt(i[:16]))+i[:16] for i in [m[i:i+32] for i in range(0,len(m),32)])
+    return unpad(m,32)
+</code></pre>
+<p>Solution Script:</p>
+<pre><code class="language-python">from hashlib import md5
+from Crypto.Cipher import AES
+from Crypto.Util.Padding import unpad
+
+
+def bytexor(da,ta): return bytes(i^j for i,j in zip(da,ta))
+
+
+def get_ciphers(iv1, iv2):
+    return [
+        AES.new(keys[0], mode=AES.MODE_CBC, iv=iv1),
+        AES.new(keys[1], mode=AES.MODE_CFB, iv=iv2, segment_size=8*16),
+    ]
+
+
+def decrypt(c: bytes, iv1: bytes, iv2: bytes) -&gt; bytes:
+    ciphers = get_ciphers(iv1, iv2)
+    m = c
+    for cipher in ciphers[::-1]:
+        m = b''.join(bytexor(i[16:],cipher.encrypt(i[:16]))+i[:16] for i in [m[i:i+32] for i in range(0,len(m),32)])
+    return unpad(m,32)
+
+
+(iv1, iv2, ct),pt = (bytes.fromhex(i) for i in open('encrypted','rb').read().strip().decode().split(':')), b'finally now i am able to send my secret with double security and double trust, '
+
+keys        =   [ md5(bytes([i,j,k])).digest() for i in range(256) for j in range(256) for k in range(256) ]
+key1      =   [ i for i in keys if bytexor(pt[:16],AES.new(i,AES.MODE_CBC,iv1).encrypt(pt[16:32])) == ct[:16] ][0]
+key2    =   [ i for i in keys if bytexor(AES.new(i,AES.MODE_CFB, iv2,segment_size=8*16).encrypt(ct[:16]),ct[16:32]) == pt[16:32] ][0]
+
+keys = [ key1, key2]
+
+flag = decrypt(ct,iv1,iv2)[79:]
+print(flag)
+</code></pre>
+<p>Flag: <code>shaktictf{Well now I know that it is not an awesome encryption scheme}</code></p></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+                <p>Copyright &copy; 2020 <a href="http://Team-Shakti.github.io/">Team-Shakti Writeups</a></p>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../../js/base.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
+        <script src="../../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

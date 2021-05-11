@@ -17,3 +17,13 @@ This repo contains the writeups of varoius challenges from ShaktiCTF. There are 
 - [steganography](../ShaktiCTF20/stego/intro/)
 - [Miscellaneous](../ShaktiCTF20/misc/intro/)
 
+### ShaktiCTF 2021
+
+- [Reverse Engineering](../ShaktiCTF21/reversing/intro/)
+- [Binary Exploitation]()
+- [Cryptography]()
+- [Web Exploitation]()
+- [Forensics](../ShaktiCTF21/forensics/intro/)
+- [Misc](../ShaktiCTF21/misc/intro/)
+
+

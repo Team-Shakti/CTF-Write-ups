@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        <link rel="canonical" href="https://github.com/Team-Shakti/CTF-Write-ups/ShaktiCTF21/misc/grocery/">
+        <link rel="shortcut icon" href="../../../img/favicon.ico">
+        <title>Grocery List - CTF-Writeups</title>
+        <link href="../../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/darcula.min.css">
+
+        <script src="../../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../../js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+            <div class="container">
+                <a class="navbar-brand" href="../../..">CTF-Writeups</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="navitem">
+                                <a href="../../../about/" class="nav-link">About Us</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../../../shaktictf/" class="nav-link">ShaktiCTF</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="https://team-shakti.github.io/" class="nav-link">Website</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/ShaktiCTF21/misc/grocery.md" class="nav-link">Edit on Team-Shakti/CTF-Write-ups</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#grocery-list" class="nav-link">Grocery List</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#writeup" class="nav-link">Writeup</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#flag" class="nav-link">Flag</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="grocery-list">Grocery List</h1>
+<h2 id="writeup">Writeup</h2>
+<p>This challenge was based on an esolang programming language(Grocery List) as the challenge name suggested. 
+First decode the Base64 string given:</p>
+<p>```Reverse GroceryPlace</p>
+<p>vichyssoise           <br />
+mango                 <br />
+vermouth
+zucotto
+sandwich
+lamb
+veal
+yogurt
+vermicelli
+zucchini
+salmon
+fennel seeds
+ice cream
+carrots
+unagi
+inca berries
+cabbage
+upma
+grapes
+naan
+apples
+bananas
+almonds
+basil
+fenugreek
+potatoes
+pie
+soy beans
+eggs
+tunafish</p>
+<p>Find the input to the following output.
+OUTPUT: 4cum77itQdKy4r7c~rm5u05plN```</p>
+<p>After decoding, it says that some input is passed to the grocery list given and we receive an output for that. This suggests that this talks about some kind of a program. 
+On googling we find an esolang <a href="https://esolangs.org/wiki/Grocery_List">Grocery List</a></p>
+<p>The language is based on stack operations. So here is an interpretation of the first interation of the code.</p>
+<p><strong>1</strong></p>
+<pre><code class="language-vichyssoise">mango                   
+vermouth
+zucotto
+sandwich``` 
+
+Fist item starting with a `v` is skipped and ascii of the first letter of next item is pushed. So 109 is pushed to the stack.
+
+```109  &lt;-TOP/BOTTOM```
+
+Similarly next item starts with a v, so it's ignored and ascii of the following item is taken. Pushed ascii value of `z` to the stack.
+
+```109  &lt;-BOTTOM
+122 &lt;-TOP```
+The last line here starts with an s which first pop top two values and then subtacts second to top from top.This pushes 13 onto the stack
+
+```13   &lt;-TOP/BOTTOM```
+
+**2**
+```lamb
+veal
+yogurt
+vermicelli
+zucchini
+salmon
+fennel seeds
+</code></pre>
+<p>Starts a loop. 
+Then pushes 1 onto the stack(as shown in previous step)</p>
+<p><code>13   &lt;-BOTTOM
+1   &lt;-TOP</code></p>
+<p>The last line starts with an <code>f</code> and interchanges the top two values of stack.</p>
+<p><code>1   &lt;-BOTTOM
+13   &lt;-TOP</code></p>
+<p><strong>3</strong>
+<code>ice cream
+carrots
+unagi
+inca berries
+cabbage
+upma</code></p>
+<p>Takes and input and pushes it's ascii to the stack. Let's say first input is <code>a</code>.</p>
+<p><code>1   &lt;-BOTTOM
+13
+97   &lt;-TOP</code></p>
+<p>Next, item starts with <code>c</code>arrots, so it duplicates value on top.
+And then the next item starting with <code>u</code> brings the value on top of the stack to BOTTOM</p>
+<p><code>97   &lt;-BOTTOM
+1
+13
+97   &lt;-TOP</code></p>
+<p>Similary next item <code>i</code>nca berries does the same as above. Let's say the second input is <code>b</code>
+After the next 3 operations:</p>
+<p><code>98   &lt;-BOTTOM
+97
+1
+13
+97
+98   &lt;-TOP</code></p>
+<p><strong>4</strong></p>
+<pre><code class="language-grapes">naan
+apples
+bananas
+almonds
+basil```
+
+Next item starting with `g` works like an if statement. Looking here, TOP &gt; second-to-TOP. Hence pushed 1 onto stack.
+
+And then pushes 4. (from `n`)
+And then pops top two and adds.
+
+```98   &lt;-BOTTOM
+97
+1
+13
+5   &lt;-TOP```
+
+Next item `b`ananas brings value from bottom of stack to top.
+And then add top two after popping and then push the result.
+And finally brings the other input from bottom of stack
+
+```1   &lt;-BOTTOM
+13
+103 
+97   &lt;-TOP```
+
+**5**
+```fenugreek
+potatoes
+pie
+soy beans
+eggs
+tunafish```
+
+Interchange the op two value of stack (`f`)
+Pop and print the top. (`p`)
+Pop and print the top again. (`p`)
+We see here that our second input is the one that will be changed each time.
+
+```1   &lt;-BOTTOM
+13   &lt;-TOP```
+
+```Printed: ga```
+
+Next item `s`oy beans, subtract top two values.
+`e` checks for an end for the loop. So here we understand that, the loop is running 13 times. Hence 26 characters.
+
+```12   &lt;-TOP/BOTTOM```
+
+## Solution
+
+```python
+a = &quot;4cum77itQdKy4r7c~rm5u05plN&quot;
+o = &quot;&quot;
+for i in range(0,26,2):
+    if((ord(a[i]) - 5) &gt; ord(a[i+1])):
+        o = o + a[i+1]
+        o = o + chr(ord(a[i]) - 5)
+    else:
+        o = o + a[i+1]
+        o = o + chr(ord(a[i]) - 4)
+</code></pre>
+<h2 id="flag">Flag</h2>
+<p>shaktictf{c0mp73tedMyGr0c3ry5h0pp1Ng}</p></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+                <p>Copyright &copy; 2020 <a href="http://Team-Shakti.github.io/">Team-Shakti Writeups</a></p>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../../js/base.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
+        <script src="../../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>
