@@ -16,7 +16,7 @@ This repo contains the writeups of varoius challenges from CTFs we have attempte
 - [TamuCTF](https://ctftime.org/event/1320)
     - [Recovery](../TamuCTF/Recovery/Recovery) - [v1Ru5](https://twitter.com/SrideviKrishn16)
 - [DawgCTF](https://ctftime.org/event/1319)
-    - [Deserted Island Toolkit]
+    - [Deserted Island Toolkit](../DawgCTF/Deserted-island) - [Arya Arun](https://twitter.com/aryaarun_)
 
 
 
