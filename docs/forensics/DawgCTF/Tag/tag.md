@@ -9,5 +9,7 @@ Keeping your music library labeled and organized is like a full time job sometim
 
 I used "exiftool" to see the metadata of the file where I found a fake flag `DogeCTF{wr0te_0ut_th3s3_1yrics_by_hand_1ma0}`.I found the flag under "Comment" which was not clear. Then I manually retyped the flag.
 
+![flag](https://raw.githubusercontent.com/Team-Shakti/CTF-Write-ups/master/docs/forensics/DawgCTF/Tag/1.png)
+
 
 Flag : `DawgCTF{wh0_d0wnl0ads_mus1c_anym0r3?}`
