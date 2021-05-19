@@ -22,5 +22,7 @@ This repo contains the writeups of varoius challenges from CTFs we have attempte
     - [soul-crabber2](../CyberApocalypseCTF/Soul_Crabber2) - [Sowmya](https://twitter.com/__4lph4__)
     - [little-nightmares](../CyberApocalypseCTF/Little_Nightmares) - [Sowmya](https://twitter.com/__4lph4__)
     - [wii-phit](../CyberApocalypseCTF/Wii_Phit) - [Sowmya](https://twitter.com/__4lph4__)
+-[dCTF](https://ctftime.org/event/1361)
+    - [Strong password]() - [Arya Arun](https://twitter.com/aryaarun_)
         
 
