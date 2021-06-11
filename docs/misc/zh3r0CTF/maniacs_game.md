@@ -51,7 +51,7 @@ Note: Solve all the levels and then click submit the solution button and wait fo
 
 ![level 9](https://github.com/shravya-bhaskara/CTF-s/blob/main/zh3r0CTF/level%209.png)
 
-### level 10: "[[2]]" implies double dereference. That is 2nd register contains 3 and third register contains 54, then "[[2]]" will evaluate to 54.
+### level 10: "[[2]]" implies double dereference. i.e if 2nd register contains 3 and third register contains 54, then "[[2]]" will evaluate to 54.
 
 ![level 10](https://github.com/shravya-bhaskara/CTF-s/blob/main/zh3r0CTF/level%2010.png)
 
