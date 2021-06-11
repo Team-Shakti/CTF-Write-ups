@@ -15,6 +15,8 @@ This repo contains the writeups of various challenges from CTFs we have attempte
     - [Rise and Shine](https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/misc/BlueHensCTF/Rise%20%26%20Shine/rise.md) -[Adhithya Sree Mohan](https://twitter.com/adhithya_sree)
     - [Mountain Climber](https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/misc/BlueHensCTF/Mountain%20Climber/Mountain_climber.md) -[Revathi](https://twitter.com/Revathi01740772)
     - [Transforms](https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/misc/BlueHensCTF/Transforms/Transforms.md) -[Sri Nimitha](https://twitter.com/SriNimitha)
+- [zh3r0CTF](https://ctftime.org/event/1285)
+	- [A Small Maniac's game](../zh3r0CTF/maniacs_game) - [Shravya Bhaskara](https://twitter.com/BhaskaraShravya)
 #### Sandbox
 - [TamuCTF](https://ctftime.org/event/1320)
     - [pybox](../tamuCTF/pybox) - [SandraBino](https://twitter.com/SandraBino1)
