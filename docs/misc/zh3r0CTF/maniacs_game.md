@@ -1,6 +1,6 @@
 # A Small Maniac's game
 
-* point - 100
+* points - 100
 
 # Description :
 ```
