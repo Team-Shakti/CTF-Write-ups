@@ -32,3 +32,6 @@ This repo contains the writeups of various challenges from CTFs we have attempte
 - [DawgCTF 2021](https://ctftime.org/event/1319)
 	- [Two truths and a fib](../dawgctf_21/two_truths_and_a_fib/fib) - [Adhithya Sree Mohan](https://twitter.com/adhithya_sree)
 	- [Third Eye](../dawgctf_21/third_eye/thirdeye) - [Adhithya Sree Mohan](https://twitter.com/adhithya_sree)
+- [CircleCon 2021](https://ctftime.org/event/1350)
+    - [Angrbox](../CircleConCTF/angrbox) - [ph03n1x](https://twitter.com/MeenakshiSl1)
+    - [Easy as Pie](../CircleConCTF/easy_as_pie) 

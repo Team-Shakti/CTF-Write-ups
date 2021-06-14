@@ -14,7 +14,11 @@ Write me a program that :
  `nc 35.194.4.79 7000`
 
  **Attachment**
+<<<<<<< HEAD
  [angrbox.zip](../angrbox.zip)
+=======
+ [angrbox.zip](https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/misc/CircleConCTF/angrbox.zip)
+>>>>>>> cdf2e60e000d0a14f8aa282c5760a3a44d30b574
 
 
 
@@ -153,7 +157,11 @@ int main(int argc,char *argv[]) {
 
 Converting it into hex, and passing it to the server we got the flag.
 
+<<<<<<< HEAD
 ![the-solution](../solution-ss.png)
+=======
+![the-solution](https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/misc/CircleConCTF/solution-ss.png)
+>>>>>>> cdf2e60e000d0a14f8aa282c5760a3a44d30b574
 
 #### Flag
 `CCC{p4th_3pl0s10n_4s_a_tr4pd00r_funct10n?_0r_d1d_y0u_ch33s3_1t}`
