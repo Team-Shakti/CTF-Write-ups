@@ -1,10 +1,10 @@
-# CircleConCTF 21'
+## CircleConCTF 21'
 
 ## angrbox
 
 *Challenge Points : 261 Points*
 
-## Description 
+### Description 
 
 Write me a program that :
  - Takes 4 uppercase characters in argv
@@ -14,11 +14,11 @@ Write me a program that :
  `nc 35.194.4.79 7000`
 
  **Attachment**
- [angrbox.zip]()
+ [angrbox.zip](../angrbox.zip)
 
 
 
-## Writeup
+### Writeup
 
 **TL:DR**
 - Pass on a C program to check the arguments against a predefined 4 character string
@@ -27,7 +27,7 @@ Write me a program that :
 
 *(Interesting fact : We got the solve 3 min before the CTF ended in our first try . Was really exciting xD)*
 
-### Challenge
+#### Challenge
 
 After solving a PoW , the server asks for a C code that takes in a 4 character string as an argument.
 
@@ -80,7 +80,7 @@ You may find the angr script in solver.py and the session script in session.py
 
 Our aim is to code a program which angr can't guess but returns 0 for the right input and the right input only.
 
-### Approach
+#### Approach
 
 **1**
 
@@ -120,7 +120,7 @@ The only way left was to somehow make angr return the `None` for the key.
 
 Our juniors , Pavani and Revathi came up with the idea to play around with the parameters in the angr.cfg file and so we did.
 
-(4lex1)[https://github.com/sandrabeme] suggested that we use some functions that has a lot of memory utilisation , so that we could exceed angr's memory limitations and thus making it impossible for angr to solve the equation. Thus we starting trying to use memcmp and defining variables outside stack etc. But that just wasnt enough to exceed the memory limit.
+[4lex1](https://github.com/sandrabeme) suggested that we use some functions that has a lot of memory utilisation , so that we could exceed angr's memory limitations and thus making it impossible for angr to solve the equation. Thus we starting trying to use memcmp and defining variables outside stack etc. But that just wasnt enough to exceed the memory limit.
 
 Being a Crypto gal, the first thing that came to my mind was the Discrete Logarithm Problem. We framed the problem such that the first character of our string is the only solution to our DLP problem and if tried to brute-force, the memory utilisation would just grow exponentially. This was our final C code :
 
@@ -153,8 +153,8 @@ int main(int argc,char *argv[]) {
 
 Converting it into hex, and passing it to the server we got the flag.
 
-![the-solution]()
+![the-solution](../solution-ss.png)
 
-### Flag
+#### Flag
 `CCC{p4th_3pl0s10n_4s_a_tr4pd00r_funct10n?_0r_d1d_y0u_ch33s3_1t}`
 
