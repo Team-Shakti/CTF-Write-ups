@@ -153,7 +153,7 @@ int main(int argc,char *argv[]) {
 
 Converting it into hex, and passing it to the server we got the flag.
 
-![the-solution]()
+![the-solution](https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/misc/CircleConCTF/solution-ss.png)
 
 ### Flag
 `CCC{p4th_3pl0s10n_4s_a_tr4pd00r_funct10n?_0r_d1d_y0u_ch33s3_1t}`
