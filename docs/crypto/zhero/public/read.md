@@ -9,8 +9,8 @@
    ```
    This is a intresting RSA challenge. where we have to find modulous (n) from ct,d,e.
 ## files
-  - [chall.py] (../public/chall.py)
-  - [out.txt] (../public/out.txt)
+  - [chall.py] (/public/chall.py)
+  - [out.txt] (/public/out.txt)
 ## RSA equations known
 ```d ≡ e^1 mod phin(n)
    d*e ≡ 1 mod phin(n)
