@@ -1,0 +1,47 @@
+
+# Alice_bob_dave - Crypto
+
+#### Sloved by - Sowmya (@__4lph4\_\_) , Pavani(@PavaniPoluru)
+
+## Description
+   ```Alice and Bob are sending their flags to Dave. But sadly Dave lost the modulus :( Try to retrive the flag!
+   ```
+   This is a intresting RSA challenge. where we have to find modulous (n) from ct,d,e.
+## files
+  - [chall.py] (../public/chall.py)
+  - [out.txt] (../public/out.txt)
+## RSA equations known
+```d ≡ e^1 mod phin(n)
+   d*e ≡ 1 mod phin(n)
+   => d*e = k*phin(n)+1
+   => da*e-1 = k(p-1)*(q-1)
+   pt = long_to_bytes(pow(ct,d,n))
+   ct = long_to_bytes(pow(pt,e,n))
+```
+``d*e = k*phin(n)+1``
+From this try to find phin_a,phin_b 
+  ``phi(n) = (p-1)*(q-1)``
+  we can find factors of p and brutefroce it with conditions is_prime and size(1024)
+  ```py
+  if is_prime(x+1) and size(x+1) == 1024: 
+     p = x+1 
+     break 
+  ```
+  find q,r in the same way
+  ```
+     p = 177279130816191665059944783286411855023035031289227941571673915784074353287733189099688126318264113305321082059619767094038966996649561164342515779196140056547333435193040798074799909334916510316728847254833619137382153503950749154356946058670079132324988450725735937306884337410304401871741381990982764516163
+     q = 155884012157322571917571429609117477794801005792976713173607792359939561733216007547732077875565730627490168412882054028115468195925968305125054508969875158276459353283308944667481012666571096247936714275405402155862690247593753125976847078582510938772358086998385220759841590572613434454768180423789003022307
+     r = 152403791625721851654120555560673744553701328109255879726337480096744356018547509475023868657897447439271501318332177621761545812231960220886709355355570370122257259486344955476929483307543879747176492652883512877777163462444499810416443763758426816456424484060280743786614239115245058838657579029682477426407
+  ```
+  Now we know p,q,r
+  >> n_a = p * q 
+ 
+  >> n_b = p * r
+
+``pt = long_to_bytes(pow(ct,d,n))``
+Using this above equation find pt_a and pt_b
+```
+b'Hey Dave its Alice here.My flag is zh3r0{GCD_c0m3s_'
+b'Hey Dave its Bob here.My flag is 70_R3sCue_3742986}'
+```
+### FLAG - zh3r0{GCD_c0m3s_70_R3sCue_3742986}
