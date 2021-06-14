@@ -8,9 +8,6 @@
    Alice and Bob are sending their flags to Dave. But sadly Dave lost the modulus :( Try to retrive the flag!
    ```
    This is a intresting RSA challenge. where we have to find modulous (n) from ct,d,e.
-## files
-  - [chall.py] (/public/chall.py)
-  - [out.txt] (/public/out.txt)
 ## RSA equations known
 ```d ≡ e^1 mod phin(n)
    d*e ≡ 1 mod phin(n)
