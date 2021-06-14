@@ -21,3 +21,8 @@ This repo contains the writeups of varoius challenges from CTFs we have attempte
 - [TamuCTF21](https://ctftime.org/event/1320)
     - [setecAstronomy](../tamuCTF/astronomy) 
     - [simple_cipher](../tamuCTF/cipher)
+- [DawgCTF21](https://ctftime.org/event/1030)
+    - [secret_app](../dawgCTF/secret_app/secret_app)-@[Revathi](https://twitter.com/Revathi01740772)
+- [zh3r0CTF21](https://ctftime.org/event/1285)
+    - [Eat Sleep Trace Repeat](../zh3r0CTF/trace)
+    
