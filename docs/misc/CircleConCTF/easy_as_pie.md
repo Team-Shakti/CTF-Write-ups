@@ -23,5 +23,6 @@ An esoteric sketch, wouldn't you agree?
 
 
  - Putting it into a [piet interpretor](https://www.bertnase.de/npiet/npiet-execute.php) we get the flag 
-```CCC{n0th1ng_irr4ti0na1_4b0ut_p1}
+```
+CCC{n0th1ng_irr4ti0na1_4b0ut_p1}
 ```
