@@ -9,62 +9,49 @@
         <link rel="canonical" href="https://github.com/Team-Shakti/CTF-Write-ups/crypto/CyberApocalypseCTF/Phase_Stream4/">
         <link rel="shortcut icon" href="../../../img/favicon.ico">
         <title>Phase Stream 4 - CTF-Writeups</title>
-        <link href="../../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../../css/bootstrap.min.css" rel="stylesheet">
         <link href="../../../css/font-awesome.min.css" rel="stylesheet">
         <link href="../../../css/base.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/darcula.min.css">
-        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-        <!--[if lt IE 9]>
-            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-        <![endif]-->
 
         <script src="../../../js/jquery-1.10.2.min.js" defer></script>
-        <script src="../../../js/bootstrap-3.0.3.min.js" defer></script>
+        <script src="../../../js/bootstrap.min.js" defer></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
         <script>hljs.initHighlightingOnLoad();</script> 
     </head>
 
     <body>
-
-        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
             <div class="container">
-
-                <!-- Collapsed navigation -->
-                <div class="navbar-header">
-                    <!-- Expander button -->
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="../../..">CTF-Writeups</a>
-                </div>
+                <a class="navbar-brand" href="../../..">CTF-Writeups</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
                 <!-- Expanded navigation -->
-                <div class="navbar-collapse collapse">
+                <div id="navbar-collapse" class="navbar-collapse collapse">
                         <!-- Main navigation -->
                         <ul class="nav navbar-nav">
-                            <li >
-                                <a href="../../../about/">About Us</a>
+                            <li class="navitem">
+                                <a href="../../../about/" class="nav-link">About Us</a>
                             </li>
-                            <li >
-                                <a href="../../../shaktictf/">ShaktiCTF</a>
+                            <li class="navitem">
+                                <a href="../../../shaktictf/" class="nav-link">ShaktiCTF</a>
                             </li>
-                            <li >
-                                <a href="https://team-shakti.github.io/">Website</a>
+                            <li class="navitem">
+                                <a href="https://team-shakti.github.io/" class="nav-link">Website</a>
                             </li>
                         </ul>
 
-                    <ul class="nav navbar-nav navbar-right">
-                        <li>
-                            <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
                                 <i class="fa fa-search"></i> Search
                             </a>
                         </li>
-                            <li>
-                                <a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/crypto/CyberApocalypseCTF/Phase_Stream4.md">Edit on Team-Shakti/CTF-Write-ups</a>
+                            <li class="nav-item">
+                                <a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/crypto/CyberApocalypseCTF/Phase_Stream4.md" class="nav-link">Edit on Team-Shakti/CTF-Write-ups</a>
                             </li>
                     </ul>
                 </div>
@@ -72,18 +59,32 @@
         </div>
 
         <div class="container">
-                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
-    <ul class="nav bs-sidenav">
-        <li class="main active"><a href="#phase-stream-4">Phase Stream 4</a></li>
-    </ul>
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#phase-stream-4" class="nav-link">Phase Stream 4</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+        </ul>
+    </div>
 </div></div>
-                <div class="col-md-9" role="main">
+                    <div class="col-md-9" role="main">
 
 <h1 id="phase-stream-4">Phase Stream 4</h1>
 <p>Solved by: Sowmya (@__4lph4__)</p>
 <p>This is the last set of the Phase Stream challenges. This challenge involves the <code>cribdragging</code> approach.</p>
 <p>Here is the challenge script: </p>
-<pre><code class="python">from Crypto.Cipher import AES
+<pre><code class="language-python">from Crypto.Cipher import AES
 from Crypto.Util import Counter
 import os
 
@@ -105,12 +106,10 @@ with open('flag.txt', 'rb') as f:
 print(encrypt(flag))
 
 </code></pre>
-
 <p>Output: </p>
 <pre><code>2d0fb3a56aa66e1e44cffc97f3a2e030feab144124e73c76d5d22f6ce01c46e73a50b0edc1a2bd243f9578b745438b00720870e3118194cbb438149e3cc9c0844d640ecdb1e71754c24bf43bf3fd0f9719f74c7179b6816e687fa576abad1955
 2767868b7ebb7f4c42cfffa6ffbfb03bf3b8097936ae3c76ef803d76e11546947157bcea9599f826338807b55655a05666446df20c8e9387b004129e10d18e9f526f71cabcf21b48965ae36fcfee1e820cf1076f65
 </code></pre>
-
 <p>Points to be noted: </p>
 <pre><code>1. We are given 2 ciphertexts:
     1. Ciphertext of the flag
@@ -118,9 +117,9 @@ print(encrypt(flag))
 2. We know the flag format &quot;CHTB{&quot;
 3. Key is reused in AES-CTR which reduces its strength to that of XOR
 </code></pre>
-
 <p>We first XOR both the ciphertexts to remove the effect of the key. Now we use the flag format <code>CHTB{</code> to get the initial part of the quote. Through some guessing and googling we have to figure out the quote little by little. Challenge name is also helpful in guessing some part of the flag.</p>
 <p>Flag: <code>CHTB{stream_ciphers_with_reused_keystreams_are_vulnerable_to_known_plaintext_attacks}</code></p></div>
+            </div>
         </div>
 
         <footer class="col-md-12">
@@ -130,27 +129,27 @@ print(encrypt(flag))
         </footer>
         <script>
             var base_url = "../../..",
-                shortcuts = {"search": 83, "next": 78, "help": 191, "previous": 80};
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
         </script>
         <script src="../../../js/base.js" defer></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
         <script src="../../../search/main.js" defer></script>
 
-        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
-    <div class="modal-dialog">
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
             </div>
             <div class="modal-body">
                 <p>
                     From here you can search these documents. Enter
                     your search terms below.
                 </p>
-                <form role="form">
+                <form>
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
                     </div>
                 </form>
                 <div id="mkdocs-search-results"></div>
@@ -159,12 +158,12 @@ print(encrypt(flag))
             </div>
         </div>
     </div>
-</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="Keyboard Shortcuts Modal" aria-hidden="true">
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="exampleModalLabel">Keyboard Shortcuts</h4>
             </div>
             <div class="modal-body">
               <table class="table">

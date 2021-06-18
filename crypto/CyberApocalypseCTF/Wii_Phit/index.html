@@ -9,62 +9,49 @@
         <link rel="canonical" href="https://github.com/Team-Shakti/CTF-Write-ups/crypto/CyberApocalypseCTF/Wii_Phit/">
         <link rel="shortcut icon" href="../../../img/favicon.ico">
         <title>Wii Phit - CTF-Writeups</title>
-        <link href="../../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../../css/bootstrap.min.css" rel="stylesheet">
         <link href="../../../css/font-awesome.min.css" rel="stylesheet">
         <link href="../../../css/base.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/darcula.min.css">
-        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-        <!--[if lt IE 9]>
-            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-        <![endif]-->
 
         <script src="../../../js/jquery-1.10.2.min.js" defer></script>
-        <script src="../../../js/bootstrap-3.0.3.min.js" defer></script>
+        <script src="../../../js/bootstrap.min.js" defer></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
         <script>hljs.initHighlightingOnLoad();</script> 
     </head>
 
     <body>
-
-        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
             <div class="container">
-
-                <!-- Collapsed navigation -->
-                <div class="navbar-header">
-                    <!-- Expander button -->
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="../../..">CTF-Writeups</a>
-                </div>
+                <a class="navbar-brand" href="../../..">CTF-Writeups</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
                 <!-- Expanded navigation -->
-                <div class="navbar-collapse collapse">
+                <div id="navbar-collapse" class="navbar-collapse collapse">
                         <!-- Main navigation -->
                         <ul class="nav navbar-nav">
-                            <li >
-                                <a href="../../../about/">About Us</a>
+                            <li class="navitem">
+                                <a href="../../../about/" class="nav-link">About Us</a>
                             </li>
-                            <li >
-                                <a href="../../../shaktictf/">ShaktiCTF</a>
+                            <li class="navitem">
+                                <a href="../../../shaktictf/" class="nav-link">ShaktiCTF</a>
                             </li>
-                            <li >
-                                <a href="https://team-shakti.github.io/">Website</a>
+                            <li class="navitem">
+                                <a href="https://team-shakti.github.io/" class="nav-link">Website</a>
                             </li>
                         </ul>
 
-                    <ul class="nav navbar-nav navbar-right">
-                        <li>
-                            <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
                                 <i class="fa fa-search"></i> Search
                             </a>
                         </li>
-                            <li>
-                                <a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/crypto/CyberApocalypseCTF/Wii_Phit.md">Edit on Team-Shakti/CTF-Write-ups</a>
+                            <li class="nav-item">
+                                <a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/crypto/CyberApocalypseCTF/Wii_Phit.md" class="nav-link">Edit on Team-Shakti/CTF-Write-ups</a>
                             </li>
                     </ul>
                 </div>
@@ -72,18 +59,32 @@
         </div>
 
         <div class="container">
-                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
-    <ul class="nav bs-sidenav">
-        <li class="main active"><a href="#wii-phit">Wii Phit</a></li>
-    </ul>
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#wii-phit" class="nav-link">Wii Phit</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+        </ul>
+    </div>
 </div></div>
-                <div class="col-md-9" role="main">
+                    <div class="col-md-9" role="main">
 
 <h1 id="wii-phit">Wii Phit</h1>
 <p>Solved by: Sowmya (@__4lph4__)</p>
 <p>This was an interesting challenge from Cyber Apocalypse CTF 2021. This challenge is based on Number Theory and I really liked the way this challenge was created.</p>
 <p>Here's the challenge script for understanding the challenge: </p>
-<pre><code class="python">from Crypto.Util.number import bytes_to_long
+<pre><code class="language-python">from Crypto.Util.number import bytes_to_long
 from secrets import FLAG,p,q
 
 N = p**3 * q
@@ -101,11 +102,9 @@ z = q - 1
 
 assert w*(x*z + y*z - x*y) == 4*x*y*z
 </code></pre>
-
 <p>Parameter given to us:</p>
 <pre><code>Flag: 0x12f47f77c4b5a72a0d14a066fedc80ba6064058c900a798f1658de60f13e1d8f21106654c4aac740fd5e2d7cf62f0d3284c2686d2aac261e35576df989185fee449c20efa171ff3d168a04bce84e51af255383a59ed42583e93481cbfb24fddda16e0a767bff622a4753e1a5df248af14c9ad50f842be47ebb930604becfd4af04d21c0b2248a16cdee16a04b4a12ac7e2161cb63e2d86999a1a8ed2a8faeb4f4986c2a3fbd5916effb1d9f3f04e330fdd8179ea6952b14f758d385c4bc9c5ae30f516c17b23c7c6b9dbe40e16e90d8734baeb69fed12149174b22add6b96750e4416ca7addf70bcec9210b967991e487a4542899dde3abf3a91bbbaeffae67831c46c2238e6e5f4d8004543247fae7ff25bbb01a1ab3196d8a9cfd693096aabec46c2095f2a82a408f688bbedddc407b328d4ea5394348285f48afeaafacc333cff3822e791b9940121b73f4e31c93c6b72ba3ede7bba87419b154dc6099ec95f56ed74fb5c55d9d8b3b8c0fc7de99f344beb118ac3d4333eb692710eaa7fd22
 </code></pre>
-
 <p>Getting into my initial approach, I first tried elaborating this: <code>assert w*(x*z + y*z - x*y) == 4*x*y*z</code> thinking that it would give me a relation in one of the primes of the modulus. But that didn't work out. </p>
 <p>On staring at the equation for sometime, I found it similar to one the maths algebra kind of relation. Rearranging the equation gave me this equation: 
 <code>4/w = 1/x + 1/y - 1/z</code></p>
@@ -132,8 +131,8 @@ d = inverse(e,phin)
 flag = long_to_bytes(pow(flag,d,N))
 print(flag)
 </code></pre>
-
 <p>On running the script, we get the flag: <code>CHTB{Erdos-Straus-Conjecture}</code></p></div>
+            </div>
         </div>
 
         <footer class="col-md-12">
@@ -143,27 +142,27 @@ print(flag)
         </footer>
         <script>
             var base_url = "../../..",
-                shortcuts = {"search": 83, "next": 78, "help": 191, "previous": 80};
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
         </script>
         <script src="../../../js/base.js" defer></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
         <script src="../../../search/main.js" defer></script>
 
-        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
-    <div class="modal-dialog">
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
             </div>
             <div class="modal-body">
                 <p>
                     From here you can search these documents. Enter
                     your search terms below.
                 </p>
-                <form role="form">
+                <form>
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
                     </div>
                 </form>
                 <div id="mkdocs-search-results"></div>
@@ -172,12 +171,12 @@ print(flag)
             </div>
         </div>
     </div>
-</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="Keyboard Shortcuts Modal" aria-hidden="true">
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="exampleModalLabel">Keyboard Shortcuts</h4>
             </div>
             <div class="modal-body">
               <table class="table">

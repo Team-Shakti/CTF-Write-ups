@@ -9,62 +9,49 @@
         <link rel="canonical" href="https://github.com/Team-Shakti/CTF-Write-ups/crypto/CyberApocalypseCTF/Soul_Crabber2/">
         <link rel="shortcut icon" href="../../../img/favicon.ico">
         <title>Soul Crabber 2 - CTF-Writeups</title>
-        <link href="../../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../../css/bootstrap.min.css" rel="stylesheet">
         <link href="../../../css/font-awesome.min.css" rel="stylesheet">
         <link href="../../../css/base.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/darcula.min.css">
-        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-        <!--[if lt IE 9]>
-            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-        <![endif]-->
 
         <script src="../../../js/jquery-1.10.2.min.js" defer></script>
-        <script src="../../../js/bootstrap-3.0.3.min.js" defer></script>
+        <script src="../../../js/bootstrap.min.js" defer></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
         <script>hljs.initHighlightingOnLoad();</script> 
     </head>
 
     <body>
-
-        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
             <div class="container">
-
-                <!-- Collapsed navigation -->
-                <div class="navbar-header">
-                    <!-- Expander button -->
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="../../..">CTF-Writeups</a>
-                </div>
+                <a class="navbar-brand" href="../../..">CTF-Writeups</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
                 <!-- Expanded navigation -->
-                <div class="navbar-collapse collapse">
+                <div id="navbar-collapse" class="navbar-collapse collapse">
                         <!-- Main navigation -->
                         <ul class="nav navbar-nav">
-                            <li >
-                                <a href="../../../about/">About Us</a>
+                            <li class="navitem">
+                                <a href="../../../about/" class="nav-link">About Us</a>
                             </li>
-                            <li >
-                                <a href="../../../shaktictf/">ShaktiCTF</a>
+                            <li class="navitem">
+                                <a href="../../../shaktictf/" class="nav-link">ShaktiCTF</a>
                             </li>
-                            <li >
-                                <a href="https://team-shakti.github.io/">Website</a>
+                            <li class="navitem">
+                                <a href="https://team-shakti.github.io/" class="nav-link">Website</a>
                             </li>
                         </ul>
 
-                    <ul class="nav navbar-nav navbar-right">
-                        <li>
-                            <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
                                 <i class="fa fa-search"></i> Search
                             </a>
                         </li>
-                            <li>
-                                <a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/crypto/CyberApocalypseCTF/Soul_Crabber2.md">Edit on Team-Shakti/CTF-Write-ups</a>
+                            <li class="nav-item">
+                                <a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/crypto/CyberApocalypseCTF/Soul_Crabber2.md" class="nav-link">Edit on Team-Shakti/CTF-Write-ups</a>
                             </li>
                     </ul>
                 </div>
@@ -72,18 +59,32 @@
         </div>
 
         <div class="container">
-                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
-    <ul class="nav bs-sidenav">
-        <li class="main active"><a href="#soul-crabber-2">Soul Crabber 2</a></li>
-    </ul>
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#soul-crabber-2" class="nav-link">Soul Crabber 2</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+        </ul>
+    </div>
 </div></div>
-                <div class="col-md-9" role="main">
+                    <div class="col-md-9" role="main">
 
 <h1 id="soul-crabber-2">Soul Crabber 2</h1>
 <p>Solved by: Sowmya (@__4lph4__) , Namitha (@N4m1th4_01)</p>
 <p>This challenge was similar to it's preceding challenge <code>Soul Crabber</code> but the seed wasn't hardcoded this time. So this is a time based PRNG challenge that should be solved with proper brute force. One issue we faced was that we weren't very familiar with rust, so it took us some time. </p>
 <p>Here is the challenge script: </p>
-<pre><code class="rust">use rand::{Rng,SeedableRng};
+<pre><code class="language-rust">use rand::{Rng,SeedableRng};
 use rand::rngs::StdRng;
 use std::fs;
 use std::io::Write;
@@ -116,14 +117,12 @@ fn main() -&gt; std::io::Result&lt;()&gt; {
     Ok(())
 }
 </code></pre>
-
 <p>Output: </p>
 <pre><code>418a5175c38caf8c1cafa92cde06539d512871605d06b2d01bbc1696f4ff487e9d46ba0b5aaf659807
 </code></pre>
-
 <p>Using time as the seed is the vulnerability here as only the last few digits are going to be changed in 2 different particular times and therefore, the seed can be bruteforced. In this problem the range to be considered was quite large.  </p>
 <p>Here's the solution script</p>
-<pre><code class="rust">use rand::{Rng, SeedableRng, rngs::StdRng};
+<pre><code class="language-rust">use rand::{Rng, SeedableRng, rngs::StdRng};
 use std::fs;
 use std::io::Write;
 use std::time::SystemTime;
@@ -158,8 +157,8 @@ fn main() -&gt; std::io::Result&lt;()&gt; {
     Ok(())
     }
 </code></pre>
-
 <p>Flag: <code>CHTB{cl4551c_ch4ll3ng3_r3wr1tt3n_1n_ru5t}</code> </p></div>
+            </div>
         </div>
 
         <footer class="col-md-12">
@@ -169,27 +168,27 @@ fn main() -&gt; std::io::Result&lt;()&gt; {
         </footer>
         <script>
             var base_url = "../../..",
-                shortcuts = {"search": 83, "next": 78, "help": 191, "previous": 80};
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
         </script>
         <script src="../../../js/base.js" defer></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
         <script src="../../../search/main.js" defer></script>
 
-        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
-    <div class="modal-dialog">
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
             </div>
             <div class="modal-body">
                 <p>
                     From here you can search these documents. Enter
                     your search terms below.
                 </p>
-                <form role="form">
+                <form>
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
                     </div>
                 </form>
                 <div id="mkdocs-search-results"></div>
@@ -198,12 +197,12 @@ fn main() -&gt; std::io::Result&lt;()&gt; {
             </div>
         </div>
     </div>
-</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="Keyboard Shortcuts Modal" aria-hidden="true">
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="exampleModalLabel">Keyboard Shortcuts</h4>
             </div>
             <div class="modal-body">
               <table class="table">

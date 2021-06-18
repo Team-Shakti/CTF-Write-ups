@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        <link rel="canonical" href="https://github.com/Team-Shakti/CTF-Write-ups/misc/CircleConCTF/angrbox/">
+        <link rel="shortcut icon" href="../../../img/favicon.ico">
+        <title>Angrbox - CTF-Writeups</title>
+        <link href="../../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/darcula.min.css">
+
+        <script src="../../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../../js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+            <div class="container">
+                <a class="navbar-brand" href="../../..">CTF-Writeups</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="navitem">
+                                <a href="../../../about/" class="nav-link">About Us</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../../../shaktictf/" class="nav-link">ShaktiCTF</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="https://team-shakti.github.io/" class="nav-link">Website</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/misc/CircleConCTF/angrbox.md" class="nav-link">Edit on Team-Shakti/CTF-Write-ups</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="2"><a href="#circleconctf-21" class="nav-link">CircleConCTF 21'</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-level="2"><a href="#angrbox" class="nav-link">angrbox</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h2 id="circleconctf-21">CircleConCTF 21'</h2>
+<h2 id="angrbox">angrbox</h2>
+<p><em>Challenge Points : 261 Points</em></p>
+<h3 id="description">Description</h3>
+<p>Write me a program that :
+ - Takes 4 uppercase characters in argv
+ - Verifies the 4 character key and returns 0 if correct
+ - If I find the key , YOU LOSE</p>
+<p><code>nc 35.194.4.79 7000</code></p>
+<p><strong>Attachment</strong>
+&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+ <a href="../angrbox.zip">angrbox.zip</a>
+=======
+ <a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/misc/CircleConCTF/angrbox.zip">angrbox.zip</a></p>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>cdf2e60e000d0a14f8aa282c5760a3a44d30b574</p>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+<h3 id="writeup">Writeup</h3>
+<p><strong>TL:DR</strong>
+- Pass on a C program to check the arguments against a predefined 4 character string
+- Use path explosion so that angr would not be able to find a solution
+    - In this case we just used a DLP problem in the check contraint</p>
+<p><em>(Interesting fact : We got the solve 3 min before the CTF ended in our first try . Was really exciting xD)</em></p>
+<h4 id="challenge">Challenge</h4>
+<p>After solving a PoW , the server asks for a C code that takes in a 4 character string as an argument.</p>
+<p>We are to predefine a particular string in the code and check with the argument string. If both are equal the program returns a 0.</p>
+<p>The server uses angr to guess the 4 character string in the passed C code within 2 min. </p>
+<pre><code class="language-python">    print(&quot;[*] Write me a program that:&quot;)
+    print(&quot;[*] - Takes 4 uppercase characters in argv&quot;)
+    print(&quot;[*] - Verifies the 4 character key and returns 0 if correct&quot;)
+    print(&quot;[*] - If I find the key, YOU LOSE&quot;)
+    print(&quot;&quot;)
+    print(&quot;[*] Enter your C code in hex:&quot;)
+    src = bytes.fromhex(input())
+    if len(src) &gt; 2048:
+        raise MyException(&quot;[-] Too long nitwit&quot;)
+
+    print(&quot;[*] Compiling ...&quot;)
+    filepath = compile(basename, src)
+
+    print(&quot;[*] Solving (max 2 minutes) ...&quot;)
+    key = solve_key(filepath)
+</code></pre>
+<p>You may find the angr script in solver.py and the session script in session.py</p>
+<pre><code class="language-python">    if key:
+        print(f&quot;[-] WoUlD yOu LoOk At ThIs KeY i FoUnD: {key}&quot;)
+        raise MyException(&quot;[-] This code is WEAK SAUCE&quot;)
+    else:
+        print(&quot;[*] My solver couldn't find a key &gt;:(&quot;)
+
+    key = input(&quot;[*] Gimme ur key and I'll check it: &quot;)
+    if len(key.encode()) != 4:
+        raise MyException(&quot;[-] The key needs to be 4 characters fool&quot;)
+    if any(c not in string.ascii_uppercase for c in key):
+        raise MyException(&quot;[-] The key can only contain UPPERCASE characters&quot;)
+
+    success = check_key(filepath, key)
+    if success:
+        print(&quot;[*] WTF? YOUR KEY WORKS&quot;)
+        print(&quot;[*] You are a crypto genius&quot;)
+        flag = open(&quot;flag.txt&quot;).read().strip()
+        print(f&quot;[+] Here's your flag: {flag}&quot;)
+    else:
+        raise MyException(&quot;[-] ARE YOU KIDDING ME? THIS KEY DOESN'T EVEN WORK&quot;)
+</code></pre>
+<p>Our aim is to code a program which angr can't guess but returns 0 for the right input and the right input only.</p>
+<h4 id="approach">Approach</h4>
+<p><strong>1</strong></p>
+<p>Our first thought was to make a script that takes a lot of time for the check.</p>
+<p>There was a timing constraint of 2 min for angr in the config file. So we thought of putting a sleep(120) so that angr could not guess the value. This is what we tried :-</p>
+<pre><code class="language-c">
+#include&lt;stdio.h&gt;
+#include&lt;string.h&gt;
+#include&lt;unistd.h&gt;
+
+int main(int argc,char *argv[])
+{
+    char str1[4]=&quot;DBCA&quot;;
+    sleep(118);
+    if(strcmp(argv[1],str1)==0)
+        return 0;}
+
+</code></pre>
+<p>angr did find the wrong key however, it raises an exception and exits because it does not go to the else condition.</p>
+<pre><code class="language-python">    if key:
+        print(f&quot;[-] WoUlD yOu LoOk At ThIs KeY i FoUnD: {key}&quot;)
+        raise MyException(&quot;[-] This code is WEAK SAUCE&quot;)
+    else:
+        print(&quot;[*] My solver couldn't find a key &gt;:(&quot;)
+</code></pre>
+<p>So even if it did find the wrong key it does not recognize that the solution is wrong because it does not go to the else condition.</p>
+<p>The only way left was to somehow make angr return the <code>None</code> for the key.</p>
+<p><strong>2</strong></p>
+<p>Our juniors , Pavani and Revathi came up with the idea to play around with the parameters in the angr.cfg file and so we did.</p>
+<p><a href="https://github.com/sandrabeme">4lex1</a> suggested that we use some functions that has a lot of memory utilisation , so that we could exceed angr's memory limitations and thus making it impossible for angr to solve the equation. Thus we starting trying to use memcmp and defining variables outside stack etc. But that just wasnt enough to exceed the memory limit.</p>
+<p>Being a Crypto gal, the first thing that came to my mind was the Discrete Logarithm Problem. We framed the problem such that the first character of our string is the only solution to our DLP problem and if tried to brute-force, the memory utilisation would just grow exponentially. This was our final C code :</p>
+<pre><code class="language-c">int modpow(long long int x,long long int y,long long int n) {
+  int ret = 1;
+  for (; y; x = x * x % n, y &gt;&gt;= 1) {
+    if (y &amp; 1) {
+      ret = ret * x % n;
+    }
+  }
+  return ret;
+}
+
+int main(int argc,char *argv[]) {
+  char *s = argv[1];
+  char str[] = &quot;ABCD&quot;;
+  int x = (int)s[0] &lt;&lt; 20;
+  int g = 30;
+  long long int p = 262717555471964216279378282832327568771;
+  long long int y = 8520288065628959452076982415822625519;
+  if(modpow(g,x,p) == y)
+  {
+    if(s[1] == 'B' &amp;&amp; s[2] == 'C' &amp;&amp; s[3] == 'D')
+ return 0;
+  }
+
+}
+</code></pre>
+<p>Converting it into hex, and passing it to the server we got the flag.</p>
+<p>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+<img alt="the-solution" src="../solution-ss.png" />
+=======
+<img alt="the-solution" src="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/misc/CircleConCTF/solution-ss.png" /></p>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>cdf2e60e000d0a14f8aa282c5760a3a44d30b574</p>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+<h4 id="flag">Flag</h4>
+<p><code>CCC{p4th_3pl0s10n_4s_a_tr4pd00r_funct10n?_0r_d1d_y0u_ch33s3_1t}</code></p></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+                <p>Copyright &copy; 2020 <a href="http://Team-Shakti.github.io/">Team-Shakti Writeups</a></p>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../../js/base.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
+        <script src="../../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>
