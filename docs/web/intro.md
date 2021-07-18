@@ -18,5 +18,7 @@ This repo contains the writeups of varoius challenges from CTFs we have attempte
 - [TAMUctf 2021](https://ctftime.org/event/1320)
     - [uphpload](../TAMUctf2021/uphpload/uphpload) - [Sivakami Praveen](https://twitter.com/_5up3rn0v4_)
     - [API 2 : The SeQueL ](../TAMUctf2021/API2:THE SEQUEL/THeSequel) - [Aiswarya Nair & Srividhya Vasanth](https://twitter.com/Aiswary71806325)
-    
-
+- [redpwnCTF 2021](https://ctftime.org/event/1327)   
+    - [orm-bad](../redpwnCTF2021/orm-bad/ormbad) - [Sivakami Praveen](https://twitter.com/_5up3rn0v4_)
+    - [pastebin-1](../redpwnCTF2021/pastebin-1/pastebin1) - [Sivakami Praveen](https://twitter.com/_5up3rn0v4_)
+    - [secure](../redpwnCTF2021/secure/secure) - [Sivakami Praveen](https://twitter.com/_5up3rn0v4_)
