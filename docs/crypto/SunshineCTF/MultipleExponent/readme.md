@@ -7,7 +7,7 @@ Both Alice and Bob share the same modulus, but with different exponents. If only
 Author: Ratman#4736
 ```
 ### Writeup
-~Attack:Common modules~
+**Attack**:Common modules
 We have one modulus, two exponents and two ciphertexts 
 
 Equations:
