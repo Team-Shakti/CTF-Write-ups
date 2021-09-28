@@ -22,6 +22,6 @@ If u < 0 , find inverse of C1 mod n .If v<0 ,then find the inverse of C2 mod n
 As I got u < 0, I found inverse of C1.Now, according to equation-3 compute  M = c_1^u*c_2_{inv}^{-v}
 
 ### Script
-
+[solution.py](docs/crypto/SunshineCTF/MultipleExponent/soln.sage)
 ### Flag
 `` sun{d0n7_d0_m0r3_th4n_0ne_3xp0n3nt}``
