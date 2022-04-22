@@ -21,7 +21,7 @@ This repo contains the writeups of varoius challenges from CTFs we have attempte
     - [Moses](../DawgCTF/moses) - [Arya Arun](https://twitter.com/aryaarun_)
     - [Tag](../DawgCTF/Tag/tag) - [v1Ru5](https://twitter.com/SrideviKrishn16)
 - [TAMUCTF22](https://ctftime.org/event/1557)
-    - [Taxes](../TAMUCTF/Taxes/Taxes) - [v1Ru5](https://twitter.com/SrideviKrishn16)
+    - [Taxes](../TAMUCTF22/Taxes/Taxes) - [v1Ru5](https://twitter.com/SrideviKrishn16)
     
 
 
