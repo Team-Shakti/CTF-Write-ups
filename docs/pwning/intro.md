@@ -24,6 +24,6 @@ This repo contains the writeups of varoius challenges from CTFs we have attempte
 - [Cyber Apocalypse HTBCTF21](https://ctftime.org/event/1304)
 	- [Controller](../htb_cyber_21/controller/controller) - [Adhithya Sree Mohan](https://twitter.com/adhithya_sree)
 - [TamuCTF 22](https://ctftime.org/event/1557)
-    - [ctf_sim](../tamuCTF/ctf_sim) - [Shravya Bhaskara](https://twitter.com/BhaskaraShravya)
+    - [CTF_sim: 356](../tamuCTF/ctf_sim) - [Shravya Bhaskara](https://twitter.com/BhaskaraShravya)
     - [void](../tamuCTF/void) - [Shravya Bhaskara](https://twitter.com/BhaskaraShravya)
 
