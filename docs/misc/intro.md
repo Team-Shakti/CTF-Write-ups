@@ -30,7 +30,7 @@ This repo contains the writeups of various challenges from CTFs we have attempte
     - [ELIZABETH IS MISSING](../tamuCTF/elizabeth_is_missing/elizabeth) - [Adhithya Sree Mohan](https://twitter.com/adhithya_sree)
     - [MARVEL V/S DC](../tamuCTF/marvel_dc/marvel_dc) - [Adhithya Sree Mohan](https://twitter.com/adhithya_sree)
     - [SPECTRAL IMAGING](../tamuCTF/spectral_imaging/spectral) - [Adhithya Sree Mohan](https://twitter.com/adhithya_sree)
-    - [GILBERTO'S BROTHER](../tamuCTF/gilberto/Gilberto's Brother-OSINT) - [Arya Arun](https://twitter.com/rayst4rk)
+    - [GILBERTO'S BROTHER](../tamuCTF/gilberto/gilberto) - [Arya Arun](https://twitter.com/rayst4rk)
 
 - [DawgCTF 2021](https://ctftime.org/event/1319)
 	- [Two truths and a fib](../dawgctf_21/two_truths_and_a_fib/fib) - [Adhithya Sree Mohan](https://twitter.com/adhithya_sree)
