@@ -15,7 +15,6 @@ This repo contains the writeups of varoius challenges from CTFs we have attempte
     - [Rap God](../TJCTF/RAP/Rap) - [v1Ru5](https://twitter.com/SrideviKrishn16)
 - [TamuCTF](https://ctftime.org/event/1320)
     - [Recovery](../TamuCTF/Recovery/Recovery) - [v1Ru5](https://twitter.com/SrideviKrishn16)
-    - [Whats the difference](../TamuCTF/whats-the-diff/whats-the-diff) - [Arya Arun](https://twitter.com/rayst4rk)
 - [DawgCTF](https://ctftime.org/event/1319)
     - [Deserted Island Toolkit](../DawgCTF/Deserted-island) - [Arya Arun](https://twitter.com/aryaarun_)
     - [These Ladies Paved Your Way](../DawgCTF/these-ladies) - [Arya Arun](https://twitter.com/aryaarun_)
@@ -23,6 +22,8 @@ This repo contains the writeups of varoius challenges from CTFs we have attempte
     - [Tag](../DawgCTF/Tag/tag) - [v1Ru5](https://twitter.com/SrideviKrishn16)
 - [TAMUCTF22](https://ctftime.org/event/1557)
     - [Taxes](../TAMUCTF22/Taxes/Taxes) - [v1Ru5](https://twitter.com/SrideviKrishn16)
+    - [Vanity](../TAMUCTF22/Vanity/Vanity) - [v1Ru5](https://twitter.com/SrideviKrishn16)
+    - [Whats the difference](../TamuCTF/whats-the-diff/whats-the-diff) - [Arya Arun](https://twitter.com/rayst4rk)
     
 
 
