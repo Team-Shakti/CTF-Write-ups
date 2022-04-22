@@ -1,4 +1,6 @@
-# void - 272
+# void 
+
+Points: 272
 
 This was one of the good challenges that I tried during the CTF. It was based on a technique called SROP (Sigreturn Oriented Programming). 
 
