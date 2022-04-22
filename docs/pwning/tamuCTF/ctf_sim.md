@@ -1,4 +1,6 @@
-# CTF_sim: 356
+# ctf_sim
+
+Points: 356
 
 This was a uaf based challenge that I solved after the CTF. I'll now take you through it.
 
