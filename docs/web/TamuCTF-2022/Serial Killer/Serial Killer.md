@@ -1,9 +1,8 @@
-﻿Serial Killer 
+# Serial Killer 
+## Tamu CTF 2022
 
-Tamu CTF 2022
 
-
-Challenge Description:
+## Challenge Description:
 
 I'm trying a new way to display files on my website. Can you try to break it for me?
 
@@ -11,9 +10,9 @@ Do not connect with HTTPS, make sure to connect with HTTP
 
 Link: [http://serial.tamuctf.com](http://serial.tamuctf.com/)
 
-Tip: The flag is located in the /etc/passwd file.
+Tip: The flag is located in the `/etc/passwd` file.
 
-Solution:
+## Solution:
 
 So the page looks something like this,
 
@@ -57,4 +56,4 @@ Tzo3OiJHZXRQYWdlIjoxOntzOjQ6ImZpbGUiO3M6NDY6IiUyZSUyZSUyZiUyZSUyZSUyZiUyZSUyZSUy
 
 Submitting this to the `phpsessid` cookie gave us the flag:
 
-Flag:  gigem{1nt3r3sting\_LFI\_vuln}
+`Flag:  gigem{1nt3r3sting\_LFI\_vuln}`
