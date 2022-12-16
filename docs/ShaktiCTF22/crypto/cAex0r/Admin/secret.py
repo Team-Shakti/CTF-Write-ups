@@ -1,1 +1,0 @@
-flag = b"shaktictf{welCom3_t0_cRyptOo_WoRLD_77846b12bfd9b91ebce67b236aa4}"
