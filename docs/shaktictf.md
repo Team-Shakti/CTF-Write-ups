@@ -27,3 +27,6 @@ This repo contains the writeups of varoius challenges from ShaktiCTF. There are 
 - [Misc](../ShaktiCTF21/misc/intro/)
 
 
+### ShaktiCTF 2022
+
+- [Binary Exploitation](../ShaktiCTF22/pwn/intro/)
