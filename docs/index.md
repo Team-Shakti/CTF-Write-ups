@@ -1,5 +1,5 @@
 # Welcome to TeamShakti Writeups
-!(_static/img/shakti-logo-white-no-team@4x.png)[ts_logo]
+![ts_logo](_static/img/shakti-logo-white-no-team@4x.png)
 ## Introduction
 
 This site is hosted by [TeamShakti](http://Team-Shakti.github.io/),  the women-only CTF team of [Amrita Vishwa Vidyapeetham, Amritapuri Campus](https://www.amrita.edu/amritapuri/).
