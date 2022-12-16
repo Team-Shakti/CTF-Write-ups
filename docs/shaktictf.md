@@ -7,15 +7,9 @@ ShaktiCTF is a women-only CTF hosted by [TeamShakti](http://Team-Shakti.github.i
 ## The contents of this repo 
 This repo contains the writeups of varoius challenges from ShaktiCTF. There are a total of 7 categories we had this year(2020).
 
-### ShaktiCTF 2020
 
-- [Reverse Engineering](../ShaktiCTF20/reversing/intro/)
-- [Binary Exploitation](../ShaktiCTF20/pwning/intro/)
-- [Cryptography](../ShaktiCTF20/crypto/intro/)
-- [Web Exploitation](../ShaktiCTF20/web/intro/)
-- [Forensics](../ShaktiCTF20/forensics/intro/)
-- [steganography](../ShaktiCTF20/stego/intro/)
-- [Miscellaneous](../ShaktiCTF20/misc/intro/)
+### ShaktiCTF 2022
+- [Binary Exploitation](../ShaktiCTF22/pwn/intro/)
 
 ### ShaktiCTF 2021
 
@@ -26,7 +20,16 @@ This repo contains the writeups of varoius challenges from ShaktiCTF. There are 
 - [Forensics](../ShaktiCTF21/forensics/intro/)
 - [Misc](../ShaktiCTF21/misc/intro/)
 
+### ShaktiCTF 2020
 
-### ShaktiCTF 2022
+- [Reverse Engineering](../ShaktiCTF20/reversing/intro/)
+- [Binary Exploitation](../ShaktiCTF20/pwning/intro/)
+- [Cryptography](../ShaktiCTF20/crypto/intro/)
+- [Web Exploitation](../ShaktiCTF20/web/intro/)
+- [Forensics](../ShaktiCTF20/forensics/intro/)
+- [steganography](../ShaktiCTF20/stego/intro/)
+- [Miscellaneous](../ShaktiCTF20/misc/intro/)
 
-- [Binary Exploitation](../ShaktiCTF22/pwn/intro.md)
+
+
+
