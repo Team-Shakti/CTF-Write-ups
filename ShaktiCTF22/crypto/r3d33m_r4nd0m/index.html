@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        <link rel="canonical" href="https://github.com/Team-Shakti/CTF-Write-ups/ShaktiCTF22/crypto/r3d33m_r4nd0m/">
+        <link rel="shortcut icon" href="../../../img/favicon.ico">
+        <title>R3d33m r4nd0m - CTF-Writeups</title>
+        <link href="../../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/darcula.min.css">
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <script src="../../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../../js/bootstrap-3.0.3.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="container">
+
+                <!-- Collapsed navigation -->
+                <div class="navbar-header">
+                    <!-- Expander button -->
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="../../..">CTF-Writeups</a>
+                </div>
+
+                <!-- Expanded navigation -->
+                <div class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li >
+                                <a href="../../../about/">About Us</a>
+                            </li>
+                            <li >
+                                <a href="../../../shaktictf/">ShaktiCTF</a>
+                            </li>
+                            <li >
+                                <a href="https://team-shakti.github.io/">Website</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li>
+                                <a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/ShaktiCTF22/crypto/r3d33m_r4nd0m.md">Edit on Team-Shakti/CTF-Write-ups</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+        <li class="main active"><a href="#r33d3m_rand0m">r33d3m_rand0m</a></li>
+        <li class="main "><a href="#challenge-description">Challenge Description :</a></li>
+        <li class="main "><a href="#author">Author</a></li>
+        <li class="main "><a href="#difficulty-level">Difficulty Level</a></li>
+        <li class="main "><a href="#points">Points</a></li>
+        <li class="main "><a href="#flag-format">Flag format</a></li>
+            <li><a href="#writeup">Writeup</a></li>
+            <li><a href="#flag">flag</a></li>
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
+
+<h3 id="r33d3m_rand0m">r33d3m_rand0m</h3>
+<h3 id="challenge-description">Challenge Description :</h3>
+<p>You know, everything is fair in CTFs and competition.</p>
+<h3 id="author">Author</h3>
+<p><a href="https://twitter.com/Paavani21">b4b7gr00t</a></p>
+<h3 id="difficulty-level">Difficulty Level</h3>
+<p>Hard</p>
+<h3 id="points">Points</h3>
+<p>300</p>
+<h3 id="flag-format">Flag format</h3>
+<p>shaktictf{...}</p>
+<h4 id="writeup">Writeup</h4>
+<p>This is a simple <code>Random faults attack</code> which works with RSA decryption and signature verification with CRT. A signature can be built using CRTof Sp, Sq, Sr. Sp, Sq, and Sr are signatures of hash function with p,q, and r, respectively. </p>
+<p>```py=
+p,q,r = getPrime(256),getPrime(256),getPrime(256)
+n =  p<em>q</em>r
+e = 65537
+phi = (p-1)<em>(q-1)</em>(r-1)
+d = inverse(e,phi)
+ct = pow(bytes_to_long(flag),e,n)</p>
+<p>h =int(sha256(flag).hexdigest(),16)</p>
+<p>dp = d%(p-1)
+dq = d%(q-1)
+dr = d%(r-1)</p>
+<p>sp = pow(h,dp,p)
+sq = pow(h,dq,q)
+sr = pow(h,dr,r)</p>
+<p>s = (((sp<em>q</em>r<em>(inverse(q</em>r,p)))%n) + (sq<em>p</em>r<em>(inverse(p</em>r,q)) %(n)) + ((sr<em>p</em>q<em>(inverse((p</em>q),r)))%n))%n </p>
+<pre><code>
+`s` is the signature.
+
+Now, it is easy to find p,q,r,when the attacker has the full knowledge of `h`.
+
+
+If the signature is valid, i.e., `s^e mod N = h`, the attacker has a chance to manipulate `Sp, Sq and Sr` values. If you compute the signature using changed `Sp, Sq, and Sr` values, the verification fails. Now give faults Sp value, i.e., add some value to `Sp ( Sp+3 )` for first signature verification and don’t change `Sq and Sr`. Calculate `gcd(S^e - h,n)`, which is equal to the `product of q and r`. In the same way, input `Sp, modified_Sq, Sr`, and get the `product of p and r`. Next, find the `product of p and q`.
+
+
+```python=
+sp1 = sp+2      #create faults value one each time
+sq1 = sq+2      #create faults value
+sr1 = sr+2
+
+
+io = remote(host,port)    
+io.recvuntil(b'provided\n')
+n = int(io.recvline()[4:-1])
+e = int(io.recvline()[4:-1])
+h = int(io.recvline()[4:-1])
+io.recvuntil(b'values\n')
+io.sendline('2')
+io.recvuntil(b'sp value: ')
+io.sendline(str(sp1))
+io.recvuntil(b'sq value: ')
+io.sendline(str(sq))
+io.recvuntil(b'sr value: ')
+io.sendline(str(sr))
+
+qr = GCD((s**e)-h , n )
+</code></pre>
+
+<p>```python=
+pr = GCD((s<strong>e)-h , n)
+pq = GCD((s</strong>e)-h , n)</p>
+<p>p = GCD(pq,pr)
+q = GCD(pq,qr)
+r = GCD(pr,qr)     </p>
+<pre><code>
+find `pq` and `pr` in the same way. 
+
+Now find the `gcd(pq,pr),gcd(pq,qr) and gcd(pr,qr)` to get `p`,`q` and `r` values respectively.
+
+```python=
+phi = (p-1)*(q-1)*(r-1)
+d = inverse(e,phi)
+pt = long_to_bytes(pow(ct,d,n))
+
+print(pt)
+
+</code></pre>
+
+<h4 id="flag">flag</h4>
+<p><code>shaktictf{rand0m_cr4z7_p3rs0n_aLw4ys_tries_cr7pt0_a7de4873ca0f9f697f1d2c09004f33dc1ad98b64}</code></p></div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+                <p>Copyright &copy; 2020 <a href="http://Team-Shakti.github.io/">Team-Shakti Writeups</a></p>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../../..",
+                shortcuts = {"search": 83, "next": 78, "help": 191, "previous": 80};
+        </script>
+        <script src="../../../js/base.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
+        <script src="../../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form role="form">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="Keyboard Shortcuts Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Keyboard Shortcuts</h4>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>
