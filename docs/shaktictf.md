@@ -8,8 +8,13 @@ ShaktiCTF is a women-only CTF hosted by [TeamShakti](http://Team-Shakti.github.i
 This repo contains the writeups of varoius challenges from ShaktiCTF. There are a total of 7 categories we had this year(2020).
 
 
-### ShaktiCTF 2022
-- [Binary Exploitation](../ShaktiCTF22/pwn/intro/)
+### ShaktiCTF 2022 
+- [Reverse Engineering](ShaktiCTF22/reversing/intro.md)
+- [Binary Exploitation](ShaktiCTF22/pwn/intro.md)
+- [Cryptography](ShaktiCTF22/crypto/intro.md)
+- [Web Exploitation](ShaktiCTF22/web/intro.md) 
+- [Forensics](ShaktiCTF22/forensics/intro.md)
+- [Misc](ShaktiCTF22/misc/intro.md) 
 
 ### ShaktiCTF 2021
 
