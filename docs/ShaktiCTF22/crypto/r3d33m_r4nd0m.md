@@ -94,7 +94,7 @@ pt = long_to_bytes(pow(ct,d,n))
 print(pt)
 
 ```
-
+For whole script refer [here](https://github.com/Paavani-git/ShaktiCTF22/blob/main/r3deem_r4Nd0m/admin/soln.py)
 #### flag
 
 `shaktictf{rand0m_cr4z7_p3rs0n_aLw4ys_tries_cr7pt0_a7de4873ca0f9f697f1d2c09004f33dc1ad98b64}`
