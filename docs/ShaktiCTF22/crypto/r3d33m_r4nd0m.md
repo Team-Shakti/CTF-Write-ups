@@ -20,7 +20,7 @@ shaktictf{...}
 
 This is a simple `Random faults attack` which works with RSA decryption and signature verification with CRT. A signature can be built using CRTof Sp, Sq, Sr. Sp, Sq, and Sr are signatures of hash function with p,q, and r, respectively. 
 
-```py=
+```python
 p,q,r = getPrime(256),getPrime(256),getPrime(256)
 n =  p*q*r
 e = 65537
@@ -50,7 +50,7 @@ Now, it is easy to find p,q,r,when the attacker has the full knowledge of `h`.
 If the signature is valid, i.e., `s^e mod N = h`, the attacker has a chance to manipulate `Sp, Sq and Sr` values. If you compute the signature using changed `Sp, Sq, and Sr` values, the verification fails. Now give faults Sp value, i.e., add some value to `Sp ( Sp+3 )` for first signature verification and don’t change `Sq and Sr`. Calculate `gcd(S^e - h,n)`, which is equal to the `product of q and r`. In the same way, input `Sp, modified_Sq, Sr`, and get the `product of p and r`. Next, find the `product of p and q`.
 
 
-```python=
+```python
 sp1 = sp+2      #create faults value one each time
 sq1 = sq+2      #create faults value
 sr1 = sr+2
@@ -73,7 +73,7 @@ io.sendline(str(sr))
 qr = GCD((s**e)-h , n )
 ```
 
-```python=
+```python
 pr = GCD((s**e)-h , n)
 pq = GCD((s**e)-h , n)
 
@@ -86,7 +86,7 @@ find `pq` and `pr` in the same way.
 
 Now find the `gcd(pq,pr),gcd(pq,qr) and gcd(pr,qr)` to get `p`,`q` and `r` values respectively.
 
-```python=
+```python
 phi = (p-1)*(q-1)*(r-1)
 d = inverse(e,phi)
 pt = long_to_bytes(pow(ct,d,n))
