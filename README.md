@@ -81,7 +81,7 @@ Docs :
 
 [1] [mkdocs](https://www.mkdocs.org/#mkdocs) 
 
-[2] [mkdocs-meterial](https://squidfunk.github.io/mkdocs-material/)
+[2] [mkdocs-material](https://squidfunk.github.io/mkdocs-material/)
     
 
 
