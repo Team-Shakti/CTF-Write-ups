@@ -24,7 +24,7 @@ Use the flag format `shaktictf{`.
  Brute for the `stride` value within the range of 1 to 27.
  xor `cass(b'sha',brute value)` and `ct[:3]` to get the key. xor that key with ciphertext. check whether `shaktictf{` is in `cass(pt,brute value)`.
  
-```python=
+```python
 from itertools import product
 from pwn import xor
 ct = open("ciphertext.txt","rb").read()

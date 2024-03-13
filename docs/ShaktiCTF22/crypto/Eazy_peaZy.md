@@ -19,7 +19,7 @@ Rees
 ### Writeup
 This is the combination of base64 and shifting
 
-```python!
+```python
 from base64 import b64decode
 
 x = 'ZFlSXGVaVGVXbFRjamFlIVAiZFBkZmEkY1BWUmtqampqampQWFQlJCNlYyYnWCVlYyYlbg=='
