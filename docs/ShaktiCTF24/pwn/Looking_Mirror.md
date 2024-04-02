@@ -93,4 +93,4 @@ On running the script:
 
 :tada::tada::tada:
 
-Flag: `shaktictf{Th3_4rc_15_s4v3d_4nd_h4ppy_pwn1ng}`              
+Flag: `shaktiCTF{c0ngr4t5_b4by_f0rm4773r}`              
