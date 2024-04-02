@@ -61,7 +61,7 @@ Looking Mirror: Looking Mirror: nil) (nil) 0x63605f4c248c
 Woah, we got something. Now, lets prepare our exploit. I had a fuzzing script ready, so I used that for this challenge since we can directly leak the flag.
 
 **Exploit:**
-```
+```python
 from pwn import *
 
 #elf = context.binary = ELF('./looking_mirror', checksec=False)
