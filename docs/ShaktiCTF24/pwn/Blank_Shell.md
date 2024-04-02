@@ -37,7 +37,7 @@ So in short, it creates an executable region in memory and then takes in any arb
 Therefore if we provide a shellcode that can spawn a shell then its imminent victory!
 
 **Exploit**:
-```
+```python
 from pwn import *
 
 p = remote("13.234.11.113", 30125)
