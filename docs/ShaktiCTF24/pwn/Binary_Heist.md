@@ -51,6 +51,7 @@ void infiltrate(long param_1,long param_2)
 Yep, its a ret2win with arguments. Now we can hand everything over to gdb.
 
 **TODO**:
+
 *1. ~~Find offset~~*
 ```
 pwndbg> cyclic -l daaaaaaa
