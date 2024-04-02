@@ -5,11 +5,15 @@
 I love challenges !!
 Here is a Real Task for you.
 
+<br>
 
-**Author: [k1n0r4](https://twitter.com/k1n0r4)
+Author: [k1n0r4](https://twitter.com/k1n0r4)
+
 Difficulty level: Medium
+
 Points: 300
-Category: Reverse Engineering**
+
+Category: Reverse Engineering
 
 ###  Solution
 

@@ -4,10 +4,15 @@
 
 In "Operation Ultra," Agent Evelyn "Eclipse" is on a mission to recover the vanished scientist, Dr. Viktor Kozlov, and secure his groundbreaking energy technology research.
 
-**Author: [k1n0r4](https://twitter.com/k1n0r4)
+<br>
+
+Author: [k1n0r4](https://twitter.com/k1n0r4)
+
 Difficulty level: Easy
+
 Points: 200
-Category: Reverse Engineering**
+
+Category: Reverse Engineering
 
 ###  Solution
 

@@ -4,10 +4,15 @@
 
 Scientists are trying to figure out how this calculator works. They are essentially trying to crack the algorithm. Can you help them with it?
 
-**Author: [k1n0r4](https://twitter.com/k1n0r4)
+<br>
+
+Author: [k1n0r4](https://twitter.com/k1n0r4)
+
 Difficulty level: Hard
+
 Points: 500
-Category: Reverse Engineering**
+
+Category: Reverse Engineering
 
 ###  Solution
 

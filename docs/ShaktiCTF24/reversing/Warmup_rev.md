@@ -4,10 +4,16 @@
 
 Look Carefully! What you want lies inside straight in front of your eyes!
 
-**Author: [k1n0r4](https://twitter.com/k1n0r4)
+<br> 
+
+Author: [k1n0r4](https://twitter.com/k1n0r4)
+
 Difficulty level: Beginner
+
 Points: 100
-Category: Reverse Engineering**
+
+Category: Reverse Engineering
+
 
 ###  Solution
 

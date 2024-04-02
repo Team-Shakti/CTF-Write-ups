@@ -4,10 +4,15 @@
 
 Break through the kingdom !
 
-**Author: [k1n0r4](https://twitter.com/k1n0r4)
+<br>
+
+Author: [k1n0r4](https://twitter.com/k1n0r4)
+
 Difficulty level: Easy
+
 Points: 200
-Category: Reverse Engineering**
+
+Category: Reverse Engineering
 
 ###  Solution
 
