@@ -124,7 +124,7 @@ On running the script:
     b'shaktiCTF{C0ngr4t5!_n0w_s1ng_0_b3ll4_c140}\n'
 shaktiCTF{C0ngr4t5!_n0w_s1ng_0_b3ll4_c140}
 ```
-:::success
+:::
 :thumbsup: Success
 :::
 
