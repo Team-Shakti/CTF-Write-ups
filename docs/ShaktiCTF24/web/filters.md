@@ -1,4 +1,4 @@
-cd# Filters
+# Filters
 
 **Description**: No bypass!<br>
 **Author:  [Av4nth1ka](https://twitter.com/av4nth1ka)**
