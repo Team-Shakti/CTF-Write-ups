@@ -21,10 +21,10 @@ We are provided with 3 fort locations in Maharashtra. [`Google my maps`](https:/
 
 1. Create a new map in my maps. First mark the locations of the 3 forts with ``(add marker)`` tool. Then you can connect them using ``(Draw a line)`` tool. 
 
-![image](https://hackmd.io/_uploads/S1lcHAYyA.png)
+![image](/uploads/forts.png)
 
 Now search for `forts in maharashtra`.
-![image](https://hackmd.io/_uploads/H1QbOAt10.png)
+![image](/uploads/forts_mapped.png)
 
 
 **Inside the triangle**, you can see one fort clearly: `Purandar fort`
@@ -32,7 +32,5 @@ Now search for `forts in maharashtra`.
 2. The time specified is 8 pm in Japan time. It should be converted to 4.30 pm IST as the forts are in India.
 
 3. At last, convert the time to 24 hour format and assemble the flag as: `{purandar_fort_16:30}`
-
-<iframe src="https://www.google.com/maps/d/u/1/embed?mid=17O36LSjCscMzCPDsdY2ZkT7ByGac2sU&ehbc=2E312F" width="640" height="480"></iframe>
 
 Flag: `shaktictf{purandar_fort_16:30}` 
