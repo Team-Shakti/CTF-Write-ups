@@ -20,7 +20,7 @@ Flag format, if the fort is Malhargad killa and the time is 1.30 pm: vidyutctf{m
 We are provided with 3 fort locations in Maharashtra. [`Google my maps`](https://www.google.com/maps/d/u/0/) is a tool that I swear by when it comes to map related OSINT challenges. 
 
 1. Create a new map in my maps. First mark the locations of the 3 forts with ``(add marker)`` tool. Then you can connect them using ``(Draw a line)`` tool.
-2. 
+
 
 ![image](https://github.com/Ath3n1x/CTF-Write-ups/blob/master/docs/ShaktiCTF24/osint/uploads/forts.png?raw=true)
 
