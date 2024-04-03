@@ -3,7 +3,7 @@
 Crack the cryptographic challenges to unveil the hidden flag and emerge victorious!
 Note : If the plaintext obtained is : HELLOWORLD , the flag submitted should be : shaktictf{hello_world} (The flag is case sensitive )
 
-![Image Alt Text](docs/ShaktiCTF24/crypto/uploads/f.png)
+![Image Alt Text](/uploads/f.png)
 
 **Author** : [im._.a.p](https://twitter.com/im_a_p_)
 
