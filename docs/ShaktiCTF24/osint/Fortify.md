@@ -21,7 +21,7 @@ We are provided with 3 fort locations in Maharashtra. [`Google my maps`](https:/
 
 1. Create a new map in my maps. First mark the locations of the 3 forts with ``(add marker)`` tool. Then you can connect them using ``(Draw a line)`` tool. 
 
-![image](/uploads/forts.png)
+![image](docs/ShaktiCTF24/osint/uploads/forts.png)
 
 Now search for `forts in maharashtra`.
 ![image](/uploads/forts_mapped.png)
