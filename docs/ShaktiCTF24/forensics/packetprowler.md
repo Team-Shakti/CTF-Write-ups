@@ -3,7 +3,7 @@
 **Description**
 Emma works at a multinational corporation (MNC) as a Network Analyst. She was conducting a network capture and attended a meeting, leaving her laptop unattended. Her colleague, Elliot, looked into Emma's laptop and hid a message while the network capture was ongoing. Emma managed to capture the network traffic. Can you help Emma find the hidden message?
 
-*** Author: [__m1m1__](https://twitter.com/__m1m1__1) ***
+**Author: [__m1m1__](https://twitter.com/__m1m1__1)**
 
 **Solution**
 Extract the bt-att packets of len 18 into separate pcap, 
@@ -55,21 +55,21 @@ plt.show()
 ```
 
 Plotted message:
-[!alttext](images/flag.png)
+![image](images/flag.png)
 
 You can also give a certain range of packets in the script to get clear text separately.
 
 Ranges for each text:
 range(0,3000): som3t1m35
 
-[!alttext](images/image1.png)
+![image](images/image1.png)
 
 range(3000,6000):_you_h4v3_to_
 
-[!alttext](images/image2.png)
+![image](images/image2.png)
 
 range(5700,8146):scrut1n1z3
 
-[!alttext](images/image3.png)
+![image](images/image3.png)
 
 Flag: `shaktiCTF{som3t1m35_you_h4v3_to_scrut1n1z3}`

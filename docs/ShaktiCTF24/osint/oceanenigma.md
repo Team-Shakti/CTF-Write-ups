@@ -14,7 +14,7 @@ If the answer has space within the text replace them with an underscore
 example:
 If the answer is Leonardo Vinci, the format for the answer in the flag is Leonardo_Vinci
 
-*** Author: [__m1m1__](https://twitter.com/__m1m1__1) ***
+**Author: [__m1m1__](https://twitter.com/__m1m1__1)**
 
 **Solution**
 
@@ -22,15 +22,15 @@ you can refer to the below link where you can get the answers
 https://www.modelerscentral.com/maritime-history/story-of-the-mary-celeste/
 
 1) Albert_G_Richardson
-[!alttext](uploads/ans1.png)
+![image](uploads/ans1.png)
 
 2) David_Morehouse
-[!alttext](uploads/ans2.png)
+![image](uploads/ans2.png)
 
 3) Santa_Maria
-[!alttext](uploads/ans3.png)
+![image](uploads/ans3.png)
 
 4) Amazon
-[!alttext](uploads/ans4.png)
+![image](uploads/ans4.png)
 
 Flag: `shaktictf{Albert_G_Richardson:David_Morehouse:Santa_Maria:Amazon}`
