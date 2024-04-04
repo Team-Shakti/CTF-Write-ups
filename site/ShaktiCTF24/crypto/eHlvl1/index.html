@@ -84,40 +84,39 @@
 <h1 id="ehlvl1">eHlvl1</h1>
 <p><strong>Challenge Description :</strong></p>
 <p>John, an ordinary office worker, receives a mysterious email filled with seemingly random numbers, letters and codes. Little does he know, it holds the key to uncovering a hidden treasure left behind by his eccentric uncle who loved ciphers and encryptions. To claim his unexpected inheritance, John must decipher the cryptic message using his newfound skills in cryptography.</p>
-<p><strong>source.py</strong>
-```python=
-from Crypto.Util.number import<em>
+<p><strong>source.py</strong></p>
+<pre><code class="language-python">from Crypto.Util.number import*
 from gmpy2 import *
 from secret import e,b,hint,msg,d
 p = getPrime(512)
 q = getPrime(512)
-n = p</em>q
+n = p*q
 m = bytes_to_long(msg)
 h = bytes([i^b for i in hint])
-print(f"h = {hex(bytes_to_long(h))}")
+print(f&quot;h = {hex(bytes_to_long(h))}&quot;)
 ct = pow(m,e,n)
 de = pow(ct,d,n)
 assert(m == de)
-print("ct = ",ct)
-print("p = ",p)
-print("q = ",q)</p>
-<pre><code>**output.txt**
+print(&quot;ct = &quot;,ct)
+print(&quot;p = &quot;,p)
+print(&quot;q = &quot;,q)
 </code></pre>
-<p>h = 0x6f535e1b5e1b061b0c020f0b0b10134f535e1b4852555c575e1b59424f5e1b4f535a4f1b4c5a481b4354495e5f121b0112
+<p><strong>output.txt</strong></p>
+<pre><code>h = 0x6f535e1b5e1b061b0c020f0b0b10134f535e1b4852555c575e1b59424f5e1b4f535a4f1b4c5a481b4354495e5f121b0112
 ct =  90411409551177819360717236462351545237822367597930505531741437834918499125195272674859389978951589180632146502190429979348445123366914000167832349866368754227474060832624537550600921894849466284315037863094795265822884392628050584343158613338754532642964368052098136565157343201877382609610774291396944124354
 p =  10425866553433272288676977376976736493869099145622614885498170561565122111495807572631609087909399078701783905493563029715011322065331636751277834978526061
-q =  9215753518399683669080201592666232851634627861957009698720674021492716071355990364002777325458055207969176695525292834842774295594232711456066623178861093</p>
-<pre><code>
-**Author** : [im._.a.p](https://twitter.com/im_a_p_)
+q =  9215753518399683669080201592666232851634627861957009698720674021492716071355990364002777325458055207969176695525292834842774295594232711456066623178861093
 
-**Solution**:
-
-* Values of 'p','q','ciphertext','h'(encrypted hint which has the value of e) is given.
-* Th value of the modulus can be found using 'p' and 'q' as p*q = n.
-* From the given code, we understand that 'hint' is xored with a random byte 'b' to get the ciphertext h.
-* To find 'hint', 'h' is xored with each single byte (bruteforced) to get 'hint', thus getting the value of e.
-```python
-from string import printable
+</code></pre>
+<p><strong>Author</strong> : <a href="https://twitter.com/im_a_p_">im._.a.p</a></p>
+<p><strong>Solution</strong>:</p>
+<ul>
+<li>Values of 'p','q','ciphertext','h'(encrypted hint which has the value of e) is given.</li>
+<li>Th value of the modulus can be found using 'p' and 'q' as p*q = n.</li>
+<li>From the given code, we understand that 'hint' is xored with a random byte 'b' to get the ciphertext h.</li>
+<li>To find 'hint', 'h' is xored with each single byte (bruteforced) to get 'hint', thus getting the value of e.</li>
+</ul>
+<pre><code class="language-python">from string import printable
 h= '6f535e1b5e1b061b0c020f0b0b10134f535e1b4852555c575e1b59424f5e1b4f535a4f1b4c5a481b4354495e5f121b0112'
 m= bytes.fromhex(h)
 for i in range(256):
@@ -149,7 +148,7 @@ b&quot;Here is your reward 'vvrkxuqgi{r0i43m0r_f0_hu3_u3gtu3!!!}' You can ask 'D
 vinegere cipher key : doraemon
 </code></pre>
 <p>The message has the encrypted flag and key which is to be decrypted.(vinegere cipher).</p>
-<p><strong>Flag</strong> : shaktictf{d0r43m0n_t0_th3_r3scu3!!!}</p></div>
+<p><strong>Flag</strong> : <code>shaktictf{d0r43m0n_t0_th3_r3scu3!!!}</code></p></div>
             </div>
         </div>
 
