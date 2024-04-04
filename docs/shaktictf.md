@@ -14,7 +14,6 @@ This repo contains the writeups of various challenges from ShaktiCTF.
 - [Cryptography](ShaktiCTF24/crypto/README.md)
 - [Web Exploitation](ShaktiCTF24/web/README.md) 
 - [Forensics](ShaktiCTF24/forensics/README.md)
-- [Misc](ShaktiCTF24/misc/README.md) 
 - [OSINT](ShaktiCTF24/osint/README.md)
 
 ### ShaktiCTF 2022 
