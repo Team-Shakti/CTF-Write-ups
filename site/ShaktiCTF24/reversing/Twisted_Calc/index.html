@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        <link rel="canonical" href="https://github.com/Team-Shakti/CTF-Write-ups/ShaktiCTF24/reversing/Twisted_Calc/">
+        <link rel="shortcut icon" href="../../../img/favicon.ico">
+        <title>Twisted_Calc - CTF-Writeups</title>
+        <link href="../../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/darcula.min.css">
+
+        <script src="../../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../../js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+            <div class="container">
+                <a class="navbar-brand" href="../../..">CTF-Writeups</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="navitem">
+                                <a href="../../../about/" class="nav-link">About Us</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../../../shaktictf/" class="nav-link">ShaktiCTF</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="https://team-shakti.github.io/" class="nav-link">Website</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/ShaktiCTF24/reversing/Twisted_Calc.md" class="nav-link">Edit on Team-Shakti/CTF-Write-ups
+                                    </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#twisted_calc" class="nav-link">Twisted_Calc</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="twisted_calc">Twisted_Calc</h1>
+<h3 id="description">Description</h3>
+<p>Scientists are trying to figure out how this calculator works. They are essentially trying to crack the algorithm. Can you help them with it?</p>
+<p><br></p>
+<p>Author: <a href="https://twitter.com/k1n0r4">k1n0r4</a></p>
+<p>Difficulty level: Hard</p>
+<p>Points: 500</p>
+<p>Category: Reverse Engineering</p>
+<h3 id="solution">Solution</h3>
+<p>The given file is an ELF 64-Bit Executable.</p>
+<h5 id="what-all-is-happening-with-the-input">What all is happening with the input?</h5>
+<ul>
+<li>The input is taken and xorred with a predefined array of length 50 byte by byte. This indicates that the flag length is 50.</li>
+<li>Later it goes through a <code>check</code> function which contains constraints for the manipulated input.</li>
+<li>Next, a digital signal (in form of 1's and 0's) is declared.</li>
+</ul>
+<p><img alt="image" src="https://imgur.com/eYFIpGP.png" /></p>
+<ul>
+<li>The xorred input is used to determine what operations will be performed on the given signal via the <code>applySignalProcessing</code> function.</li>
+</ul>
+<p><img alt="image" src="https://imgur.com/Yf2qCpn.png" /></p>
+<ul>
+<li>For every 5th index of the input, the state of the signal is being checked under the <code>second_check</code> function.</li>
+</ul>
+<h4 id="towards-the-flag">Towards the flag</h4>
+<p>Analysing the <code>applySignalProcessing</code> function indicates the use of 10 operations, hence there are only 10 possible elements of v10 array. </p>
+<p>For each batch of 5 elements of v10 array, there are 3 checks given to us in <code>check</code> function and a final signal state check in <code>second_check</code> function.</p>
+<pre><code class="language-c"># Checks for the first batch of 5 elements
+
+if ( (a1[3] ^ a1[2] ^ a1[1] ^ *a1 ^ a1[4]) != 44 )
+    exit(0);
+if ( *a1 != 32 )
+    exit(0);
+if ( a1[4] != 47 )
+    exit(0);
+</code></pre>
+<p>Utilising these constraints and the fact that there are only 10 possible values, we can brute and get the values.</p>
+<p>One simple way to confirm which is the correct value could be by xorring the obtained values with the predefined array in step 1 and see which of the string makes sense or is readable.</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+#include &lt;math.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;time.h&gt;
+
+int applySignalProcessing(int digitalSignal, int operation, int parameter) {
+
+    switch (operation) {
+        case 20: 
+            return digitalSignal;
+
+        case 23: 
+            return digitalSignal * 8;
+
+        case 26: 
+            return digitalSignal + (parameter*3);
+
+        case 29: 
+            if(digitalSignal &gt; 1000)
+                return digitalSignal;
+            else
+                return digitalSignal * parameter * parameter;
+
+        case 32: 
+            return digitalSignal ^ parameter;
+
+        case 35: 
+            if(digitalSignal &gt; 1000000)
+                return digitalSignal / 1000;
+
+        case 38: 
+            if(digitalSignal &gt; parameter)
+                return digitalSignal - parameter;
+            else
+                return digitalSignal;
+
+        case 41: 
+            if(digitalSignal &gt; 10000)
+                return digitalSignal;
+            else
+                return digitalSignal * parameter;
+
+        case 44: 
+            return digitalSignal * 2 ;
+
+        case 47: 
+            return digitalSignal + parameter;
+
+
+        default:
+            return 0; 
+    }
+}
+
+int main()
+{
+    int a1[50] = {0};
+    a1[0] = 0x20;
+    a1[5] = 32;
+    a1[10] = 23;
+    a1[15] = 41;
+    a1[20] = 35;
+    a1[25] = 26;
+    a1[30] = 26;
+    a1[35] = 29;
+    a1[40] = 26;
+    a1[45] = 38;
+    a1[4] = 0x2F;
+    a1[9] = 26;
+    a1[14] = 47;
+    a1[19] = 47;
+    a1[24] = 41;
+    a1[29] = 29;
+    a1[34] = 44;
+    a1[39] = 29;
+    a1[44] = 20;
+    a1[49] = 26;
+
+    int signal[50] = {1,0,1,1,1,0,0,1,0,1,0,1,0,1,0,1,0,1,1,1,0,0,0,0,1,1,0,0,1,0,1,1,0,1,1,0};
+    int oper[10] = {20, 23, 26, 29, 32, 35, 38, 41, 44, 47};
+    int check[10] = {44, 31, 29, 20, 29, 42, 31, 47, 43, 42};
+    int final[50] = {44, 40, 44, 44, 44, 40, 40, 44, 40, 44, 40, 44, 40, 44, 40, 44, 40, 44, 44, 44, 40, 40, 40, 40, 44, 44, 40, 40, 44, 40, 44, 44, 40, 44, 44, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40};
+
+        for(int a = 0; a&lt;10; a++)
+        {
+            for(int b = 0; b&lt;10; b++)
+            {
+                for(int c = 0;c&lt;10;c++)
+                {
+                    int signal[50] = {1,0,1,1,1,0,0,1,0,1,0,1,0,1,0,1,0,1,1,1,0,0,0,0,1,1,0,0,1,0,1,1,0,1,1,0};
+
+                    if((a1[0]^oper[a]^oper[b]^oper[c]^a1[4]) == 44)
+                    {
+                        int ope[5] = {a1[0], oper[a], oper[b], oper[c], a1[4]};
+                        int res[3] = {oper[a], oper[b], oper[c]};
+                        for( int i = 0;i&lt;5;i++)
+                        {
+                            for(int j=0;j&lt;50;j++){
+                                signal[j] = applySignalProcessing(signal[j], ope[i], 10);
+                            }
+                        }
+                        int c = 1;
+                        for(int k =0;k&lt;50;k++){
+                            if(final[k] != signal[k]){
+                                c = 0;
+                            }
+                        }
+                        if(c==1){
+                            printf(&quot;\nSolution found: %d %d %d\n\n&quot;, res[0], res[1], res[2]);                            
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+}
+</code></pre>
+<p>Output:</p>
+<p><code>Solution found: 44 44 35</code></p>
+<p>The given solution, on xorring back gives the result as <code>shakt</code>, which is the starting 5 bytes of the flag format.</p>
+<p>Similarly, all the 10 batches of elements can be retrieved and formed into the flag.</p>
+<h3 id="flag">Flag</h3>
+<p><code>shaktictf{3l3ctr0n1cs_s0m3t1m3s_1s_p41n_735294758}</code></p></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+                <p>Copyright &copy; 2020 <a href="http://Team-Shakti.github.io/">Team-Shakti Writeups</a></p>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../../js/base.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
+        <script src="../../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

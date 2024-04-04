@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        <link rel="canonical" href="https://github.com/Team-Shakti/CTF-Write-ups/reversing/zh3r0CTF/babyrev/">
+        <link rel="shortcut icon" href="../../../img/favicon.ico">
+        <title>Babyrev - CTF-Writeups</title>
+        <link href="../../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/darcula.min.css">
+
+        <script src="../../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../../js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+            <div class="container">
+                <a class="navbar-brand" href="../../..">CTF-Writeups</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="navitem">
+                                <a href="../../../about/" class="nav-link">About Us</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../../../shaktictf/" class="nav-link">ShaktiCTF</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="https://team-shakti.github.io/" class="nav-link">Website</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/reversing/zh3r0CTF/babyrev.md" class="nav-link">Edit on Team-Shakti/CTF-Write-ups
+                                    </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#zh3r0-ctf-2021" class="nav-link">zh3r0-ctf 2021</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#babyre-reversing" class="nav-link">babyre - Reversing</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#description" class="nav-link">Description</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#solution" class="nav-link">Solution</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#flag" class="nav-link">Flag</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="zh3r0-ctf-2021">zh3r0-ctf 2021</h1>
+<h2 id="babyre-reversing">babyre - Reversing</h2>
+<h2 id="description">Description</h2>
+<p>!(https://github.com/revathi2001/files-required-for-writeups/blob/main/Selection_174.png)
+<code>Its BabyRE, you should be able to solve it without angr. even the stego guys solved this.</code></p>
+<ul>
+<li><img alt="babyre" src="https://github.com/revathi2001/files-required-for-writeups/blob/main/babyrev" /></li>
+</ul>
+<h2 id="solution">Solution</h2>
+<ul>
+<li>Opening file in ghidra we can see strings <code>CORRECT PASSWORD</code> and <code>INCORRECT PASSWORD</code>, going to corresponding function we can see following code.</li>
+</ul>
+<pre><code>void FUN_00101600(undefined8 param_1,undefined4 param_2,int param_3,undefined8 param_4)
+
+{
+  long lVar1;
+  undefined8 uVar2;
+
+  wattr_on(param_1,0x80000,0);
+  lVar1 = FUN_00101560(param_4);
+  if (lVar1 == 0) {
+    wattr_on(param_1,0x100,0);
+    mvwprintw(param_1,param_2,param_3 + 2,&quot; CORRECT PASSWORD &quot;);
+    uVar2 = 0x100;
+  }
+  else {
+    wattr_on(param_1,0x400,0);
+    mvwprintw(param_1,param_2,param_3 + 2,&quot;INCORRECT PASSWORD&quot;);
+    uVar2 = 0x400;
+  }
+  wattr_off(param_1,uVar2,0);
+  return;
+}
+</code></pre>
+<ul>
+<li>In the above code our input is passed to <code>FUN_00101560</code> and if return value is zero <code>CORRECT PASSWORD</code> is printed.</li>
+</ul>
+<pre><code>long FUN_00101560(char *param_1)
+
+{
+  int iVar1;
+  size_t sVar2;
+  long lVar3;
+  undefined8 uVar4;
+  undefined8 *puVar5;
+  undefined8 *puVar6;
+  long in_FS_OFFSET;
+  undefined local_58 [16];
+  undefined local_48 [16];
+  undefined8 local_38;
+  long local_30;
+
+  local_30 = *(long *)(in_FS_OFFSET + 0x28);
+  local_58 = (undefined  [16])0x0;
+  local_48 = (undefined  [16])0x0;
+  sVar2 = strlen(param_1);
+  lVar3 = 1;
+  if (sVar2 == 0x20) {
+    puVar5 = (undefined8 *)local_58;
+    do {
+      puVar6 = puVar5 + 1;
+      uVar4 = FUN_001014d0(param_1);
+      *puVar5 = uVar4;
+      param_1 = param_1 + 8;
+      puVar5 = puVar6;
+    } while (puVar6 != &amp;local_38);
+    iVar1 = memcmp(local_58,&amp;DAT_00104020,0x20);
+    lVar3 = (long)iVar1;
+  }
+  if (local_30 == *(long *)(in_FS_OFFSET + 0x28)) {
+    return lVar3;
+  }
+                    /* WARNING: Subroutine does not return */
+  __stack_chk_fail();
+
+}
+</code></pre>
+<ul>
+<li>In the above function our input is splitted into 4 parts and passed to <code>FUN_001014d0</code>.</li>
+</ul>
+<pre><code>long FUN_001014d0(long param_1)
+
+{
+  long *plVar1;
+  long *plVar2;
+  ulong uVar3;
+  long lVar4;
+  long in_FS_OFFSET;
+  undefined8 local_18;
+  long local_10 [2];
+
+  lVar4 = 0;
+  local_18._0_1_ = 0;
+  local_10[0] = *(long *)(in_FS_OFFSET + 0x28);
+  local_18 = 0;
+  while( true ) {
+    plVar1 = &amp;local_18;
+    uVar3 = (ulong)*(byte *)(param_1 + lVar4);
+    while( true ) {
+      plVar2 = (long *)((long)plVar1 + 1);
+      *(byte *)plVar1 = (byte)(((uint)uVar3 &amp; 1) &lt;&lt; ((byte)lVar4 &amp; 0x1f)) | (byte)local_18;
+      if (local_10 == plVar2) break;
+      local_18._0_1_ = *(byte *)plVar2;
+      plVar1 = plVar2;
+      uVar3 = uVar3 &gt;&gt; 1;
+    }
+    lVar4 = lVar4 + 1;
+    if (lVar4 == 8) break;
+  }
+  if (local_10[0] == *(long *)(in_FS_OFFSET + 0x28)) {
+    return local_18;
+  }
+                    /* WARNING: Subroutine does not return */
+  __stack_chk_fail();
+}
+</code></pre>
+<ul>
+<li>The above function is converted to python code as follows.</li>
+</ul>
+<pre><code>x=bytes.fromhex(&quot;a4adc0a3fd7fab00e8d5e248dabffd00d140f2c47bbf76008707d5adae82fd00&quot;)
+flag = [0]*32
+
+for i in range(4):
+    x1=x[(i*8):(i*8)+8]
+    for k,st in enumerate(x1):
+        for j in range(8):
+            flag[i*8+j] |= ((st&gt;&gt;j) &amp; 1) &lt;&lt; k
+
+print(&quot;&quot;.join([chr(x) for x in flag]))
+</code></pre>
+<h2 id="flag">Flag</h2>
+<pre><code>zh3r0{4_b4byre_w1th0ut_-O3_XDXD}
+</code></pre></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+                <p>Copyright &copy; 2020 <a href="http://Team-Shakti.github.io/">Team-Shakti Writeups</a></p>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../../js/base.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
+        <script src="../../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

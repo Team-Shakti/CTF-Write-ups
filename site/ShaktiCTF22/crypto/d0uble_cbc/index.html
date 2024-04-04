@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        <link rel="canonical" href="https://github.com/Team-Shakti/CTF-Write-ups/ShaktiCTF22/crypto/d0uble_cbc/">
+        <link rel="shortcut icon" href="../../../img/favicon.ico">
+        <title>D0uble cbc - CTF-Writeups</title>
+        <link href="../../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/darcula.min.css">
+
+        <script src="../../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../../js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+            <div class="container">
+                <a class="navbar-brand" href="../../..">CTF-Writeups</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="navitem">
+                                <a href="../../../about/" class="nav-link">About Us</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../../../shaktictf/" class="nav-link">ShaktiCTF</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="https://team-shakti.github.io/" class="nav-link">Website</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/ShaktiCTF22/crypto/d0uble_cbc.md" class="nav-link">Edit on Team-Shakti/CTF-Write-ups
+                                    </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="2"><a href="#d0uble_cbc" class="nav-link">d0uble_cbc</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-level="1"><a href="#hostport-00004304" class="nav-link">host,port = '0.0.0.0',4304</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h2 id="d0uble_cbc">d0uble_cbc</h2>
+<h3 id="challenge-description">Challenge Description :</h3>
+<p>My uncle has been working as a schoolteacher. One fine day, he decides to give chocolates to all his students. He brought a different types of chocolates. But two students are asking for the same kind of chocolate. All chocolates of that kind are completed except one. So, he decided to change the chocolate wrapper and give the same chocolate that he has.Can you help him to find that same chocolate wrapper?</p>
+<h3 id="difficulty-level">Difficulty Level</h3>
+<p>Medium</p>
+<h3 id="author">Author</h3>
+<p><a href="https://twitter.com/Paavani21">b4b7gr00t</a></p>
+<h3 id="points">Points</h3>
+<p>200</p>
+<h3 id="flag-format">Flag format</h3>
+<p>shaktictf{...}</p>
+<h3 id="writeup">Writeup</h3>
+<ol>
+<li>This chall is combination of two iv detection in cbc mode and cbc mac vulnerability with non zero IV.</li>
+<li>Find iv using the oracle provided and use that iv as input for cbc mac oracle.</li>
+<li>iv detection can done by encrypting the <code>pt='\x00'*32</code> , decrypt <code>ct = b"\x00"*16+bytes.fromhex(ct)[:16]</code> , decrypt the result again to get iv. </li>
+</ol>
+<p>```python=
+from pwn import *
+from os import urandom
+host,port = '65.2.136.80',31351
+io = remote(host,port)</p>
+<p>io.recvuntil(b'4.exit')
+io.sendline('1')
+io.recvuntil(b'format\n')
+pt = '\x00'*32
+io.sendline(pt.encode().hex())
+io.recvline()
+ct = io.recvline()
+ct = ct[25:-1].decode()</p>
+<h1 id="hostport-00004304">host,port = '0.0.0.0',4304</h1>
+<p>io = remote(host,port)</p>
+<p>io.recvuntil(b'4.exit')
+io.sendline('2')
+io.recvuntil(b'decrypt')
+io.sendline(ct)
+io.recvline()
+pt = io.recvline()[28:-1]
+ct = b"\x00"*16+bytes.fromhex(ct)[:16]</p>
+<p>io = remote(host,port)
+io.recvuntil(b'4.exit')
+io.sendline('2')
+io.recvuntil(b'decrypt')
+io.sendline(ct.hex())
+io.recvline()
+iv_dec = (bytes.fromhex(io.recvline()[28:-1].decode())[16:]).hex()</p>
+<pre><code>
+5. Now pass that iv to the sign function. It will return the tag as ct[16:].
+```python=
+io.recvuntil(b'4.exit')
+io.sendline('3')
+io.recvuntil(b'further')
+io.sendline(iv_dec)
+io.recvuntil(b'messages\n')
+io.sendline('0')
+io.recvline()
+msg1 = urandom(16).hex()
+io.recvline()
+io.sendline(msg1)
+io.recvline()
+io.recvline()
+tag1 = (io.recvline().decode())[:-1]
+</code></pre>
+<ol>
+<li>
+<p>sign funtion is returning the last 16 bytes from <code>ct</code>. </p>
+</li>
+<li>
+<p>sign(sign(block0) xor block1) gives the same sign value. (So, simply append the ciphertext of the previous block)</p>
+</li>
+</ol>
+<h4 id="flag">Flag</h4>
+<p><code>shaktictf{double_cheese_double_mac_yummyyyy_4120686170707920636263206d6f6465}</code></p></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+                <p>Copyright &copy; 2020 <a href="http://Team-Shakti.github.io/">Team-Shakti Writeups</a></p>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../../js/base.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
+        <script src="../../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

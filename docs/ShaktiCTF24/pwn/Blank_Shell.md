@@ -19,7 +19,7 @@ First lets check the permissions with `checksec`:
 Except for canary, everything else is enabled. 
 
 Now lets run the program and take a look at its source. 
-```
+```c
 int main(int argc, char **argv) { 
     int* addr = mmap(0, 0x1000, PROT_READ | PROT_WRITE | PROT_EXEC, MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
     read(0, addr, 100);

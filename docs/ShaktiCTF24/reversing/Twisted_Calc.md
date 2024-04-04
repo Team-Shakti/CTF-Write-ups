@@ -39,7 +39,7 @@ Analysing the `applySignalProcessing` function indicates the use of 10 operation
 
 For each batch of 5 elements of v10 array, there are 3 checks given to us in `check` function and a final signal state check in `second_check` function.
 
-```clike!
+```c
 # Checks for the first batch of 5 elements
 
 if ( (a1[3] ^ a1[2] ^ a1[1] ^ *a1 ^ a1[4]) != 44 )
@@ -55,7 +55,7 @@ Utilising these constraints and the fact that there are only 10 possible values,
 
 One simple way to confirm which is the correct value could be by xorring the obtained values with the predefined array in step 1 and see which of the string makes sense or is readable.
 
-```clike!
+```c
 #include <stdio.h>
 #include <string.h>
 #include <math.h>

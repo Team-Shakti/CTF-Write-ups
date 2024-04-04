@@ -2,10 +2,10 @@
 
 ## Introduction
 
-ShaktiCTF is a women-only CTF hosted by [TeamShakti](http://Team-Shakti.github.io/), the women-only CTF team of [Amrita Vishwa Vidyapeetham, Amritapuri Campus](https://www.amrita.edu/amritapuri/). Bringing participants from five major continents(Asia, Europe, Africa, North and South America), the competition aimed to balance the existing gender gap in the field of cybersecurity by hosting a beginner friendly CTF on a women only playground and bringing more feminine power into the field. The competition had 49 challenges in domains ranging from Cryptography, Web Exploitation, Reverse Engineering and Forensics.
+ShaktiCTF is a women-only CTF hosted by [TeamShakti](http://Team-Shakti.github.io/), the women-only CTF team of [Amrita Vishwa Vidyapeetham, Amritapuri Campus](https://www.amrita.edu/amritapuri/). Bringing participants from five major continents(Asia, Europe, Africa, North and South America), the competition aimed to balance the existing gender gap in the field of cybersecurity by hosting a beginner friendly CTF on a women only playground and bringing more feminine power into the field. 
 
 ## The contents of this repo 
-This repo contains the writeups of various challenges from ShaktiCTF. There are a total of 7 categories we had this year(2020).
+This repo contains the writeups of various challenges from ShaktiCTF. 
 
 ### ShaktiCTF 2024 
 
@@ -14,7 +14,6 @@ This repo contains the writeups of various challenges from ShaktiCTF. There are 
 - [Cryptography](ShaktiCTF24/crypto/README.md)
 - [Web Exploitation](ShaktiCTF24/web/README.md) 
 - [Forensics](ShaktiCTF24/forensics/README.md)
-- [Misc](ShaktiCTF24/misc/README.md) 
 - [OSINT](ShaktiCTF24/osint/README.md)
 
 ### ShaktiCTF 2022 

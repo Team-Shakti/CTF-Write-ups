@@ -26,7 +26,7 @@ Segmentation fault (core dumped)
 ```
 
 Ok so we can overflow the buffer. Lets look at the binary in ida/ghidra. There seems to be a win function called `infiltrate`:
-```
+```c
 void infiltrate(long param_1,long param_2)
 
 {

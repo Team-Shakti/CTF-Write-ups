@@ -25,7 +25,7 @@ The logic under `main` function indicates that binary inputs the flag, reverses 
 
 On reversing the given string, we retrive the flag.
 
-```python!
+```python
 print("}!d33dn1_3gn3ll4hc_pUmr4w_4_51_s1ht{ftcitkahs"[::-1])
 ```
 
