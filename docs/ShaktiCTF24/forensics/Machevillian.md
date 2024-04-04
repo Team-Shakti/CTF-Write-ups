@@ -1,4 +1,4 @@
- # Machevillian
+# Machevillian
 
 **Description** :
 Freddy Mileman, a research student sought guidance from his Professor for his impending research paper submission. Subsequently, he received a file from an individual claiming to be the Professor's associate. Upon opening the file, the command line unexpectedly launched. Suspecting potential cybercrime activity, Freddy promptly contacted his friend to assess the situation and mitigate any potential risks.

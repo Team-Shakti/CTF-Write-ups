@@ -14,8 +14,8 @@ where the btatt value of
 by implementing this in the code, the script will take the att value of each packet, put the x and y coordinates in a list, and plot the coordinates using matplotlib where you can see the hidden message.
 
 
-# script:
-```
+### Script:
+```py
 from scapy.all import *
 import matplotlib.pyplot as plt
 

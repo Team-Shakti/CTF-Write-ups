@@ -69,7 +69,7 @@ When the choice is 3, `printf(break_);` gets executed. So what if `break_` is `/
 
 Note: Alternatively, you can also make use of the format string vulnerability in the `printf(break_)` to get the required leaks.
 
-```python=
+```python
 from pwn import *
 #p = process("./sim")
 

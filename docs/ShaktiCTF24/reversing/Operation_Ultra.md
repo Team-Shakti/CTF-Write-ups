@@ -26,7 +26,7 @@ Category: Reverse Engineering
 #### Solution script
 When reversing `func_2` by inputting the given ASCII values and performing the same operations, we obtain the input to `func_2`. Upon XORing this input with Shadows2024, the flag is obtained.
 
-``` python 
+```python 
 def func_2():
     unk_str3 = [32, 0, 27, 30, 84, 79, 86, 22, 97, 100, 63, 95, 60, 34, 1, 71, 0, 15, 81, 68, 6, 4, 91, 40, 87, 0, 9, 59, 81, 83, 102, 21]
     flag_len = len(unk_str3)

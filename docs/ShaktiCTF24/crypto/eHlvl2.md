@@ -3,7 +3,7 @@
 In the sequel to our cryptography challenge, John embarks on a deeper cryptographic journey as he discovers a second email with an even more intricate code. Unraveling this complex puzzle will lead him closer to unveiling the secrets of his uncle's legacy. Can John decipher the cryptic message to unlock the next chapter of his mysterious inheritance?
 
 **source.py**
-```python=
+```python
 from Crypto.Util.number import*
 from gmpy2 import *
 from secret import flag,hint,p,q,n,e

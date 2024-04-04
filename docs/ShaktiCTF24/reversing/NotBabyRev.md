@@ -92,7 +92,7 @@ Here is the entire script -
 
 
 
-```python!
+```py
 from z3 import *
 
 matr = [[Int(f'matr_{i}_{j}') for j in range(6)] for i in range(6)]

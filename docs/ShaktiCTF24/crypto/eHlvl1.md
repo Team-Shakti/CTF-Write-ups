@@ -38,7 +38,7 @@ q =  921575351839968366908020159266623285163462786195700969872067402149271607135
 * Th value of the modulus can be found using 'p' and 'q' as p*q = n.
 * From the given code, we understand that 'hint' is xored with a random byte 'b' to get the ciphertext h.
 * To find 'hint', 'h' is xored with each single byte (bruteforced) to get 'hint', thus getting the value of e.
-```python=
+```python
 from string import printable
 h= '6f535e1b5e1b061b0c020f0b0b10134f535e1b4852555c575e1b59424f5e1b4f535a4f1b4c5a481b4354495e5f121b0112'
 m= bytes.fromhex(h)
@@ -53,11 +53,11 @@ for i in range(256):
   except:
     pass
   
-#59 The e = 79400+(the single byte that was xored) :)
-#e = 79459
+59 The e = 79400+(the single byte that was xored) :)
+e = 79459
 ```
 * With the values 'e','n','p','q', the ciphertext ct can be decrypted to get the message.
-```python=
+```python
 e = 79459
 n = p*q
 phi = (p-1)*(q-1)
@@ -66,9 +66,9 @@ print(d)
 hint = pow(ct,d,n)
 print(long_to_bytes(hint))
 
-#b"Here is your reward 'vvrkxuqgi{r0i43m0r_f0_hu3_u3gtu3!!!}' You can ask 'Doraemon' to help you with this. Bye!!"
-#vinegere cipher key : doraemon
+b"Here is your reward 'vvrkxuqgi{r0i43m0r_f0_hu3_u3gtu3!!!}' You can ask 'Doraemon' to help you with this. Bye!!"
+vinegere cipher key : doraemon
 ```
-* The message has the encrypted flag and key which is to be decrypted.(vinegere cipher).
+The message has the encrypted flag and key which is to be decrypted.(vinegere cipher).
 
 **Flag** : shaktictf{d0r43m0n_t0_th3_r3scu3!!!}

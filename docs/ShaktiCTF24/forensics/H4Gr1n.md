@@ -1,4 +1,4 @@
- # H4Gr1n
+# H4Gr1n
 
 **Description**:
 The Griffin family's personal computer encountered a significant security breach.They promptly took a memory dump, capturing the system's state at the time of the intrusion.
