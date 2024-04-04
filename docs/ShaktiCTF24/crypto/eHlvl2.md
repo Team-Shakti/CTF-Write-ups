@@ -29,7 +29,7 @@ q =  777133221300612867151462836274177397058867542231576918862614623267365729480
 * Values of 'p','q','ciphertext','h'(encrypted hint which has the value of e) is given.
 * According to the code given, 'hint' is xored with 'n' to get the ciphertext 'h'.
 * To find the 'hint', 'h' is xored with 'n' to get 'hint', thus getting the value of 'e'.
-```python=
+```python
 n = p*q
 hi = [i^n for i in h]
 l = []
@@ -41,7 +41,7 @@ print(li)
 #The e = 46307 :)
 ```
 * With the values 'e','n','p','q', the ciphertext 'ct' can be decrypted to get the flag.
-```python=
+```python
 e = 46307
 n = p*q
 phi = (p-1)*(q-1)

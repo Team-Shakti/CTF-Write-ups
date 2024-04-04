@@ -4,7 +4,7 @@
 John, an ordinary office worker, receives a mysterious email filled with seemingly random numbers, letters and codes. Little does he know, it holds the key to uncovering a hidden treasure left behind by his eccentric uncle who loved ciphers and encryptions. To claim his unexpected inheritance, John must decipher the cryptic message using his newfound skills in cryptography.
 
 **source.py**
-```python=
+```python
 from Crypto.Util.number import*
 from gmpy2 import *
 from secret import e,b,hint,msg,d
@@ -71,4 +71,4 @@ vinegere cipher key : doraemon
 ```
 The message has the encrypted flag and key which is to be decrypted.(vinegere cipher).
 
-**Flag** : shaktictf{d0r43m0n_t0_th3_r3scu3!!!}
+**Flag** : `shaktictf{d0r43m0n_t0_th3_r3scu3!!!}`
