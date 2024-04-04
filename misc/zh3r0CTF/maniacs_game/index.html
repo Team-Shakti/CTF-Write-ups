@@ -9,62 +9,50 @@
         <link rel="canonical" href="https://github.com/Team-Shakti/CTF-Write-ups/misc/zh3r0CTF/maniacs_game/">
         <link rel="shortcut icon" href="../../../img/favicon.ico">
         <title>A Small Maniac's game - CTF-Writeups</title>
-        <link href="../../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../../css/bootstrap.min.css" rel="stylesheet">
         <link href="../../../css/font-awesome.min.css" rel="stylesheet">
         <link href="../../../css/base.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/darcula.min.css">
-        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-        <!--[if lt IE 9]>
-            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-        <![endif]-->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/darcula.min.css">
 
         <script src="../../../js/jquery-1.10.2.min.js" defer></script>
-        <script src="../../../js/bootstrap-3.0.3.min.js" defer></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        <script src="../../../js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
         <script>hljs.initHighlightingOnLoad();</script> 
     </head>
 
     <body>
-
-        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
             <div class="container">
-
-                <!-- Collapsed navigation -->
-                <div class="navbar-header">
-                    <!-- Expander button -->
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="../../..">CTF-Writeups</a>
-                </div>
+                <a class="navbar-brand" href="../../..">CTF-Writeups</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
                 <!-- Expanded navigation -->
-                <div class="navbar-collapse collapse">
+                <div id="navbar-collapse" class="navbar-collapse collapse">
                         <!-- Main navigation -->
                         <ul class="nav navbar-nav">
-                            <li >
-                                <a href="../../../about/">About Us</a>
+                            <li class="navitem">
+                                <a href="../../../about/" class="nav-link">About Us</a>
                             </li>
-                            <li >
-                                <a href="../../../shaktictf/">ShaktiCTF</a>
+                            <li class="navitem">
+                                <a href="../../../shaktictf/" class="nav-link">ShaktiCTF</a>
                             </li>
-                            <li >
-                                <a href="https://team-shakti.github.io/">Website</a>
+                            <li class="navitem">
+                                <a href="https://team-shakti.github.io/" class="nav-link">Website</a>
                             </li>
                         </ul>
 
-                    <ul class="nav navbar-nav navbar-right">
-                        <li>
-                            <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
                                 <i class="fa fa-search"></i> Search
                             </a>
                         </li>
-                            <li>
-                                <a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/misc/zh3r0CTF/maniacs_game.md">Edit on Team-Shakti/CTF-Write-ups</a>
+                            <li class="nav-item">
+                                <a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/misc/zh3r0CTF/maniacs_game.md" class="nav-link">Edit on Team-Shakti/CTF-Write-ups
+                                    </a>
                             </li>
                     </ul>
                 </div>
@@ -72,28 +60,40 @@
         </div>
 
         <div class="container">
-                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
-    <ul class="nav bs-sidenav">
-        <li class="main active"><a href="#a-small-maniacs-game">A Small Maniac's game</a></li>
-        <li class="main "><a href="#description">Description :</a></li>
-        <li class="main "><a href="#solution">Solution :</a></li>
-            <li><a href="#level-0-here-we-make-use-of-move-a1-a2-instruction-where-in-a1-is-the-amount-of-steps-and-a2-is-the-direction">level 0: here we make use of "MOVE A1 A2" instruction where in A1 is the amount of steps and A2 is the direction.</a></li>
-            <li><a href="#level-1-same-instructions-are-used-to-navigate-here-too">level 1: same instructions are used to navigate here too.</a></li>
-            <li><a href="#level-2-read-a1-will-read-the-input-and-store-it-into-a1-whereas-unlock-a2-has-key-a2-which-is-used-to-unlock-the-door">level 2: "READ A1" will read the input and store it into A1 whereas "UNLOCK A2" has key = A2 which is used to unlock the door.</a></li>
-            <li><a href="#level-3-the-instruction-add-m1-a1-a2-stores-the-result-of-a1a2-into-m1-and-so-other-operations-of-subtraction-and-multiplication-are-also-obtained">level 3: the instruction "ADD M1 A1 A2" stores the result of A1+A2 into M1. And so other operations of subtraction and multiplication are also obtained.</a></li>
-            <li><a href="#level-4-jmp-a1-will-allow-us-to-jump-to-a-line-in-the-code">level 4: "JMP A1" will allow us to jump to a line in the code.</a></li>
-            <li><a href="#level-5">level 5:</a></li>
-            <li><a href="#level-6-jmpz-a1-a2-jumps-to-line-a1-if-a2-is-0-whereas-jmpn-a1-a2-jumps-to-line-a1-if-a2-is-negative">level 6: "JMPZ A1 A2" jumps to line A1 if A2 is 0, whereas "JMPN A1 A2" jumps to line A1 if A2 is negative.</a></li>
-            <li><a href="#level-7-moving-in-the-clockwise-and-solving-the-equation">level 7: moving in the clockwise and solving the equation.</a></li>
-            <li><a href="#level-8-cmp-m1-a1-a2-is-used-to-compare-a1-and-a2-if-a1-a2-then-m1-1-if-a1-a2-then-m1-0-if-a1-a2-then-m1-1">level 8: "CMP M1 A1 A2" is used to compare A1 and A2. If A1 &gt; A2 then M1 = 1; if A1 = A2 then M1 = 0; if A1 &lt; A2 then M1 = -1</a></li>
-            <li><a href="#level-9-we-make-use-jmp-instructions-to-run-a-loop">level 9: we make use "JMP" instructions to run a loop.</a></li>
-            <li><a href="#level-10-2-implies-double-dereference-ie-if-2nd-register-contains-3-and-third-register-contains-54-then-2-will-evaluate-to-54">level 10: "[[2]]" implies double dereference. i.e if 2nd register contains 3 and third register contains 54, then "[[2]]" will evaluate to 54.</a></li>
-            <li><a href="#level-11-register-7-contains-number-of-steps-taken-it-doesnt-increment-once-it-hits-a-block">level 11: register "[7]" contains number of steps taken. It doesn't increment once it hits a block.</a></li>
-            <li><a href="#level-12-we-can-use-all-the-above-instructions-to-run-a-loop-in-order-to-check-if-the-input-is-prime-or-not">level 12: we can use all the above instructions to run a loop in order to check if the input is prime or not.</a></li>
-            <li><a href="#flag">Flag :</a></li>
-    </ul>
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#a-small-maniacs-game" class="nav-link">A Small Maniac's game</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-level="1"><a href="#description" class="nav-link">Description :</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-level="1"><a href="#solution" class="nav-link">Solution :</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#flag" class="nav-link">Flag :</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
 </div></div>
-                <div class="col-md-9" role="main">
+                    <div class="col-md-9" role="main">
 
 <h1 id="a-small-maniacs-game">A Small Maniac's game</h1>
 <ul>
@@ -104,7 +104,6 @@
 
 Note: Solve all the levels and then click submit the solution button and wait for 40 seconds to get the flag. 
 </code></pre>
-
 <h1 id="solution">Solution :</h1>
 <h3 id="level-0-here-we-make-use-of-move-a1-a2-instruction-where-in-a1-is-the-amount-of-steps-and-a2-is-the-direction">level 0: here we make use of "MOVE A1 A2" instruction where in A1 is the amount of steps and A2 is the direction.</h3>
 <p><img alt="level 0" src="https://raw.githubusercontent.com/shravya-bhaskara/CTF-s/main/zh3r0CTF/level%200.png" /></p>
@@ -134,6 +133,7 @@ Note: Solve all the levels and then click submit the solution button and wait fo
 <p><img alt="level 12" src="https://raw.githubusercontent.com/shravya-bhaskara/CTF-s/main/zh3r0CTF/level%2012.png" /></p>
 <h2 id="flag">Flag :</h2>
 <p><img alt="flag" src="https://raw.githubusercontent.com/shravya-bhaskara/CTF-s/main/zh3r0CTF/flag.png" /></p></div>
+            </div>
         </div>
 
         <footer class="col-md-12">
@@ -143,41 +143,38 @@ Note: Solve all the levels and then click submit the solution button and wait fo
         </footer>
         <script>
             var base_url = "../../..",
-                shortcuts = {"search": 83, "next": 78, "help": 191, "previous": 80};
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
         </script>
         <script src="../../../js/base.js" defer></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
         <script src="../../../search/main.js" defer></script>
 
-        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
-    <div class="modal-dialog">
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
             </div>
             <div class="modal-body">
-                <p>
-                    From here you can search these documents. Enter
-                    your search terms below.
-                </p>
-                <form role="form">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
                     </div>
                 </form>
-                <div id="mkdocs-search-results"></div>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
             </div>
             <div class="modal-footer">
             </div>
         </div>
     </div>
-</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="Keyboard Shortcuts Modal" aria-hidden="true">
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="exampleModalLabel">Keyboard Shortcuts</h4>
             </div>
             <div class="modal-body">
               <table class="table">

@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        <link rel="canonical" href="https://github.com/Team-Shakti/CTF-Write-ups/reversing/kalmarctf23/cyclechaser/solution/">
+        <link rel="shortcut icon" href="../../../../img/favicon.ico">
+        <title>cyclechaser (kalmarCTF) - CTF-Writeups</title>
+        <link href="../../../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/darcula.min.css">
+
+        <script src="../../../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../../../js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+            <div class="container">
+                <a class="navbar-brand" href="../../../..">CTF-Writeups</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="navitem">
+                                <a href="../../../../about/" class="nav-link">About Us</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../../../../shaktictf/" class="nav-link">ShaktiCTF</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="https://team-shakti.github.io/" class="nav-link">Website</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/reversing/kalmarctf23/cyclechaser/solution.md" class="nav-link">Edit on Team-Shakti/CTF-Write-ups
+                                    </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#cyclechaser-kalmarctf" class="nav-link">cyclechaser (kalmarCTF)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="cyclechaser-kalmarctf">cyclechaser (kalmarCTF)</h1>
+<h3 id="initial-triage">Initial Triage</h3>
+<p>Let's first analyze the challenge statically.</p>
+<p>The process generates a 4 byte number via the function <code>getrandom()</code> and this random number is then used as the seed for <code>srand()</code> function. </p>
+<p>The <code>getrandom()</code> function is then used second time to generate 1024 random bytes.</p>
+<p>Next there is an attempt to open flag.txt which is already present in the server and we aim to recover the contents of this file.</p>
+<p>The content of flag.txt is checked against the flag format and the part of the flag without the flag format is saved to be used in further functions.</p>
+<p>There are further checks for the saved part of the flag.txt</p>
+<p><img alt="" src="https://i.imgur.com/d5KPPTm.png" /></p>
+<p>Thereafter the program also takes our input which is 16393 bytes long.</p>
+<p><br></p>
+<h3 id="initial-approach">Initial Approach</h3>
+<p>Since a lot of things are going on in this challenge, it was difficult to point out at what approach would be best to take.</p>
+<p>Running the challenge first prints out the seed used for srand function, I felt that whatever function or part of code is using <code>rand()</code> function might be of high importance.</p>
+<p><img alt="" src="https://i.imgur.com/Bbat8pR.png" /></p>
+<p>In this section we have got a really large for loop which runs 131135 times.</p>
+<p>The final output that we get is v17 which is changed according to the value of v5 variable, which is in turn being changed based on the condition <code>if ( j &gt; 0x1FFFF )</code></p>
+<p>My initial approach was to extract all the rand() values based on the seed and then somehow try to get the flag bytes which are originally v15 in this section. </p>
+<p>Let's make the decompilation more clear for better understanding.</p>
+<p><img alt="" src="https://i.imgur.com/pxbjuxJ.png" /></p>
+<p>The else part of the above conditional statement involves those random bytes which are generated via the <code>getrandom()</code> function, hence those can't be predicted easily.</p>
+<p>So that makes it kind of tedious to determine the output if the else section is executed.</p>
+<h3 id="right-hunch">Right Hunch</h3>
+<p>This made me realize that what if I don't even let that else part to play any role in my output. This is where the role of step function comes in.</p>
+<p><img alt="" src="https://i.imgur.com/8ilCQJ7.png" /></p>
+<p>Until now I haven't checked out step function properly but just skimmed over.</p>
+<p>Here v4 needs to be 1 in order to the function to return true, which is when the output will be changed based on the v5 calculated earlier in the previous loop.</p>
+<p>In order to make v4 1 we need the first byte of our input to be an odd byte.</p>
+<p>But our trouble doesn't ends here, if we look further we could see that our input is being shifted.</p>
+<p>That means for everytime the step function is called, the first byte of our input is different.</p>
+<p>The shifting that is taking place here is left shift by one byte along with few more calculations which I actually didn't bother to reverse right now.</p>
+<p>So if we go back to the main function, I get an awesome hunch that if the step function returns 0 131072 times and then returns 1 for the rest of the iterations, we might get the flag bytes as it is printed out.</p>
+<p><img alt="" src="https://i.imgur.com/cpQ6EBb.png" /></p>
+<p>Since output is initialized to be zero and continues to remain zero until the iteration number reaches 131072, v5 is directly assigned with the flag bytes which are xorred with the output bytes itself hence giving out the flag itself.</p>
+<p>But now we need to figure out what input will make this happen.</p>
+<p>I tried analysing the output of the same function with different inputs to find any pattern if it exists.</p>
+<p>The pattern that I observed was this -</p>
+<pre><code class="language-c">#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+
+int step(char *a1, int a2) {
+  char v3 = 0;
+  unsigned int v4 ;
+  int v8 = 0;
+  unsigned int v9 = 0;
+  uint i;
+  int j;
+
+    v4 = *a1 &amp; 1;
+  if (v4) {
+    v8 = 1;
+    for (i = 0; i &lt; a2; ++i) {
+      v9 = v8 + 3 * a1[i];
+      v8 = v9 &gt;&gt; 8;
+      a1[i] = v9;
+    }
+    if (v8) {
+      puts(&quot;Error.&quot;);
+      exit(99);
+    }
+  }
+
+  for (j = a2 - 1; j &gt;= 0; --j) {
+    char v5 = a1[j] &amp; 1;
+    a1[j] &gt;&gt;= 1;
+    a1[j] |= v3 &lt;&lt; 7;
+    v3 = v5;
+  }
+
+  if (v3)
+    printf(&quot;error\n&quot;);
+  return v4;
+}
+
+int main()
+{
+    char inp[] = &quot;\x00\x00\x00\x00\xaa\xaa\xaa\xaa&quot;;
+    for (int i = 0; i &lt; 70; ++i)
+    {
+        printf(&quot;%d &quot;, step(inp, 10));
+    }
+    return 0;
+}
+</code></pre>
+<p>This returns - </p>
+<p><img alt="" src="https://i.imgur.com/DcqvZvP.png" /></p>
+<p>For every null byte it returns '0' 8 times and thus since I provided 4 null bytes, it gave me 32 zeros and then 1's because of '\xaa'</p>
+<p>So since we need to pass the step function 131072 times, which is perfectly divisible by 8 to be 16384, we provide '16384' null bytes and rest some non-null bytes.</p>
+<h4 id="solve-script">Solve script</h4>
+<pre><code class="language-python">from pwn import *
+yy = b'\x00'
+zz= b'\xff'
+x = yy*16384+zz*9
+
+io = remote('3.123.91.129',13339)
+print('seed', io.recvline())
+io.sendline(x)
+
+ret = io.recvline()
+print(ret)
+io.close()
+</code></pre>
+<p>This returns - </p>
+<p><img alt="" src="https://i.imgur.com/RBLQitS.png" /></p>
+<p>Which forms the flag - </p>
+<p><code>python=
+f='69 5F 73 74 69 6C 6C 5F 68 61 76 65 5F 74 6F 5F 63 6F 6E 73 74 72 75 63 74 5F 61 5F 66 6C 61 67 5F 6F 66 5F 63 6F 72 72 65 63 74 5F 6C 65 6E 67 74 68 5F 66 6F 72 5F 74 68 69 73 5F 63 68 61 6C'.split(' ')
+for i in f:
+    print(chr(int(i,16)),end='')</code></p>
+<p><b>Output - </b>
+i_still_have_to_construct_a_flag_of_correct_length_for_this_chal</p>
+<h4 id="flag-">Flag -</h4>
+<p><code>kalmar{i_still_have_to_construct_a_flag_of_correct_length_for_this_chal}</code></p></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+                <p>Copyright &copy; 2020 <a href="http://Team-Shakti.github.io/">Team-Shakti Writeups</a></p>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../../../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../../../js/base.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
+        <script src="../../../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

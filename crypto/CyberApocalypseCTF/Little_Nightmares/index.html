@@ -9,62 +9,50 @@
         <link rel="canonical" href="https://github.com/Team-Shakti/CTF-Write-ups/crypto/CyberApocalypseCTF/Little_Nightmares/">
         <link rel="shortcut icon" href="../../../img/favicon.ico">
         <title>Little Nightmares - CTF-Writeups</title>
-        <link href="../../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../../css/bootstrap.min.css" rel="stylesheet">
         <link href="../../../css/font-awesome.min.css" rel="stylesheet">
         <link href="../../../css/base.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/darcula.min.css">
-        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-        <!--[if lt IE 9]>
-            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-        <![endif]-->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/darcula.min.css">
 
         <script src="../../../js/jquery-1.10.2.min.js" defer></script>
-        <script src="../../../js/bootstrap-3.0.3.min.js" defer></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        <script src="../../../js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
         <script>hljs.initHighlightingOnLoad();</script> 
     </head>
 
     <body>
-
-        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
             <div class="container">
-
-                <!-- Collapsed navigation -->
-                <div class="navbar-header">
-                    <!-- Expander button -->
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="../../..">CTF-Writeups</a>
-                </div>
+                <a class="navbar-brand" href="../../..">CTF-Writeups</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
                 <!-- Expanded navigation -->
-                <div class="navbar-collapse collapse">
+                <div id="navbar-collapse" class="navbar-collapse collapse">
                         <!-- Main navigation -->
                         <ul class="nav navbar-nav">
-                            <li >
-                                <a href="../../../about/">About Us</a>
+                            <li class="navitem">
+                                <a href="../../../about/" class="nav-link">About Us</a>
                             </li>
-                            <li >
-                                <a href="../../../shaktictf/">ShaktiCTF</a>
+                            <li class="navitem">
+                                <a href="../../../shaktictf/" class="nav-link">ShaktiCTF</a>
                             </li>
-                            <li >
-                                <a href="https://team-shakti.github.io/">Website</a>
+                            <li class="navitem">
+                                <a href="https://team-shakti.github.io/" class="nav-link">Website</a>
                             </li>
                         </ul>
 
-                    <ul class="nav navbar-nav navbar-right">
-                        <li>
-                            <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
                                 <i class="fa fa-search"></i> Search
                             </a>
                         </li>
-                            <li>
-                                <a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/crypto/CyberApocalypseCTF/Little_Nightmares.md">Edit on Team-Shakti/CTF-Write-ups</a>
+                            <li class="nav-item">
+                                <a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/crypto/CyberApocalypseCTF/Little_Nightmares.md" class="nav-link">Edit on Team-Shakti/CTF-Write-ups
+                                    </a>
                             </li>
                     </ul>
                 </div>
@@ -72,18 +60,32 @@
         </div>
 
         <div class="container">
-                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
-    <ul class="nav bs-sidenav">
-        <li class="main active"><a href="#little-nightmares">Little Nightmares</a></li>
-    </ul>
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#little-nightmares" class="nav-link">Little Nightmares</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+        </ul>
+    </div>
 </div></div>
-                <div class="col-md-9" role="main">
+                    <div class="col-md-9" role="main">
 
 <h1 id="little-nightmares">Little Nightmares</h1>
 <p>Solved by: Sowmya (@__4lph4__)</p>
 <p>Another interesting and number theory challenge from Cyber Apocalypse CTF 2021. </p>
 <p>Here is the challenge script: </p>
-<pre><code class="python">from Crypto.Util.number import getPrime, bytes_to_long
+<pre><code class="language-python">from Crypto.Util.number import getPrime, bytes_to_long
 from random import randint
 
 FLAG = b'CHTB{??????????????????????????????????}'
@@ -118,19 +120,16 @@ assert flag == decrypt(enc, private)
 print(f'Public key: {public}')
 print(f'Encrypted Flag: {enc}')
 </code></pre>
-
 <p>Output: </p>
 <pre><code>Public key: [15046368688522729878837364795846944447584249939940259042809310309990644722874686184397211078874301515249887625469482926118729767921165680434919436001251916009731653621249173925306213496143518405636216886510423114656445458948673083827223571060637952939874530020017901480576002182201895448100262702822444377134178804257755785230586532510071013644046338971791975792507111644403115625869332161597091770842097004583717690548871004494047953982837491656373096470967389016252220593050830165369469758747361848151735684518721718721910577759955840675047364431973099362772693817698643582567162750607561757926413317531802354973847, 9283319553892803764690461243901070663222428323113425322850741756254277368036028273335428365663191030757323877453365465554132886645468588395631445445583253155195968694862787593653053769030730815589172570039269584478526982112345274390480983685543611640614764128042195018064671336591349166188571572536295612195292864841173479903528383123563226015278849646883506520514470333897880659139687610612049230856991239192330160727258048546502899802982277188877310126410571180236389500463464659397850999622904270520629126455639717497594792781963273264274684421455422023088932590387852813426966580288533263121276557350436900246463, 8170671201621857973407215819397012803619280999847588732628253232283307833188933536560440103969432332185848983745037071025860497584949115721267685519443159539783527315198992420655868110884873218133385835580345201078361745220227561551654718787264374257293351098299807821798471006283753277157555438331734456302990269860368479905882644912688806233577606978042582643369428542665819950283055672363935065844777322370865181261974289403517780920801228770368401030437376412993457855872519154731210534206120823952983817295670102327952847504357905927290367724038039202573992755780477507837498958878434898475866081720566629437645]
 Encrypted Flag: [7276931928429452854246342065839521806420418866856294154132077445353136752229297971239711445722522895365037966326373464771601590080627182837712349184127450287007143044916049997542062388957038193775059765336324946772584345217059576295657932746876343366393024413356918508539249571136028895868283293788299191933766033783323506852233709102246103073938749386863417754855718482717665887208176012160888333043927323096890710493237011980243014972091979988123240671317403963855512078171350546136813316974298786004332694857700545913951953794486310691251777765023941312078456072442404873687449493571576308437181236785086220324920, 323136689475858283788435297190415326629231841782013470380328322062914421821417044602586721782266492137206976604934554032410738337998164019339195282867579270570771188637636630571301963569622900241602213161396475522976801562853960864577088622021373828937295792222819561111043573007672396987476784672948287600574705736056566374617963948347878220280909003723932805632146024848076789866573232781595349191010186788284504514925388452232227920241883518851862145988532377145521056940790582807479213216240632647108768886842632170415653038740093542869598364804101879631033516030858720540787637217275393603575250765731822252109]
 </code></pre>
-
 <p>This is a customised encryption scheme with paramters <code>N,g1,g2,c1,c2</code> given. On observing this line in the code:</p>
-<pre><code class="python">    g1, g2 = pow(g, r1*(p-1), N), pow(g, r2*(q-1), N)
+<pre><code class="language-python">    g1, g2 = pow(g, r1*(p-1), N), pow(g, r2*(q-1), N)
 </code></pre>
-
 <p>We get to know that <code>g1 ≡ 1 (mod p)</code> and <code>g2 ≡ 1 (mod q)</code>. Using this we try to get out prime factors. </p>
 <p>Here's the solution script</p>
-<pre><code class="python">from Crypto.Util.number import *
+<pre><code class="language-python">from Crypto.Util.number import *
 
 def decrypt(enc, private):
     c1, c2 = enc
@@ -151,8 +150,8 @@ private = [p,q]
 
 print(long_to_bytes(decrypt(enc,private)))
 </code></pre>
-
 <p>Flag: <code>CHTB{Factoring_With_Fermats_Little_Theorem}</code></p></div>
+            </div>
         </div>
 
         <footer class="col-md-12">
@@ -162,41 +161,38 @@ print(long_to_bytes(decrypt(enc,private)))
         </footer>
         <script>
             var base_url = "../../..",
-                shortcuts = {"search": 83, "next": 78, "help": 191, "previous": 80};
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
         </script>
         <script src="../../../js/base.js" defer></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
         <script src="../../../search/main.js" defer></script>
 
-        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
-    <div class="modal-dialog">
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
             </div>
             <div class="modal-body">
-                <p>
-                    From here you can search these documents. Enter
-                    your search terms below.
-                </p>
-                <form role="form">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
                     </div>
                 </form>
-                <div id="mkdocs-search-results"></div>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
             </div>
             <div class="modal-footer">
             </div>
         </div>
     </div>
-</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="Keyboard Shortcuts Modal" aria-hidden="true">
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="exampleModalLabel">Keyboard Shortcuts</h4>
             </div>
             <div class="modal-body">
               <table class="table">

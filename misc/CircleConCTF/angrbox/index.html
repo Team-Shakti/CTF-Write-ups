@@ -9,62 +9,50 @@
         <link rel="canonical" href="https://github.com/Team-Shakti/CTF-Write-ups/misc/CircleConCTF/angrbox/">
         <link rel="shortcut icon" href="../../../img/favicon.ico">
         <title>Angrbox - CTF-Writeups</title>
-        <link href="../../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../../css/bootstrap.min.css" rel="stylesheet">
         <link href="../../../css/font-awesome.min.css" rel="stylesheet">
         <link href="../../../css/base.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/darcula.min.css">
-        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-        <!--[if lt IE 9]>
-            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-        <![endif]-->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/darcula.min.css">
 
         <script src="../../../js/jquery-1.10.2.min.js" defer></script>
-        <script src="../../../js/bootstrap-3.0.3.min.js" defer></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        <script src="../../../js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
         <script>hljs.initHighlightingOnLoad();</script> 
     </head>
 
     <body>
-
-        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
             <div class="container">
-
-                <!-- Collapsed navigation -->
-                <div class="navbar-header">
-                    <!-- Expander button -->
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="../../..">CTF-Writeups</a>
-                </div>
+                <a class="navbar-brand" href="../../..">CTF-Writeups</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
                 <!-- Expanded navigation -->
-                <div class="navbar-collapse collapse">
+                <div id="navbar-collapse" class="navbar-collapse collapse">
                         <!-- Main navigation -->
                         <ul class="nav navbar-nav">
-                            <li >
-                                <a href="../../../about/">About Us</a>
+                            <li class="navitem">
+                                <a href="../../../about/" class="nav-link">About Us</a>
                             </li>
-                            <li >
-                                <a href="../../../shaktictf/">ShaktiCTF</a>
+                            <li class="navitem">
+                                <a href="../../../shaktictf/" class="nav-link">ShaktiCTF</a>
                             </li>
-                            <li >
-                                <a href="https://team-shakti.github.io/">Website</a>
+                            <li class="navitem">
+                                <a href="https://team-shakti.github.io/" class="nav-link">Website</a>
                             </li>
                         </ul>
 
-                    <ul class="nav navbar-nav navbar-right">
-                        <li>
-                            <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
                                 <i class="fa fa-search"></i> Search
                             </a>
                         </li>
-                            <li>
-                                <a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/misc/CircleConCTF/angrbox.md">Edit on Team-Shakti/CTF-Write-ups</a>
+                            <li class="nav-item">
+                                <a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/misc/CircleConCTF/angrbox.md" class="nav-link">Edit on Team-Shakti/CTF-Write-ups
+                                    </a>
                             </li>
                     </ul>
                 </div>
@@ -72,15 +60,31 @@
         </div>
 
         <div class="container">
-                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
-    <ul class="nav bs-sidenav">
-        <li class="main active"><a href="#circleconctf-21">CircleConCTF 21'</a></li>
-        <li class="main "><a href="#angrbox">angrbox</a></li>
-            <li><a href="#description">Description</a></li>
-            <li><a href="#writeup">Writeup</a></li>
-    </ul>
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="2"><a href="#circleconctf-21" class="nav-link">CircleConCTF 21'</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-level="2"><a href="#angrbox" class="nav-link">angrbox</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+        </ul>
+    </div>
 </div></div>
-                <div class="col-md-9" role="main">
+                    <div class="col-md-9" role="main">
 
 <h2 id="circleconctf-21">CircleConCTF 21'</h2>
 <h2 id="angrbox">angrbox</h2>
@@ -121,7 +125,7 @@
 <p>After solving a PoW , the server asks for a C code that takes in a 4 character string as an argument.</p>
 <p>We are to predefine a particular string in the code and check with the argument string. If both are equal the program returns a 0.</p>
 <p>The server uses angr to guess the 4 character string in the passed C code within 2 min. </p>
-<pre><code class="python">    print(&quot;[*] Write me a program that:&quot;)
+<pre><code class="language-python">    print(&quot;[*] Write me a program that:&quot;)
     print(&quot;[*] - Takes 4 uppercase characters in argv&quot;)
     print(&quot;[*] - Verifies the 4 character key and returns 0 if correct&quot;)
     print(&quot;[*] - If I find the key, YOU LOSE&quot;)
@@ -137,9 +141,8 @@
     print(&quot;[*] Solving (max 2 minutes) ...&quot;)
     key = solve_key(filepath)
 </code></pre>
-
 <p>You may find the angr script in solver.py and the session script in session.py</p>
-<pre><code class="python">    if key:
+<pre><code class="language-python">    if key:
         print(f&quot;[-] WoUlD yOu LoOk At ThIs KeY i FoUnD: {key}&quot;)
         raise MyException(&quot;[-] This code is WEAK SAUCE&quot;)
     else:
@@ -160,13 +163,12 @@
     else:
         raise MyException(&quot;[-] ARE YOU KIDDING ME? THIS KEY DOESN'T EVEN WORK&quot;)
 </code></pre>
-
 <p>Our aim is to code a program which angr can't guess but returns 0 for the right input and the right input only.</p>
 <h4 id="approach">Approach</h4>
 <p><strong>1</strong></p>
 <p>Our first thought was to make a script that takes a lot of time for the check.</p>
 <p>There was a timing constraint of 2 min for angr in the config file. So we thought of putting a sleep(120) so that angr could not guess the value. This is what we tried :-</p>
-<pre><code class="c">
+<pre><code class="language-c">
 #include&lt;stdio.h&gt;
 #include&lt;string.h&gt;
 #include&lt;unistd.h&gt;
@@ -179,22 +181,20 @@ int main(int argc,char *argv[])
         return 0;}
 
 </code></pre>
-
 <p>angr did find the wrong key however, it raises an exception and exits because it does not go to the else condition.</p>
-<pre><code class="python">    if key:
+<pre><code class="language-python">    if key:
         print(f&quot;[-] WoUlD yOu LoOk At ThIs KeY i FoUnD: {key}&quot;)
         raise MyException(&quot;[-] This code is WEAK SAUCE&quot;)
     else:
         print(&quot;[*] My solver couldn't find a key &gt;:(&quot;)
 </code></pre>
-
 <p>So even if it did find the wrong key it does not recognize that the solution is wrong because it does not go to the else condition.</p>
 <p>The only way left was to somehow make angr return the <code>None</code> for the key.</p>
 <p><strong>2</strong></p>
 <p>Our juniors , Pavani and Revathi came up with the idea to play around with the parameters in the angr.cfg file and so we did.</p>
 <p><a href="https://github.com/sandrabeme">4lex1</a> suggested that we use some functions that has a lot of memory utilisation , so that we could exceed angr's memory limitations and thus making it impossible for angr to solve the equation. Thus we starting trying to use memcmp and defining variables outside stack etc. But that just wasnt enough to exceed the memory limit.</p>
 <p>Being a Crypto gal, the first thing that came to my mind was the Discrete Logarithm Problem. We framed the problem such that the first character of our string is the only solution to our DLP problem and if tried to brute-force, the memory utilisation would just grow exponentially. This was our final C code :</p>
-<pre><code class="c">int modpow(long long int x,long long int y,long long int n) {
+<pre><code class="language-c">int modpow(long long int x,long long int y,long long int n) {
   int ret = 1;
   for (; y; x = x * x % n, y &gt;&gt;= 1) {
     if (y &amp; 1) {
@@ -219,7 +219,6 @@ int main(int argc,char *argv[]) {
 
 }
 </code></pre>
-
 <p>Converting it into hex, and passing it to the server we got the flag.</p>
 <p>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
 <img alt="the-solution" src="../solution-ss.png" />
@@ -242,6 +241,7 @@ int main(int argc,char *argv[]) {
 </blockquote>
 <h4 id="flag">Flag</h4>
 <p><code>CCC{p4th_3pl0s10n_4s_a_tr4pd00r_funct10n?_0r_d1d_y0u_ch33s3_1t}</code></p></div>
+            </div>
         </div>
 
         <footer class="col-md-12">
@@ -251,41 +251,38 @@ int main(int argc,char *argv[]) {
         </footer>
         <script>
             var base_url = "../../..",
-                shortcuts = {"search": 83, "next": 78, "help": 191, "previous": 80};
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
         </script>
         <script src="../../../js/base.js" defer></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
         <script src="../../../search/main.js" defer></script>
 
-        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
-    <div class="modal-dialog">
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
             </div>
             <div class="modal-body">
-                <p>
-                    From here you can search these documents. Enter
-                    your search terms below.
-                </p>
-                <form role="form">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
                     </div>
                 </form>
-                <div id="mkdocs-search-results"></div>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
             </div>
             <div class="modal-footer">
             </div>
         </div>
     </div>
-</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="Keyboard Shortcuts Modal" aria-hidden="true">
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="exampleModalLabel">Keyboard Shortcuts</h4>
             </div>
             <div class="modal-body">
               <table class="table">
