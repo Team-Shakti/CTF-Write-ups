@@ -36,7 +36,7 @@ Looking Mirror: I am Ath3n1x
 ```
 As the description says, it just spits out the input.
 
-Now we will move on the examining the source code in ida/ghidra:
+Now we will move on to examine the source code in ida/ghidra:
 ```
   do {
     printf("\n> ");
@@ -90,7 +90,6 @@ On running the script:
 8: b'Looking Mirror: (null)\n\n> '
 10: b'Looking Mirror: shaktiCTF{c0ngr4t5_b4by_f0rm4773r}\n\n\n> '
 ```
-
-:tada::tada::tada:
+Got it!
 
 Flag: `shaktiCTF{c0ngr4t5_b4by_f0rm4773r}`              
