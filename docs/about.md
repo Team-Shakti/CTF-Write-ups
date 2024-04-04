@@ -6,7 +6,7 @@ The beginning is always the hardest, and the team had to face its fair share of 
 
 Team Shakti is characterised by its peer mentoring and the bond of sisterhood that teammates share with each other. Newbies are introduced into the field by the experienced seniors. Overall, we are a group of motivated women who would support and encourage each other while venturing into the cyber world to the best of our possibilities and try to bring about the difference we hope to see in the tech industry where women are highly underpresented.
 
-Join Us @ [Discord]()
+Join Us @ [Discord](https://discord.gg/PtDGEppW88)
 
 Follow us on Twitter - [@TeamShakti](https://twitter.com/teamshakti06)
 
@@ -35,3 +35,9 @@ Contact Us via mail : shakticon@am.amrita.edu
 @[Namitha S](https://github.com/namithas123)
 
 @[Simran Kathpalia](https://github.com/simran-kathpalia)
+
+@[av4nth1ka](https://github.com/av4nth1ka)
+
+@[k1n0r4](https://github.com/k1n0r4)
+
+@[L0xm1](https://github.com/L0xm1)

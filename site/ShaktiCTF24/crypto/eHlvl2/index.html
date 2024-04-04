@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        <link rel="canonical" href="https://github.com/Team-Shakti/CTF-Write-ups/ShaktiCTF24/crypto/eHlvl2/">
+        <link rel="shortcut icon" href="../../../img/favicon.ico">
+        <title>eHlvl2 - CTF-Writeups</title>
+        <link href="../../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/darcula.min.css">
+
+        <script src="../../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../../js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+            <div class="container">
+                <a class="navbar-brand" href="../../..">CTF-Writeups</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="navitem">
+                                <a href="../../../about/" class="nav-link">About Us</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../../../shaktictf/" class="nav-link">ShaktiCTF</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="https://team-shakti.github.io/" class="nav-link">Website</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/ShaktiCTF24/crypto/eHlvl2.md" class="nav-link">Edit on Team-Shakti/CTF-Write-ups
+                                    </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#ehlvl2" class="nav-link">eHlvl2</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="ehlvl2">eHlvl2</h1>
+<h3 id="challenge-description">Challenge Description :</h3>
+<p>In the sequel to our cryptography challenge, John embarks on a deeper cryptographic journey as he discovers a second email with an even more intricate code. Unraveling this complex puzzle will lead him closer to unveiling the secrets of his uncle's legacy. Can John decipher the cryptic message to unlock the next chapter of his mysterious inheritance?</p>
+<p><strong>source.py</strong>
+```python=
+from Crypto.Util.number import*
+from gmpy2 import *
+from secret import flag,hint,p,q,n,e</p>
+<p>m = bytes_to_long(flag)
+h = [i^n for i in hint]
+print(f"h = {(h)}")
+ct = pow(m,e,n)
+print("ct = ",ct)
+print("p = ",p)
+print("q = ",q)</p>
+<pre><code>**output.txt**
+</code></pre>
+<p>h = [94679407488132818404660699098842374931489424397235444032237590365827255722083367058700051514705537574410165711179896056841523082769989050948432027496868754650692929646830509011686345739543788335116663878603193093822729085523727432834299509271223474277629700801997533152872965865087117035426980349126297961521, 94679407488132818404660699098842374931489424397235444032237590365827255722083367058700051514705537574410165711179896056841523082769989050948432027496868754650692929646830509011686345739543788335116663878603193093822729085523727432834299509271223474277629700801997533152872965865087117035426980349126297961485, 94679407488132818404660699098842374931489424397235444032237590365827255722083367058700051514705537574410165711179896056841523082769989050948432027496868754650692929646830509011686345739543788335116663878603193093822729085523727432834299509271223474277629700801997533152872965865087117035426980349126297961472, 94679407488132818404660699098842374931489424397235444032237590365827255722083367058700051514705537574410165711179896056841523082769989050948432027496868754650692929646830509011686345739543788335116663878603193093822729085523727432834299509271223474277629700801997533152872965865087117035426980349126297961541, 94679407488132818404660699098842374931489424397235444032237590365827255722083367058700051514705537574410165711179896056841523082769989050948432027496868754650692929646830509011686345739543788335116663878603193093822729085523727432834299509271223474277629700801997533152872965865087117035426980349126297961472, 94679407488132818404660699098842374931489424397235444032237590365827255722083367058700051514705537574410165711179896056841523082769989050948432027496868754650692929646830509011686345739543788335116663878603193093822729085523727432834299509271223474277629700801997533152872965865087117035426980349126297961541, 94679407488132818404660699098842374931489424397235444032237590365827255722083367058700051514705537574410165711179896056841523082769989050948432027496868754650692929646830509011686345739543788335116663878603193093822729085523727432834299509271223474277629700801997533152872965865087117035426980349126297961560, 94679407488132818404660699098842374931489424397235444032237590365827255722083367058700051514705537574410165711179896056841523082769989050948432027496868754650692929646830509011686345739543788335116663878603193093822729085523727432834299509271223474277629700801997533152872965865087117035426980349126297961541, 94679407488132818404660699098842374931489424397235444032237590365827255722083367058700051514705537574410165711179896056841523082769989050948432027496868754650692929646830509011686345739543788335116663878603193093822729085523727432834299509271223474277629700801997533152872965865087117035426980349126297961553, 94679407488132818404660699098842374931489424397235444032237590365827255722083367058700051514705537574410165711179896056841523082769989050948432027496868754650692929646830509011686345739543788335116663878603193093822729085523727432834299509271223474277629700801997533152872965865087117035426980349126297961555, 94679407488132818404660699098842374931489424397235444032237590365827255722083367058700051514705537574410165711179896056841523082769989050948432027496868754650692929646830509011686345739543788335116663878603193093822729085523727432834299509271223474277629700801997533152872965865087117035426980349126297961558, 94679407488132818404660699098842374931489424397235444032237590365827255722083367058700051514705537574410165711179896056841523082769989050948432027496868754650692929646830509011686345739543788335116663878603193093822729085523727432834299509271223474277629700801997533152872965865087117035426980349126297961557, 94679407488132818404660699098842374931489424397235444032237590365827255722083367058700051514705537574410165711179896056841523082769989050948432027496868754650692929646830509011686345739543788335116663878603193093822729085523727432834299509271223474277629700801997533152872965865087117035426980349126297961554, 94679407488132818404660699098842374931489424397235444032237590365827255722083367058700051514705537574410165711179896056841523082769989050948432027496868754650692929646830509011686345739543788335116663878603193093822729085523727432834299509271223474277629700801997533152872965865087117035426980349126297961541, 94679407488132818404660699098842374931489424397235444032237590365827255722083367058700051514705537574410165711179896056841523082769989050948432027496868754650692929646830509011686345739543788335116663878603193093822729085523727432834299509271223474277629700801997533152872965865087117035426980349126297961567, 94679407488132818404660699098842374931489424397235444032237590365827255722083367058700051514705537574410165711179896056841523082769989050948432027496868754650692929646830509011686345739543788335116663878603193093822729085523727432834299509271223474277629700801997533152872965865087117035426980349126297961548]
+ct =  67505152689735765883791932740130754794209575051890980602600781674553775583258220666677751769017514328860789798530248480070252409403368045243830780631402335081141998133869158737642149138788268554416336823598505828237139319106610394963826005339971182324217930994374291223950212588510430646278894660497182784293
+p =  12183163052748797962152083951276410017023381414297530966097687939312125214962148117236820737625705839607797813446007939630781665285299250570390516148709817
+q =  7771332213006128671514628362741773970588675422315769188626146232673657294809145256158466322140793048100178050459366164928658849208228006813771330133382669</p>
+<pre><code>**Author** : [im._.a.p](https://twitter.com/im_a_p_)
+
+### Solution : 
+* Values of 'p','q','ciphertext','h'(encrypted hint which has the value of e) is given.
+* According to the code given, 'hint' is xored with 'n' to get the ciphertext 'h'.
+* To find the 'hint', 'h' is xored with 'n' to get 'hint', thus getting the value of 'e'.
+```python=
+n = p*q
+hi = [i^n for i in h]
+l = []
+for i in hi:
+    x = chr(i)
+    l.append(x)
+li = ''.join(l)
+print(li)
+#The e = 46307 :)
+</code></pre>
+<ul>
+<li>With the values 'e','n','p','q', the ciphertext 'ct' can be decrypted to get the flag.
+<code>python=
+e = 46307
+n = p*q
+phi = (p-1)*(q-1)
+d = invert(e,phi)
+msg = pow(ct,d,n)
+print(long_to_bytes(msg))</code>
+<strong>Flag</strong> : shaktictf{RSA_1s_fun_t0_d0_ri8?}</li>
+</ul></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+                <p>Copyright &copy; 2020 <a href="http://Team-Shakti.github.io/">Team-Shakti Writeups</a></p>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../../js/base.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
+        <script src="../../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

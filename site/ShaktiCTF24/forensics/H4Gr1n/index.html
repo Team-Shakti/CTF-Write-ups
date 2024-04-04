@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        <link rel="canonical" href="https://github.com/Team-Shakti/CTF-Write-ups/ShaktiCTF24/forensics/H4Gr1n/">
+        <link rel="shortcut icon" href="../../../img/favicon.ico">
+        <title>H4Gr1n - CTF-Writeups</title>
+        <link href="../../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/darcula.min.css">
+
+        <script src="../../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../../js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+            <div class="container">
+                <a class="navbar-brand" href="../../..">CTF-Writeups</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="navitem">
+                                <a href="../../../about/" class="nav-link">About Us</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../../../shaktictf/" class="nav-link">ShaktiCTF</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="https://team-shakti.github.io/" class="nav-link">Website</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/ShaktiCTF24/forensics/H4Gr1n.md" class="nav-link">Edit on Team-Shakti/CTF-Write-ups
+                                    </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<p># H4Gr1n</p>
+<p><strong>Description</strong>:
+The Griffin family's personal computer encountered a significant security breach.They promptly took a memory dump, capturing the system's state at the time of the intrusion.</p>
+<p>Help find the following:</p>
+<pre><code>        Question 1: What is the password manager used by Griffins.Format -  ['password_manager_name_with_version_all_lower cases'] 
+        Question 2: Retrieve the password of the password manager. Format -  ['Password_manager_password' ] 
+        Question 3:What is the vulnerability found in password manager -  Format -  ['CVE-XXXX-XXXX'] 
+        Question 4: Find the key that was removed from password manager - Format-['removed_file_password']
+</code></pre>
+<p>Answering the above question will give you the final flag.</p>
+<p><strong>Author: <a href="https://twitter.com/hrippix_">hrippi.x_</a></strong></p>
+<p><strong>Solution</strong>:
+As a raw file is given the memory dump can be analayzed using the volatility3 framework.</p>
+<p>Going through the processes we find Keepass as the only password manager present-<code>KeePass</code>
+Filescanning for keepass shows you the .exe with its version tagged on it.
+<img alt="alt text" src="../uploads/image-3.png" />
+Ans1) KeePass2.53.1</p>
+<p>To retrieve the password from the password manager while finding for ways to recover the password we come across the cve for KeePass 2023.</p>
+<p>Going through the blogs we can find that when the content of the KeePass text box is entered, a managed string is created in its process memory. Whose memory if dumped,will lead to the leakage of the master password.</p>
+<p>Search for placeholder xCFx25 based on known information. As shown in the figure below, it is found that a placeholder appears first, followed by the plaintext character</p>
+<p><img alt="alt text" src="../uploads/image-4.png" /></p>
+<p>This gives you the complete password of Keepass:</p>
+<p>Ans2) <code>allsecretslieinhere_for4r3ason_louis</code></p>
+<p>From the research done for the second question the 3rd answer should be quite easy as it is the cve number that has been asked :</p>
+<p>Ans3) <code>CVE-2023-32784</code></p>
+<p>For the next part you have to dump Keepass from memory using the volatility framework.</p>
+<pre><code>python3 vol.py -f chall.raw windows.filescan | grep .kdbx
+</code></pre>
+<p><img alt="alt text" src="../uploads/image-6.png" /></p>
+<p>Dump the Secrets.kdbx using the command:</p>
+<pre><code>python3 vol.py -f chall.raw windows.dumpfiles -o output_file --virtaddr 0x8c0ae33b7c70
+</code></pre>
+<p>After retrieving the password manager check the key that was deleted </p>
+<p><img alt="alt text" src="../uploads/image-7.png" />
+Ans4) <code>U6Vgc6dhNGbw3jSB5vzS</code>
+Here you go the last answer needed to get the final flag.</p>
+<h3 id="flag">Flag</h3>
+<p><code>shaktictf{C0ng0!_m4st3r_cv31s7_34256865}</code></p></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+                <p>Copyright &copy; 2020 <a href="http://Team-Shakti.github.io/">Team-Shakti Writeups</a></p>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../../js/base.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
+        <script src="../../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

