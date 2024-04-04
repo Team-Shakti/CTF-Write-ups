@@ -140,11 +140,13 @@ Here is a Real Task for you.</p>
 <p>These constraints can be solved using a constraint solver called z3.</p>
 <h4 id="solution-script">Solution Script</h4>
 <p>Here is the entire script - </p>
-<p>```python!
-from z3 import *</p>
-<p>matr = [[Int(f'matr_{i}_{j}') for j in range(6)] for i in range(6)]</p>
-<p>sol = Solver()</p>
-<p>sol.add(matr[2][4] + matr[1][0] - matr[3][0] == 106)
+<pre><code class="language-py">from z3 import *
+
+matr = [[Int(f'matr_{i}_{j}') for j in range(6)] for i in range(6)]
+
+sol = Solver()
+
+sol.add(matr[2][4] + matr[1][0] - matr[3][0] == 106)
 sol.add(matr[5][2] + matr[1][4] - matr[4][5] == 174) 
 sol.add(matr[0][2] + matr[5][4] - matr[2][5] == 111) 
 sol.add(matr[3][0] + matr[2][2] - matr[4][4] == 19) 
@@ -187,38 +189,51 @@ sol.add(matr[4][0] + matr[4][1] + matr[4][2] + matr[4][3] + matr[4][4] + matr[4]
 sol.add(matr[5][0] + matr[5][1] + matr[5][2] + matr[5][3] + matr[5][4] + matr[5][5] == 522)
 sol.add(matr[0][0] + matr[1][0] + matr[2][0] + matr[3][0] + matr[4][0] + matr[5][0] == 394)
 sol.add(matr[0][1] + matr[1][1] + matr[2][1] + matr[3][1] + matr[4][1] + matr[5][1] == 382)
-sol.add(matr[0][2] + matr[1][2] + matr[2][2] + matr[3][2] + matr[4][2] + matr[5][2] == 560)  <br />
+sol.add(matr[0][2] + matr[1][2] + matr[2][2] + matr[3][2] + matr[4][2] + matr[5][2] == 560)    
 sol.add(matr[0][3] + matr[1][3] + matr[2][3] + matr[3][3] + matr[4][3] + matr[5][3] == 357)
 sol.add(matr[0][4] + matr[1][4] + matr[2][4] + matr[3][4] + matr[4][4] + matr[5][4] == 599)
-sol.add(matr[0][5] + matr[1][5] + matr[2][5] + matr[3][5] + matr[4][5] + matr[5][5] == 502)</p>
-<p>if sol.check() == sat:
+sol.add(matr[0][5] + matr[1][5] + matr[2][5] + matr[3][5] + matr[4][5] + matr[5][5] == 502)
+
+
+if sol.check() == sat:
     model = sol.model()
     result_matrix = [[model.evaluate(matr[i][j]) for j in range(6)] for i in range(6)]
-    print("Satisfiable solution found:")
+    print(&quot;Satisfiable solution found:&quot;)
 else:
-    print("No satisfiable solution found.")</p>
-<p>matrix = [[0 for j in range(6)] for i in range(6)]</p>
-<p>for i in range(6):
+    print(&quot;No satisfiable solution found.&quot;)
+
+matrix = [[0 for j in range(6)] for i in range(6)]
+
+for i in range(6):
     for j in range(6):
-        matrix[i][j] = result_matrix[i][j].as_long()</p>
-<p>for row in matrix:
-    print(row)</p>
-<p>for i in range(6):
-    matrix[i][2],matrix[i][3] = matrix[i][3],matrix[i][2]</p>
-<p>for j in range(6):
-    matrix[1][j],matrix[5][j] = matrix[5][j],matrix[1][j]</p>
-<p>for k in range(6):
-    matrix[k][1],matrix[k][4] = matrix[k][4],matrix[k][1]</p>
-<p>for a in range(6):
-    matrix[0][a],matrix[3][a] = matrix[3][a],matrix[0][a]</p>
-<p>for b in range(36):
-    matrix[b//6][b%6] += 5</p>
-<p>for x in range(36):
+        matrix[i][j] = result_matrix[i][j].as_long()
+
+for row in matrix:
+    print(row)
+
+
+for i in range(6):
+    matrix[i][2],matrix[i][3] = matrix[i][3],matrix[i][2]
+
+for j in range(6):
+    matrix[1][j],matrix[5][j] = matrix[5][j],matrix[1][j]
+
+for k in range(6):
+    matrix[k][1],matrix[k][4] = matrix[k][4],matrix[k][1]
+
+for a in range(6):
+    matrix[0][a],matrix[3][a] = matrix[3][a],matrix[0][a]
+
+for b in range(36):
+    matrix[b//6][b%6] += 5
+
+for x in range(36):
     if x % 2 == 0:
         print(chr(matrix[x//6][x%6] ^ 0x38),end='')
     else:
-        print(chr(matrix[x//6][x%6]),end='')</p>
-<p>```</p>
+        print(chr(matrix[x//6][x%6]),end='')
+
+</code></pre>
 <h3 id="flag">Flag</h3>
 <p><code>shaktictf{h0w_w4s_th3_fl4g_ch3ck3r?}</code></p></div>
             </div>

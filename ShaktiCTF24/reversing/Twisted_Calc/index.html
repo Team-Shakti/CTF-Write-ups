@@ -76,11 +76,6 @@
               <ul class="nav flex-column">
               </ul>
             </li>
-            
-            <li class="nav-item" data-level="1"><a href="#checks-for-the-first-batch-of-5-elements" class="nav-link">Checks for the first batch of 5 elements</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
         </ul>
     </div>
 </div></div>
@@ -113,22 +108,18 @@
 <h4 id="towards-the-flag">Towards the flag</h4>
 <p>Analysing the <code>applySignalProcessing</code> function indicates the use of 10 operations, hence there are only 10 possible elements of v10 array. </p>
 <p>For each batch of 5 elements of v10 array, there are 3 checks given to us in <code>check</code> function and a final signal state check in <code>second_check</code> function.</p>
-<p>```clike!</p>
-<h1 id="checks-for-the-first-batch-of-5-elements">Checks for the first batch of 5 elements</h1>
-<p>if ( (a1[3] ^ a1[2] ^ a1[1] ^ <em>a1 ^ a1[4]) != 44 )
+<pre><code class="language-c"># Checks for the first batch of 5 elements
+
+if ( (a1[3] ^ a1[2] ^ a1[1] ^ *a1 ^ a1[4]) != 44 )
     exit(0);
-if ( </em>a1 != 32 )
+if ( *a1 != 32 )
     exit(0);
 if ( a1[4] != 47 )
-    exit(0);</p>
-<pre><code>
-
-Utilising these constraints and the fact that there are only 10 possible values, we can brute and get the values.
-
-One simple way to confirm which is the correct value could be by xorring the obtained values with the predefined array in step 1 and see which of the string makes sense or is readable.
-
-```clike!
-#include &lt;stdio.h&gt;
+    exit(0);
+</code></pre>
+<p>Utilising these constraints and the fact that there are only 10 possible values, we can brute and get the values.</p>
+<p>One simple way to confirm which is the correct value could be by xorring the obtained values with the predefined array in step 1 and see which of the string makes sense or is readable.</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;string.h&gt;
 #include &lt;math.h&gt;
 #include &lt;stdlib.h&gt;

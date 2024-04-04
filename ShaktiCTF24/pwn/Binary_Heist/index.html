@@ -102,7 +102,7 @@ System: Log entry successful! You will be granted access on entering the correct
 Segmentation fault (core dumped)
 </code></pre>
 <p>Ok so we can overflow the buffer. Lets look at the binary in ida/ghidra. There seems to be a win function called <code>infiltrate</code>:</p>
-<pre><code>void infiltrate(long param_1,long param_2)
+<pre><code class="language-c">void infiltrate(long param_1,long param_2)
 
 {
   undefined8 local_16;
