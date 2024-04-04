@@ -95,7 +95,7 @@ First lets check the permissions with <code>checksec</code>:</p>
 </code></pre>
 <p>Except for canary, everything else is enabled. </p>
 <p>Now lets run the program and take a look at its source. </p>
-<pre><code>int main(int argc, char **argv) { 
+<pre><code class="language-c">int main(int argc, char **argv) { 
     int* addr = mmap(0, 0x1000, PROT_READ | PROT_WRITE | PROT_EXEC, MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
     read(0, addr, 100);
 
