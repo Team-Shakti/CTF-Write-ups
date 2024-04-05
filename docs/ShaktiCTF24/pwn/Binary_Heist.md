@@ -127,7 +127,7 @@ On running the script:
 shaktiCTF{C0ngr4t5!_n0w_s1ng_0_b3ll4_c140}
 ```
 
-:thumbsup: Success
+Success!
 
 
 Flag: `shaktictf{C0ngr4t5!_n0w_s1ng_0_b3ll4_c140}`  

@@ -12,7 +12,7 @@ location 3: Vairatgad Fort
 
 However, our officers were unable to find any suspicious activity at these sites. We also know that the group leader is currently in Osaka, Japan and has set the meeting time for 8:00 pm.
 But the fort is closed at the time. Now its upto you to find the fourth fort and the right time for the meeting.
-Flag format, if the fort is Malhargad killa and the time is 1.30 pm: vidyutctf{malhargad_killa_13:30}
+Flag format, if the fort is Malhargad killa and the time is 1.30 pm: shaktictf{malhargad_killa_13:30}
 
 **Author:  [Ath3n1x](https://twitter.com/Ath3n1x)**
 

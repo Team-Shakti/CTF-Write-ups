@@ -38,7 +38,7 @@ void add(){
 }
 ```
 
-`idx` is signed. Integer overflow is a possibility which allows negative indexiing. Also, we can allocate/write anything at `reactor+idx`. This is particularly dangerous because we can modify the contents of the reactor array at any position specified by idx. If negative values are permitted, we could potentially overwrite critical areas of memory, such as the Global Offset Table (GOT), since both reactor and the GOT are stored in the BSS segment. By calculating the correct offset, we could overwrite a GOT entry with the address of the `libc system` function. This would allow us to hijack the program's execution flow and ultimately gain a shell.
+`idx` is signed. Integer overflow is a possibility which allows negative indexing. Also, we can allocate/write anything at `reactor+idx`. This is particularly dangerous because we can modify the contents of the reactor array at any position specified by idx. If negative values are permitted, we could potentially overwrite critical areas of memory, such as the Global Offset Table (GOT), since both reactor and the GOT are stored in the BSS segment. By calculating the correct offset, we could overwrite a GOT entry with the address of the `libc system` function. This would allow us to hijack the program's execution flow and ultimately gain a shell.
 
 
 ```C
@@ -118,6 +118,4 @@ shaktiCTF{Th3_4rc_15_s4v3d_4nd_h4ppy_pwn1ng}
 $ exit
 ```
  
-:thumbsup::tada:
-
 Flag: `shaktictf{Th3_4rc_15_s4v3d_4nd_h4ppy_pwn1ng}`              
