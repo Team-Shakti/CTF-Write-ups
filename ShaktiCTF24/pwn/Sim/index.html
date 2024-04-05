@@ -110,7 +110,7 @@ For a change, this is also a 32 bit binary contrary to the 64 bit binaries that 
 
 }
 </code></pre>
-<p><code>idx</code> is signed. Integer overflow is a possibility which allows negative indexiing. Also, we can allocate/write anything at <code>reactor+idx</code>. This is particularly dangerous because we can modify the contents of the reactor array at any position specified by idx. If negative values are permitted, we could potentially overwrite critical areas of memory, such as the Global Offset Table (GOT), since both reactor and the GOT are stored in the BSS segment. By calculating the correct offset, we could overwrite a GOT entry with the address of the <code>libc system</code> function. This would allow us to hijack the program's execution flow and ultimately gain a shell.</p>
+<p><code>idx</code> is signed. Integer overflow is a possibility which allows negative indexing. Also, we can allocate/write anything at <code>reactor+idx</code>. This is particularly dangerous because we can modify the contents of the reactor array at any position specified by idx. If negative values are permitted, we could potentially overwrite critical areas of memory, such as the Global Offset Table (GOT), since both reactor and the GOT are stored in the BSS segment. By calculating the correct offset, we could overwrite a GOT entry with the address of the <code>libc system</code> function. This would allow us to hijack the program's execution flow and ultimately gain a shell.</p>
 <pre><code class="language-C">void show(){
     int idx;
     puts(&quot;Enter the index :&quot;);
@@ -176,7 +176,6 @@ $ cat flag.txt
 shaktiCTF{Th3_4rc_15_s4v3d_4nd_h4ppy_pwn1ng}
 $ exit
 </code></pre>
-<p>:thumbsup::tada:</p>
 <p>Flag: <code>shaktictf{Th3_4rc_15_s4v3d_4nd_h4ppy_pwn1ng}</code>              </p></div>
             </div>
         </div>
