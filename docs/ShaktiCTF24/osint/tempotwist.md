@@ -9,7 +9,7 @@ Sample Flag Format: shaktictf{18.431,134.778}
 
 Please avoid any spaces in the flag.
 
-**Author: [__m1m1__] (https://twitter.com/__m1m1__1)**
+**Author: [__m1m1__](https://twitter.com/__m1m1__1)**
 
 **Solution**
  I searched the given lyrics on Google and found the full song of the given audio.
