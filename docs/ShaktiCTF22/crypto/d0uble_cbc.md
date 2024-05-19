@@ -20,7 +20,7 @@ shaktictf{...}
 2. Find iv using the oracle provided and use that iv as input for cbc mac oracle.
 3. iv detection can done by encrypting the `pt='\x00'*32` , decrypt `ct = b"\x00"*16+bytes.fromhex(ct)[:16]` , decrypt the result again to get iv. 
 
-```python=
+```python
 from pwn import *
 from os import urandom
 host,port = '65.2.136.80',31351
@@ -55,7 +55,7 @@ iv_dec = (bytes.fromhex(io.recvline()[28:-1].decode())[16:]).hex()
 ```
 
 5. Now pass that iv to the sign function. It will return the tag as ct[16:].
-```python=
+```python
 io.recvuntil(b'4.exit')
 io.sendline('3')
 io.recvuntil(b'further')
@@ -75,6 +75,7 @@ tag1 = (io.recvline().decode())[:-1]
 
 7. sign(sign(block0) xor block1) gives the same sign value. (So, simply append the ciphertext of the previous block)
 
+For whole script refer [here](https://github.com/Paavani-git/ShaktiCTF22/blob/main/Double_cbc/Admin/soln.py)
 
 #### Flag
 `shaktictf{double_cheese_double_mac_yummyyyy_4120686170707920636263206d6f6465}`
